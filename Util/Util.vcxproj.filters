@@ -21,9 +21,6 @@
     <ClInclude Include="Threading\WaitCallback.h">
       <Filter>Threading\ThreadPool</Filter>
     </ClInclude>
-    <ClInclude Include="Threading\Finally.h">
-      <Filter>Threading\ThreadPool</Filter>
-    </ClInclude>
     <ClInclude Include="Threading\IOCPThreadPool.h">
       <Filter>Threading\ThreadPool</Filter>
     </ClInclude>
@@ -36,11 +33,11 @@
     <ClInclude Include="Event\Event.h">
       <Filter>Event</Filter>
     </ClInclude>
+    <ClInclude Include="Common\Finally.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Threading\Finally.cpp">
-      <Filter>Threading\ThreadPool</Filter>
-    </ClCompile>
     <ClCompile Include="Threading\IOCPThreadPool.cpp">
       <Filter>Threading\ThreadPool</Filter>
     </ClCompile>

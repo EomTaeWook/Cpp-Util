@@ -9,7 +9,6 @@
 
 //작성자 엄태욱 2018-01-10
 //IOCP 쓰레드 풀
-
 namespace Threading
 {
 	template <typename T>
