@@ -69,13 +69,26 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>$(ProjectName)_d</TargetName>
+    <OutDir>$(SolutionDir)$(Configuration)\$(PlatformTarget)</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)</IntDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
+    <PreBuildEvent>
+      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")
+xcopy /S "$(ProjectDir)*.h" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include\"
+IF EXIST "$(SolutionDir)Lib" (copy "$(SolutionDir)Lib\*.lib" "$(SolutionDir)$(Configuration)\$(PlatformTarget)")
+IF EXIST "$(SolutionDir)Include" (xcopy "$(SolutionDir)Include\*.*" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
