@@ -32,7 +32,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -74,6 +74,11 @@
     <OutDir>$(SolutionDir)$(Configuration)\$(PlatformTarget)</OutDir>
     <IntDir>$(SolutionDir)$(Configuration)</IntDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\$(PlatformTarget)</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)</IntDir>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -86,8 +91,8 @@
     <PostBuildEvent>
       <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")
 xcopy /S "$(ProjectDir)*.h" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include\"
-IF EXIST "$(SolutionDir)Lib" (copy "$(SolutionDir)Lib\*.lib" "$(SolutionDir)$(Configuration)\$(PlatformTarget)")
-IF EXIST "$(SolutionDir)Include" (xcopy "$(SolutionDir)Include\*.*" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
+IF EXIST "$(SolutionDir)Lib" (xcopy /S "$(SolutionDir)Lib\*.lib" "$(SolutionDir)$(Configuration)\$(PlatformTarget)")
+IF EXIST "$(SolutionDir)Include" (xcopy /S "$(SolutionDir)Include\*.*" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -109,6 +114,15 @@ IF EXIST "$(SolutionDir)Include" (xcopy "$(SolutionDir)Include\*.*" "$(SolutionD
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PreBuildEvent>
+      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")
+xcopy /S "$(ProjectDir)*.h" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include\"
+IF EXIST "$(SolutionDir)Lib" (xcopy /S "$(SolutionDir)Lib\*.lib" "$(SolutionDir)$(Configuration)\$(PlatformTarget)")
+IF EXIST "$(SolutionDir)Include" (xcopy /S "$(SolutionDir)Include\*.*" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
