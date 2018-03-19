@@ -53,8 +53,9 @@ namespace Common
 					}
 					case 's':
 					{
-						std::string arg(va_arg(args, char*));
-						output.append(arg.begin(), arg.end());
+						auto arg = va_arg(args, char*);
+						std::string str(arg);
+						output.append(str.begin(), str.end());
 						break;
 					}
 					case 'hs':
