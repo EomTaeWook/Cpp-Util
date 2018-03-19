@@ -140,6 +140,7 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Common\StringFormat.h" />
     <ClInclude Include="Event\Event.h" />
     <ClInclude Include="Common\Delegate.h" />
     <ClInclude Include="Common\Finally.h" />

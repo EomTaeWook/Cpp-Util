@@ -36,6 +36,9 @@
     <ClInclude Include="Common\Finally.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="Common\StringFormat.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Threading\IOCPThreadPool.cpp">
