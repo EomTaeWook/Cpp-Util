@@ -79,9 +79,9 @@ namespace Common
 					std::wstring key;
 					i++;
 					bool find = false;
-					for (size_t ii = i, count = 0; ii < format.size() && count < 3; ii++, count++)
+					for (size_t count = 0; i < format.size() && count < 3; i++, count++)
 					{
-						key.push_back(format[ii]);
+						key.push_back(format[i]);
 						auto type = formatEnum.Find(key);
 						if (type != ArgType::None)
 						{
@@ -186,9 +186,9 @@ namespace Common
 					std::string key;
 					i++;
 					bool find = false;
-					for (size_t ii = i, count = 0; ii < format.size() && count < 3; ii++, count++)
+					for (size_t count = 0; i < format.size() && count < 3; i++, count++)
 					{
-						key.push_back(format[ii]);
+						key.push_back(format[i]);
 						auto type = formatEnum.Find(key);
 						if (type != ArgType::None)
 						{
