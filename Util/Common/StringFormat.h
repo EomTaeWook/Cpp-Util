@@ -10,7 +10,7 @@ namespace Common
 		va_start(args, format);
 		try
 		{
-			for (int i = 0; i < format.size(); i++)
+			for (size_t i = 0; i < format.size(); i++)
 			{
 				if (format[i] != '%')
 				{
@@ -98,7 +98,7 @@ namespace Common
 		va_start(args, format);
 		try
 		{
-			for (int i = 0; i < format.size(); i++)
+			for (size_t i = 0; i < format.size(); i++)
 			{
 				if (format[i] != '%')
 				{
