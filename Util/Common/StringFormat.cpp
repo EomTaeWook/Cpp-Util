@@ -1,7 +1,6 @@
 #include "StringFormat.h"
 
 NS_COMMON_BEGIN
-
 std::string String::Format(std::string format, ...)
 {
 	FormatEmun formatEnum;
@@ -37,13 +36,13 @@ std::string String::Format(std::string format, ...)
 						case FormatEmun::Signature::d:
 						{
 							auto arg = va_arg(args, int);
-							output.append(std::to_string(arg));
+							output.append(FillDigit(std::to_string(arg), digit));
 							break;
 						}
 						case FormatEmun::Signature::u:
 						{
 							auto arg = va_arg(args, unsigned int);
-							output.append(std::to_string(arg));
+							output.append(FillDigit(std::to_string(arg), digit));
 							break;
 						}
 						case FormatEmun::Signature::f:
@@ -88,13 +87,13 @@ std::string String::Format(std::string format, ...)
 						case FormatEmun::Signature::ld:
 						{
 							auto arg = va_arg(args, long);
-							output.append(std::to_string(arg));
+							output.append(FillDigit(std::to_string(arg), digit));
 							break;
 						}
 						case FormatEmun::Signature::lld:
 						{
 							auto arg = va_arg(args, long long);
-							output.append(std::to_string(arg));
+							output.append(FillDigit(std::to_string(arg), digit));
 							break;
 						}
 						}
@@ -115,6 +114,119 @@ std::string String::Format(std::string format, ...)
 	va_end(args);
 	return output;
 }
+
+std::wstring String::Format(std::wstring format, ...)
+{
+	FormatEmun formatEnum;
+	va_list args;
+	std::wstring output;
+	va_start(args, format);
+	try
+	{
+		for (size_t i = 0; i < format.size(); i++)
+		{
+			if (format[i] != '%')
+			{
+				output.push_back(format[i]);
+			}
+			else if (format[i] == '%')
+			{
+				std::wstring key;
+				std::wstring digit;
+				i++;
+				bool find = false;
+				while (i<format.size())
+				{
+					if (format[i] >= '0' && format[i] <= '9' || format[i] == '.')
+						digit.push_back(format[i]);
+					else
+						key.push_back(format[i]);
+					auto type = formatEnum.Find(key);
+					if (type != FormatEmun::Signature::None)
+					{
+						find = true;
+						switch (type)
+						{
+						case FormatEmun::Signature::d:
+						{
+							auto arg = va_arg(args, int);
+							output.append(FillDigit(std::to_wstring(arg), digit));
+							break;
+						}
+						case FormatEmun::Signature::u:
+						{
+							auto arg = va_arg(args, unsigned int);
+							output.append(FillDigit(std::to_wstring(arg), digit));
+							break;
+						}
+						case FormatEmun::Signature::f:
+						{
+							auto arg = va_arg(args, double);
+							output.append(FillDigit(std::to_wstring(arg), digit));
+							break;
+						}
+						case FormatEmun::Signature::c:
+						{
+							auto arg = va_arg(args, char);
+							output.push_back(arg);
+							break;
+						}
+						case FormatEmun::Signature::s:
+						{
+							auto arg = va_arg(args, char*);
+							std::string str(arg);
+							output.append(str.begin(), str.end());
+							break;
+						}
+						case FormatEmun::Signature::wc:
+						{
+							auto arg = va_arg(args, wchar_t);
+							output.push_back(arg);
+							break;
+						}
+						case FormatEmun::Signature::ws:
+						{
+							auto arg = va_arg(args, wchar_t*);
+							output.append(arg);
+							break;
+						}
+						case FormatEmun::Signature::lf:
+						{
+							auto arg = va_arg(args, double);
+							output.append(FillDigit(std::to_wstring(arg), digit));
+							break;
+						}
+						case FormatEmun::Signature::ld:
+						{
+							auto arg = va_arg(args, long);
+							output.append(FillDigit(std::to_wstring(arg), digit));
+							break;
+						}
+						case FormatEmun::Signature::lld:
+						{
+							auto arg = va_arg(args, long long);
+							output.append(FillDigit(std::to_wstring(arg), digit));
+							break;
+						}
+						}
+						break;
+					}
+					i++;
+				}
+				if (!find)
+					output.append(key);
+			}
+		}
+	}
+	catch (...)
+	{
+		va_end(args);
+		throw std::exception("argument type mismatch");
+	}
+	va_end(args);
+	return output;
+}
+
 std::string String::FillDigit(std::string& arg, std::string& digit)
 {
 	if (digit.empty()) return  arg;
@@ -233,117 +345,6 @@ std::wstring String::FillDigit(std::wstring& arg, std::wstring& digit)
 			output.append(arg);
 		}
 	}
-	return output;
-}
-std::wstring String::Format(std::wstring format, ...)
-{
-	FormatEmun formatEnum;
-	va_list args;
-	std::wstring output;
-	va_start(args, format);
-	try
-	{
-		for (size_t i = 0; i < format.size(); i++)
-		{
-			if (format[i] != '%')
-			{
-				output.push_back(format[i]);
-			}
-			else if (format[i] == '%')
-			{
-				std::wstring key;
-				std::wstring digit;
-				i++;
-				bool find = false;
-				while (i<format.size())
-				{
-					if (format[i] >= '0' && format[i] <= '9' || format[i] == '.')
-						digit.push_back(format[i]);
-					else
-						key.push_back(format[i]);
-					auto type = formatEnum.Find(key);
-					if (type != FormatEmun::Signature::None)
-					{
-						find = true;
-						switch (type)
-						{
-						case FormatEmun::Signature::d:
-						{
-							auto arg = va_arg(args, int);
-							output.append(std::to_wstring(arg));
-							break;
-						}
-						case FormatEmun::Signature::u:
-						{
-							auto arg = va_arg(args, unsigned int);
-							output.append(std::to_wstring(arg));
-							break;
-						}
-						case FormatEmun::Signature::f:
-						{
-							auto arg = va_arg(args, double);
-							output.append(FillDigit(std::to_wstring(arg), digit));
-							break;
-						}
-						case FormatEmun::Signature::c:
-						{
-							auto arg = va_arg(args, char);
-							output.push_back(arg);
-							break;
-						}
-						case FormatEmun::Signature::s:
-						{
-							auto arg = va_arg(args, char*);
-							std::string str(arg);
-							output.append(str.begin(), str.end());
-							break;
-						}
-						case FormatEmun::Signature::wc:
-						{
-							auto arg = va_arg(args, wchar_t);
-							output.push_back(arg);
-							break;
-						}
-						case FormatEmun::Signature::ws:
-						{
-							auto arg = va_arg(args, wchar_t*);
-							output.append(arg);
-							break;
-						}
-						case FormatEmun::Signature::lf:
-						{
-							auto arg = va_arg(args, double);
-							output.append(FillDigit(std::to_wstring(arg), digit));
-							break;
-						}
-						case FormatEmun::Signature::ld:
-						{
-							auto arg = va_arg(args, long);
-							output.append(std::to_wstring(arg));
-							break;
-						}
-						case FormatEmun::Signature::lld:
-						{
-							auto arg = va_arg(args, long long);
-							output.append(std::to_wstring(arg));
-							break;
-						}
-						}
-						break;
-					}
-					i++;
-				}
-				if (!find)
-					output.append(key);
-			}
-		}
-	}
-	catch (...)
-	{
-		va_end(args);
-		throw std::exception("argument type mismatch");
-	}
-	va_end(args);
 	return output;
 }
 NS_COMMON_END
