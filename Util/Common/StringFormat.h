@@ -12,7 +12,7 @@ private:
 	private:
 		friend class String;
 	private:
-		enum ArgType
+		enum Signature
 		{
 			None = 0,
 			d = 1, //int
@@ -26,48 +26,51 @@ private:
 			ld, //long
 			lld //long long
 		};
-		std::map<std::string, ArgType> enumMap;
+		std::map<std::string, Signature> enumMap;
 	public:
 		FormatEmun()
 		{
 			enumMap = {
-				{ "d", ArgType::d },
-				{ "u", ArgType::u },
-				{ "f", ArgType::f },
-				{ "c", ArgType::c },
-				{ "s", ArgType::s },
-				{ "wc", ArgType::wc },
-				{ "ws", ArgType::ws },
-				{ "lf", ArgType::lf },
-				{ "ld", ArgType::ld },
-				{ "lld", ArgType::lld },
+				{ "d", Signature::d },
+				{ "u", Signature::u },
+				{ "f", Signature::f },
+				{ "c", Signature::c },
+				{ "s", Signature::s },
+				{ "wc", Signature::wc },
+				{ "ws", Signature::ws },
+				{ "lf", Signature::lf },
+				{ "ld", Signature::ld },
+				{ "lld", Signature::lld },
 			};
 		}
 	private:
-		ArgType Find(std::string signature);
-		ArgType Find(std::wstring signature);
+		Signature Find(std::string signature);
+		Signature Find(std::wstring signature);
 	};
 public:
 	static std::wstring String::Format(std::wstring format, ...);
 	static std::string String::Format(std::string format, ...);
+private:
+	static std::string FillDigit(std::string& arg, std::string& digit);
+	static std::wstring FillDigit(std::wstring& arg, std::wstring& digit);
 };
 
-inline String::FormatEmun::ArgType String::FormatEmun::Find(std::string signature)
+inline String::FormatEmun::Signature String::FormatEmun::Find(std::string signature)
 {
 	auto it = enumMap.find(signature);
 	if (it != enumMap.end())
 		return it->second;
 	else
-		return ArgType::None;
+		return Signature::None;
 }
 
-inline String::FormatEmun::ArgType String::FormatEmun::Find(std::wstring signature)
+inline String::FormatEmun::Signature String::FormatEmun::Find(std::wstring signature)
 {
 	std::string _signature(signature.begin(), signature.end());
 	auto it = enumMap.find(_signature);
 	if (it != enumMap.end())
 		return it->second;
 	else
-		return ArgType::None;
+		return Signature::None;
 }
 NS_COMMON_END
