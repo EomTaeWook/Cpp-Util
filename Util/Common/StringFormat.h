@@ -7,9 +7,9 @@ namespace Common
 	{
 		va_list args;
 		std::wstring output;
-		va_start(args, format);
 		try
 		{
+			va_start(args, format);
 			for (size_t i = 0; i < format.size(); i++)
 			{
 				if (format[i] != '%')
@@ -95,9 +95,9 @@ namespace Common
 	{
 		va_list args;
 		std::string output;
-		va_start(args, format);
 		try
 		{
+			va_start(args, format);
 			for (size_t i = 0; i < format.size(); i++)
 			{
 				if (format[i] != '%')
