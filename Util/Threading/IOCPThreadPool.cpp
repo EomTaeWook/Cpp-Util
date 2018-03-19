@@ -2,6 +2,8 @@
 #include "../Common/Finally.h"
 #include <memory>
 
+USING_COMMON
+
 namespace Threading
 {
 	bool IOCPThreadPool::Init(unsigned int threadMaxSize)

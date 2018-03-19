@@ -1,5 +1,7 @@
 #pragma once
 #include<functional>
+#include "NS.h"
+NS_COMMON_BEGIN
 class Finally
 {
 private:
@@ -14,3 +16,4 @@ public:
 		if (_func != nullptr) _func();
 	}
 };
+NS_COMMON_END

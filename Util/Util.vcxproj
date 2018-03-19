@@ -152,6 +152,7 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Common\NS.h" />
     <ClInclude Include="Common\StringFormat.h" />
     <ClInclude Include="Event\Event.h" />
     <ClInclude Include="Common\Delegate.h" />
@@ -161,6 +162,7 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <ClInclude Include="Threading\WaitCallback.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Common\StringFormat.cpp" />
     <ClCompile Include="Threading\IOCPThreadPool.cpp" />
     <ClCompile Include="Threading\WaitCallback.cpp" />
   </ItemGroup>

@@ -39,6 +39,9 @@
     <ClInclude Include="Common\StringFormat.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="Common\NS.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Threading\IOCPThreadPool.cpp">
@@ -46,6 +49,9 @@
     </ClCompile>
     <ClCompile Include="Threading\WaitCallback.cpp">
       <Filter>Threading\ThreadPool</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\StringFormat.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
