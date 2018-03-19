@@ -26,11 +26,11 @@ private:
 			ld, //long
 			lld //long long
 		};
-		std::map<std::string, Signature> enumMap;
+		std::map<std::string, Signature> _enumMap;
 	public:
 		FormatEmun()
 		{
-			enumMap = {
+			_enumMap = {
 				{ "d", Signature::d },
 				{ "u", Signature::u },
 				{ "f", Signature::f },
@@ -57,8 +57,8 @@ private:
 
 inline String::FormatEmun::Signature String::FormatEmun::Find(std::string signature)
 {
-	auto it = enumMap.find(signature);
-	if (it != enumMap.end())
+	auto it = _enumMap.find(signature);
+	if (it != _enumMap.end())
 		return it->second;
 	else
 		return Signature::None;
@@ -67,8 +67,8 @@ inline String::FormatEmun::Signature String::FormatEmun::Find(std::string signat
 inline String::FormatEmun::Signature String::FormatEmun::Find(std::wstring signature)
 {
 	std::string _signature(signature.begin(), signature.end());
-	auto it = enumMap.find(_signature);
-	if (it != enumMap.end())
+	auto it = _enumMap.find(_signature);
+	if (it != _enumMap.end())
 		return it->second;
 	else
 		return Signature::None;
