@@ -36,36 +36,42 @@ std::string String::Format(std::string format, ...)
 						case FormatEmun::Signature::d:
 						{
 							auto arg = va_arg(args, int);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							output.append(FillDigit(std::to_string(arg), digit));
 							break;
 						}
 						case FormatEmun::Signature::u:
 						{
 							auto arg = va_arg(args, unsigned int);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							output.append(FillDigit(std::to_string(arg), digit));
 							break;
 						}
 						case FormatEmun::Signature::f:
 						{
 							auto arg = va_arg(args, double);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							output.append(FillDigit(std::to_string(arg), digit));
 							break;
 						}
 						case FormatEmun::Signature::c:
 						{
 							auto arg = va_arg(args, char);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							output.push_back(arg);
 							break;
 						}
 						case FormatEmun::Signature::s:
 						{
 							auto arg = va_arg(args, char*);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							output.append(arg);
 							break;
 						}
 						case FormatEmun::Signature::wc:
 						{
 							auto arg = va_arg(args, wchar_t);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							std::wstring wstr;
 							wstr.push_back(arg);
 							output.append(wstr.begin(), wstr.end());
@@ -74,6 +80,7 @@ std::string String::Format(std::string format, ...)
 						case FormatEmun::Signature::ws:
 						{
 							auto arg = va_arg(args, wchar_t*);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							std::wstring wstr(arg);
 							output.append(wstr.begin(), wstr.end());
 							break;
@@ -81,18 +88,21 @@ std::string String::Format(std::string format, ...)
 						case FormatEmun::Signature::lf:
 						{
 							auto arg = va_arg(args, double);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							output.append(FillDigit(std::to_string(arg), digit));
 							break;
 						}
 						case FormatEmun::Signature::ld:
 						{
 							auto arg = va_arg(args, long);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							output.append(FillDigit(std::to_string(arg), digit));
 							break;
 						}
 						case FormatEmun::Signature::lld:
 						{
 							auto arg = va_arg(args, long long);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							output.append(FillDigit(std::to_string(arg), digit));
 							break;
 						}
@@ -150,30 +160,35 @@ std::wstring String::Format(std::wstring format, ...)
 						case FormatEmun::Signature::d:
 						{
 							auto arg = va_arg(args, int);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							output.append(FillDigit(std::to_wstring(arg), digit));
 							break;
 						}
 						case FormatEmun::Signature::u:
 						{
 							auto arg = va_arg(args, unsigned int);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							output.append(FillDigit(std::to_wstring(arg), digit));
 							break;
 						}
 						case FormatEmun::Signature::f:
 						{
 							auto arg = va_arg(args, double);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							output.append(FillDigit(std::to_wstring(arg), digit));
 							break;
 						}
 						case FormatEmun::Signature::c:
 						{
 							auto arg = va_arg(args, char);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							output.push_back(arg);
 							break;
 						}
 						case FormatEmun::Signature::s:
 						{
 							auto arg = va_arg(args, char*);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							std::string str(arg);
 							output.append(str.begin(), str.end());
 							break;
@@ -181,30 +196,35 @@ std::wstring String::Format(std::wstring format, ...)
 						case FormatEmun::Signature::wc:
 						{
 							auto arg = va_arg(args, wchar_t);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							output.push_back(arg);
 							break;
 						}
 						case FormatEmun::Signature::ws:
 						{
 							auto arg = va_arg(args, wchar_t*);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							output.append(arg);
 							break;
 						}
 						case FormatEmun::Signature::lf:
 						{
 							auto arg = va_arg(args, double);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							output.append(FillDigit(std::to_wstring(arg), digit));
 							break;
 						}
 						case FormatEmun::Signature::ld:
 						{
 							auto arg = va_arg(args, long);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							output.append(FillDigit(std::to_wstring(arg), digit));
 							break;
 						}
 						case FormatEmun::Signature::lld:
 						{
 							auto arg = va_arg(args, long long);
+							if (arg == NULL) throw std::exception("Null Pointer Exception");
 							output.append(FillDigit(std::to_wstring(arg), digit));
 							break;
 						}
@@ -217,6 +237,11 @@ std::wstring String::Format(std::wstring format, ...)
 					output.append(key);
 			}
 		}
+	}
+	catch (std::exception ex)
+	{
+		va_end(args);
+		throw ex;
 	}
 	catch (...)
 	{
