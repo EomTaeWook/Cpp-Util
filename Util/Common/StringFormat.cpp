@@ -1,264 +1,213 @@
 #include "StringFormat.h"
+#include <typeinfo>
 
 NS_COMMON_BEGIN
+template<typename T, typename Traits = std::char_traits<T>, typename Alloc = std::allocator<T>>
+std::basic_string<T, Traits, Alloc> String::Format(std::basic_string<T, Traits, Alloc> format, va_list& args)
+{
+	FormatEmun formatEnum;
+	std::basic_string<T, Traits, Alloc> output;
+	for (size_t i = 0; i < format.size(); i++)
+	{
+		if (format[i] != '%')
+		{
+			output.push_back(format[i]);
+		}
+		else if (format[i] == '%')
+		{
+			std::basic_string<T, Traits, Alloc> key;
+			std::basic_string<T, Traits, Alloc> digit;
+			i++;
+			bool find = false;
+			while (i<format.size())
+			{
+				if (format[i] >= '0' && format[i] <= '9' || format[i] == '.')
+					digit.push_back(format[i]);
+				else
+					key.push_back(format[i]);
+				auto type = formatEnum.Find(key);
+				if (type != FormatEmun::Signature::None)
+				{
+					find = true;
+					switch (type)
+					{
+					case FormatEmun::Signature::d:
+					{
+						auto arg = va_arg(args, int);
+						if (typeid(T) == typeid(char))
+						{
+							auto fill = FillDigit<char, std::char_traits<char>, std::allocator<char>>(std::to_string(arg), std::string(digit.begin(), digit.end()));
+							output.append(fill.begin(), fill.end());
+						}
+						else if (typeid(T) == typeid(wchar_t))
+						{
+							auto fill = FillDigit<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>(std::to_wstring(arg), std::wstring(digit.begin(), digit.end()));
+							output.append(fill.begin(), fill.end());
+						}
+						break;
+					}
+					case FormatEmun::Signature::u:
+					{
+						auto arg = va_arg(args, unsigned int);
+						if (typeid(T) == typeid(char))
+						{
+							auto fill = FillDigit<char, std::char_traits<char>, std::allocator<char>>(std::to_string(arg), std::string(digit.begin(), digit.end()));
+							output.append(fill.begin(), fill.end());
+						}
+						else if (typeid(T) == typeid(wchar_t))
+						{
+							auto fill = FillDigit<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>(std::to_wstring(arg), std::wstring(digit.begin(), digit.end()));
+							output.append(fill.begin(), fill.end());
+						}
+						break;
+					}
+					case FormatEmun::Signature::f:
+					{
+						auto arg = va_arg(args, double);
+						if (typeid(T) == typeid(char))
+						{
+							auto fill = FillDigit<char, std::char_traits<char>, std::allocator<char>>(std::to_string(arg), std::string(digit.begin(), digit.end()));
+							output.append(fill.begin(), fill.end());
+						}
+						else if (typeid(T) == typeid(wchar_t))
+						{
+							auto fill = FillDigit<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>(std::to_wstring(arg), std::wstring(digit.begin(), digit.end()));
+							output.append(fill.begin(), fill.end());
+						}
+						break;
+					}
+					case FormatEmun::Signature::c:
+					{
+						auto arg = va_arg(args, char);
+						output.push_back(arg);
+						break;
+					}
+					case FormatEmun::Signature::s:
+					{
+						auto arg = va_arg(args, char*);
+						std::string str(arg);
+						output.append(str.begin(), str.end());
+						break;
+					}
+					case FormatEmun::Signature::wc:
+					{
+						auto arg = va_arg(args, wchar_t);
+						std::wstring wstr;
+						wstr.push_back(arg);
+						output.append(wstr.begin(), wstr.end());
+						break;
+					}
+					case FormatEmun::Signature::ws:
+					{
+						auto arg = va_arg(args, wchar_t*);
+						std::wstring wstr(arg);
+						output.append(wstr.begin(), wstr.end());
+						break;
+					}
+					case FormatEmun::Signature::lf:
+					{
+						auto arg = va_arg(args, double);
+						if (typeid(T) == typeid(char))
+						{
+							auto fill = FillDigit<char, std::char_traits<char>, std::allocator<char>>(std::to_string(arg), std::string(digit.begin(), digit.end()));
+							output.append(fill.begin(), fill.end());
+						}
+						else if (typeid(T) == typeid(wchar_t))
+						{
+							auto fill = FillDigit<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>(std::to_wstring(arg), std::wstring(digit.begin(), digit.end()));
+							output.append(fill.begin(), fill.end());
+						}
+						break;
+					}
+					case FormatEmun::Signature::ld:
+					{
+						auto arg = va_arg(args, long);
+						if (typeid(T) == typeid(char))
+						{
+							auto fill = FillDigit<char, std::char_traits<char>, std::allocator<char>>(std::to_string(arg), std::string(digit.begin(), digit.end()));
+							output.append(fill.begin(), fill.end());
+						}
+						else if (typeid(T) == typeid(wchar_t))
+						{
+							auto fill = FillDigit<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>(std::to_wstring(arg), std::wstring(digit.begin(), digit.end()));
+							output.append(fill.begin(), fill.end());
+						}
+						break;
+					}
+					case FormatEmun::Signature::lld:
+					{
+						auto arg = va_arg(args, long long);
+						if (typeid(T) == typeid(char))
+						{
+							auto fill = FillDigit<char, std::char_traits<char>, std::allocator<char>>(std::to_string(arg), std::string(digit.begin(), digit.end()));
+							output.append(fill.begin(), fill.end());
+						}
+						else if (typeid(T) == typeid(wchar_t))
+						{
+							auto fill = FillDigit<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>(std::to_wstring(arg), std::wstring(digit.begin(), digit.end()));
+							output.append(fill.begin(), fill.end());
+						}
+						break;
+					}
+					}
+					break;
+				}
+				i++;
+			}
+			if (!find)
+				output.append(key);
+		}
+	}
+	return output;
+}
+
 std::string String::Format(std::string format, ...)
 {
 	FormatEmun formatEnum;
 	va_list args;
-	std::string output;
-	va_start(args, format);
 	try
 	{
-		for (size_t i = 0; i < format.size(); i++)
-		{
-			if (format[i] != '%')
-			{
-				output.push_back(format[i]);
-			}
-			else if (format[i] == '%')
-			{
-				std::string key;
-				std::string digit;
-				i++;
-				bool find = false;
-				while (i<format.size())
-				{
-					if (format[i] >= '0' && format[i] <= '9' || format[i] == '.')
-						digit.push_back(format[i]);
-					else
-						key.push_back(format[i]);
-					auto type = formatEnum.Find(key);
-					if (type != FormatEmun::Signature::None)
-					{
-						find = true;
-						switch (type)
-						{
-						case FormatEmun::Signature::d:
-						{
-							auto arg = va_arg(args, int);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							output.append(FillDigit(std::to_string(arg), digit));
-							break;
-						}
-						case FormatEmun::Signature::u:
-						{
-							auto arg = va_arg(args, unsigned int);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							output.append(FillDigit(std::to_string(arg), digit));
-							break;
-						}
-						case FormatEmun::Signature::f:
-						{
-							auto arg = va_arg(args, double);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							output.append(FillDigit(std::to_string(arg), digit));
-							break;
-						}
-						case FormatEmun::Signature::c:
-						{
-							auto arg = va_arg(args, char);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							output.push_back(arg);
-							break;
-						}
-						case FormatEmun::Signature::s:
-						{
-							auto arg = va_arg(args, char*);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							output.append(arg);
-							break;
-						}
-						case FormatEmun::Signature::wc:
-						{
-							auto arg = va_arg(args, wchar_t);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							std::wstring wstr;
-							wstr.push_back(arg);
-							output.append(wstr.begin(), wstr.end());
-							break;
-						}
-						case FormatEmun::Signature::ws:
-						{
-							auto arg = va_arg(args, wchar_t*);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							std::wstring wstr(arg);
-							output.append(wstr.begin(), wstr.end());
-							break;
-						}
-						case FormatEmun::Signature::lf:
-						{
-							auto arg = va_arg(args, double);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							output.append(FillDigit(std::to_string(arg), digit));
-							break;
-						}
-						case FormatEmun::Signature::ld:
-						{
-							auto arg = va_arg(args, long);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							output.append(FillDigit(std::to_string(arg), digit));
-							break;
-						}
-						case FormatEmun::Signature::lld:
-						{
-							auto arg = va_arg(args, long long);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							output.append(FillDigit(std::to_string(arg), digit));
-							break;
-						}
-						}
-						break;
-					}
-					i++;
-				}
-				if (!find)
-					output.append(key);
-			}
-		}
+		va_start(args, format);
+		std::string output;
+		output = Format<char, std::char_traits<char>, std::allocator<char>>(format, args);
+		va_end(args);
+		return output;
 	}
 	catch (std::exception ex)
 	{
 		va_end(args);
 		throw ex;
 	}
-	va_end(args);
-	return output;
 }
 
 std::wstring String::Format(std::wstring format, ...)
 {
 	FormatEmun formatEnum;
 	va_list args;
-	std::wstring output;
-	va_start(args, format);
 	try
 	{
-		for (size_t i = 0; i < format.size(); i++)
-		{
-			if (format[i] != '%')
-			{
-				output.push_back(format[i]);
-			}
-			else if (format[i] == '%')
-			{
-				std::wstring key;
-				std::wstring digit;
-				i++;
-				bool find = false;
-				while (i<format.size())
-				{
-					if (format[i] >= '0' && format[i] <= '9' || format[i] == '.')
-						digit.push_back(format[i]);
-					else
-						key.push_back(format[i]);
-					auto type = formatEnum.Find(key);
-					if (type != FormatEmun::Signature::None)
-					{
-						find = true;
-						switch (type)
-						{
-						case FormatEmun::Signature::d:
-						{
-							auto arg = va_arg(args, int);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							output.append(FillDigit(std::to_wstring(arg), digit));
-							break;
-						}
-						case FormatEmun::Signature::u:
-						{
-							auto arg = va_arg(args, unsigned int);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							output.append(FillDigit(std::to_wstring(arg), digit));
-							break;
-						}
-						case FormatEmun::Signature::f:
-						{
-							auto arg = va_arg(args, double);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							output.append(FillDigit(std::to_wstring(arg), digit));
-							break;
-						}
-						case FormatEmun::Signature::c:
-						{
-							auto arg = va_arg(args, char);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							output.push_back(arg);
-							break;
-						}
-						case FormatEmun::Signature::s:
-						{
-							auto arg = va_arg(args, char*);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							std::string str(arg);
-							output.append(str.begin(), str.end());
-							break;
-						}
-						case FormatEmun::Signature::wc:
-						{
-							auto arg = va_arg(args, wchar_t);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							output.push_back(arg);
-							break;
-						}
-						case FormatEmun::Signature::ws:
-						{
-							auto arg = va_arg(args, wchar_t*);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							output.append(arg);
-							break;
-						}
-						case FormatEmun::Signature::lf:
-						{
-							auto arg = va_arg(args, double);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							output.append(FillDigit(std::to_wstring(arg), digit));
-							break;
-						}
-						case FormatEmun::Signature::ld:
-						{
-							auto arg = va_arg(args, long);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							output.append(FillDigit(std::to_wstring(arg), digit));
-							break;
-						}
-						case FormatEmun::Signature::lld:
-						{
-							auto arg = va_arg(args, long long);
-							if (arg == NULL) throw std::exception("Null Pointer Exception");
-							output.append(FillDigit(std::to_wstring(arg), digit));
-							break;
-						}
-						}
-						break;
-					}
-					i++;
-				}
-				if (!find)
-					output.append(key);
-			}
-		}
+		std::wstring output;
+		va_start(args, format);
+		output = Format<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t>>(format, args);
+		va_end(args);
+		return output;
 	}
 	catch (std::exception ex)
 	{
 		va_end(args);
 		throw ex;
 	}
-	catch (...)
-	{
-		va_end(args);
-		throw std::exception("argument type mismatch");
-	}
-	va_end(args);
-	return output;
 }
-
-std::string String::FillDigit(std::string& arg, std::string& digit)
+template<typename T, typename Traits = std::char_traits<T>, typename Alloc = std::allocator<T>>
+static std::basic_string<T, Traits, Alloc> String::FillDigit(std::basic_string<T, Traits, Alloc>& arg, std::basic_string<T, Traits, Alloc>& digit)
 {
-	if (digit.empty()) return  arg;
+	if (digit.empty()) return arg;
 
-	std::string output;
-	int idx = digit.find(".");
-	if (idx == std::string::npos)
+	std::basic_string<T, Traits, Alloc> output;
+	std::basic_string<T, Traits, Alloc> find_key;
+	find_key.push_back('.');
+	int idx = digit.find(find_key);
+	if (idx == -1)
 	{
 		int size = std::stoi(digit) - arg.size();
 		for (int i = 0; i < size; i++)
@@ -269,20 +218,26 @@ std::string String::FillDigit(std::string& arg, std::string& digit)
 	}
 	else
 	{
-		std::string decimalPoint = digit.substr(idx + 1, digit.size() - idx + 1);
-		int argDigit = arg.find(".");
-		if (argDigit != std::string::npos)
+		auto decimalDigit = digit.substr(idx + 1, digit.size() - idx + 1);
+		int argDigit = arg.find(find_key);
+		if (argDigit != -1)
 			output.append(arg.substr(0, argDigit));
-		if (!decimalPoint.empty())
+		else
+			output.append(arg);
+		if (!decimalDigit.empty())
 		{
+			std::basic_string<T, Traits, Alloc> argDecimal;
 			output.push_back('.');
-			std::string decimal = arg.substr(argDigit + 1, arg.size() - argDigit);
-			size_t size = std::stoi(decimalPoint);
-
-			if (size > decimal.size())
+			if (argDigit != -1)
 			{
-				output.append(decimal);
-				for (size_t i = 0; i < size - decimal.size(); i++)
+				argDecimal = arg.substr(argDigit + 1, arg.size() - argDigit);
+				output.append(argDecimal.begin(), argDecimal.end());
+			}
+			size_t size = std::stoi(decimalDigit);
+
+			if (size > argDecimal.size())
+			{
+				for (size_t i = 0; i < size - argDecimal.size(); i++)
 				{
 					output.push_back('0');
 				}
@@ -291,7 +246,7 @@ std::string String::FillDigit(std::string& arg, std::string& digit)
 			{
 				for (size_t i = 0; i < size; i++)
 				{
-					output.push_back(decimal[i]);
+					output.push_back(argDecimal[i]);
 				}
 			}
 			else
@@ -299,75 +254,14 @@ std::string String::FillDigit(std::string& arg, std::string& digit)
 				output.pop_back();
 			}
 		}
-		std::string integerPoint = digit.substr(0, idx);
-		if (!integerPoint.empty())
+		auto integerDigit = digit.substr(0, idx);
+		if (!integerDigit.empty())
 		{
-			int size = std::stoi(integerPoint) - arg.size();
+			int size = std::stoi(integerDigit) - output.size();
 			for (int i = 0; i < size; i++)
 			{
-				output.push_back(' ');
+				output.insert(output.begin(), ' ');
 			}
-			output.append(arg);
-		}
-	}
-	return output;
-}
-std::wstring String::FillDigit(std::wstring& arg, std::wstring& digit)
-{
-	if (digit.empty()) return  arg;
-
-	std::wstring output;
-	int idx = digit.find(L".");
-	if (idx == std::string::npos)
-	{
-		int size = std::stoi(digit) - arg.size();
-		for (int i = 0; i < size; i++)
-		{
-			output.push_back(' ');
-		}
-		output.append(arg);
-	}
-	else
-	{
-		std::wstring decimalPoint = digit.substr(idx + 1, digit.size() - idx + 1);
-		int argDigit = arg.find(L".");
-		if (argDigit != std::string::npos)
-			output.append(arg.substr(0, argDigit));
-		if (!decimalPoint.empty())
-		{
-			output.push_back('.');
-			std::wstring decimal = arg.substr(argDigit + 1, arg.size() - argDigit);
-			size_t size = std::stoi(decimalPoint);
-
-			if (size > decimal.size())
-			{
-				output.append(decimal);
-				for (size_t i = 0; i < size - decimal.size(); i++)
-				{
-					output.push_back('0');
-				}
-			}
-			else if (size != 0)
-			{
-				for (size_t i = 0; i < size; i++)
-				{
-					output.push_back(decimal[i]);
-				}
-			}
-			else
-			{
-				output.pop_back();
-			}
-		}
-		std::wstring integerPoint = digit.substr(0, idx);
-		if (!integerPoint.empty())
-		{
-			int size = std::stoi(integerPoint) - arg.size();
-			for (int i = 0; i < size; i++)
-			{
-				output.push_back(' ');
-			}
-			output.append(arg);
 		}
 	}
 	return output;

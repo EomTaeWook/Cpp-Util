@@ -51,8 +51,10 @@ public:
 	static std::wstring String::Format(std::wstring format, ...);
 	static std::string String::Format(std::string format, ...);
 private:
-	static std::string FillDigit(std::string& arg, std::string& digit);
-	static std::wstring FillDigit(std::wstring& arg, std::wstring& digit);
+	template<typename T, typename Traits = std::char_traits<T>, typename Alloc = std::allocator<T>>
+	static std::basic_string<T, Traits, Alloc> Format(std::basic_string<T, Traits, Alloc> format, va_list& args);
+	template<typename T, typename Traits = std::char_traits<T>, typename Alloc = std::allocator<T>>
+	static std::basic_string<T, Traits, Alloc> FillDigit(std::basic_string<T, Traits, Alloc>& arg, std::basic_string<T, Traits, Alloc>& digit);
 };
 
 inline String::FormatEmun::Signature String::FormatEmun::Find(std::string signature)
