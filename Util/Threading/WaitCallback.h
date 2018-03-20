@@ -1,6 +1,7 @@
 #pragma once
 #include <functional>
 #include "NS.h"
+
 NS_THREADING_BEGIN
 typedef std::function<void(void*)> Func;
 class WaitCallback

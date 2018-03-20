@@ -7,7 +7,6 @@
 #include "NS.h"
 #define CLOSE_THREAD -1
 
-
 NS_THREADING_BEGIN
 template <typename T>
 class Singleton

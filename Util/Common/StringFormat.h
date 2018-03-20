@@ -3,6 +3,7 @@
 #include <stdarg.h>
 #include <map>
 #include "NS.h"
+
 NS_COMMON_BEGIN
 class String
 {

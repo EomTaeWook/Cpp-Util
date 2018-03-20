@@ -1,8 +1,8 @@
 #pragma once
 #include <functional>
 #include "NS.h"
-NS_COMMON_BEGIN
 
+NS_COMMON_BEGIN
 template<typename T0, typename T1 = void, typename T2 = void>
 class Delegate
 {
