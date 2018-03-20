@@ -166,7 +166,6 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
   <ItemGroup>
     <ClCompile Include="Common\StringFormat.cpp" />
     <ClCompile Include="Threading\IOCPThreadPool.cpp" />
-    <ClCompile Include="Threading\WaitCallback.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
