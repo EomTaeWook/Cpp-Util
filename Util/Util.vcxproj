@@ -157,7 +157,9 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <ClInclude Include="Event\Event.h" />
     <ClInclude Include="Common\Delegate.h" />
     <ClInclude Include="Common\Finally.h" />
+    <ClInclude Include="Event\NS.h" />
     <ClInclude Include="Threading\IOCPThreadPool.h" />
+    <ClInclude Include="Threading\NS.h" />
     <ClInclude Include="Threading\Thread.h" />
     <ClInclude Include="Threading\WaitCallback.h" />
   </ItemGroup>

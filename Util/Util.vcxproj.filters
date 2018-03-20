@@ -42,6 +42,12 @@
     <ClInclude Include="Common\NS.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="Event\NS.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Threading\NS.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Threading\IOCPThreadPool.cpp">
