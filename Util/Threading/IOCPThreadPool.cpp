@@ -3,6 +3,7 @@
 #include <memory>
 
 USING_COMMON
+USING_THREADING
 
 NS_THREADING_BEGIN
 bool IOCPThreadPool::Init(unsigned int threadMaxSize)
@@ -61,7 +62,7 @@ bool IOCPThreadPool::Stop()
 	}
 	return true;
 }
-bool IOCPThreadPool::InsertQueueItem(Func waitCallback, void* args)
+bool IOCPThreadPool::InsertQueueItem(WaitCallback::Func waitCallback, void* args)
 {
 	if (_completionPort == NULL) return false;
 

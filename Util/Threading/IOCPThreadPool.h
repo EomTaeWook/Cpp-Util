@@ -50,8 +50,9 @@ public:
 		DeleteCriticalSection(&_cs);
 	}
 	bool Init(unsigned int threadSize = 0);
-
-	bool InsertQueueItem(Func waitCallback, void* args);
+	bool InsertQueueItem(WaitCallback::Func waitCallback, void* args);
+public:
+	IOCPThreadPool& operator=(const IOCPThreadPool&) = delete;
 private:
 	bool Stop();
 	bool DeleteItem(WaitCallback* WaitCallback);

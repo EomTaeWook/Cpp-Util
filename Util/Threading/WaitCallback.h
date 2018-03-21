@@ -3,11 +3,11 @@
 #include "NS.h"
 
 NS_THREADING_BEGIN
-typedef std::function<void(void*)> Func;
 class WaitCallback
 {
 	friend class IOCPThreadPool;
 private:
+	typedef std::function<void(void*)> Func;
 	std::function<void(void*)> _func;
 	void* _obj;
 private:
