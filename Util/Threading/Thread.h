@@ -12,6 +12,12 @@ private:
 	std::function<void(void *)> _func;
 	void* _obj;
 public:
+	Thread() {
+		this->_func = NULL;
+		this->_obj = NULL;
+	};
+	Thread(const Thread&) = delete;
+	Thread& operator=(const Thread&) = delete;
 	Thread(std::function<void(void *)> pFunc, void* p_obj = NULL)
 	{
 		this->_func = pFunc;
@@ -19,11 +25,24 @@ public:
 	}
 	~Thread() {}
 	void Start();
+	void Start(std::function<void(void *)> pFunc, void* p_obj = NULL);
+public:
+	void operator()(std::function<void(void *)> pFunc, void* p_obj = NULL);
 private:
 	static unsigned int __stdcall Run(void*);
 	void Call();
 };
-
+void Thread::operator()(std::function<void(void *)> pFunc, void* p_obj)
+{
+	this->_func = pFunc;
+	this->_obj = p_obj;
+}
+inline void Thread::Start(std::function<void(void *)> pFunc, void* p_obj)
+{
+	this->_func = pFunc;
+	this->_obj = p_obj;
+	Start();
+}
 inline unsigned int __stdcall Thread::Run(void* p_obj)
 {
 	Thread* p_th = static_cast<Thread*>(p_obj);
