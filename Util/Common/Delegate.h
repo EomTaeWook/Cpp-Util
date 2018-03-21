@@ -16,14 +16,38 @@ public:
 	{
 	}
 	~Delegate() {}
+	bool operator != (nullptr_t) const;
+	bool operator != (const Delegate& delegate) const;
 	void operator = (Func func);
+	bool operator == (const Delegate& delegate) const;
 	void operator () (T0 arg0, T1 arg1, T2 arg2);
 };
+
+template<typename T0, typename T1, typename T2>
+inline bool Delegate<T0, T1, T2>::operator != (nullptr_t) const
+{
+	return this->_func != nullptr || this->_func != NULL;
+}
+
+template<typename T0, typename T1, typename T2>
+inline bool Delegate<T0, T1, T2>::operator != (const Delegate& delegate) const
+{
+	return &(delegate._func) != &_func;
+}
+
+template<typename T0, typename T1, typename T2>
+inline bool Delegate<T0, T1, T2>::operator == (const Delegate& delegate) const
+{
+	return &(delegate._func) == &_func;
+}
+
+
 template<typename T0, typename T1, typename T2>
 inline void Delegate<T0, T1, T2>::operator = (Func func)
 {
 	_func = func;
 }
+
 template<typename T0, typename T1, typename T2>
 inline void Delegate<T0, T1, T2>::operator () (T0 arg0, T1 arg1, T2 arg2)
 {
@@ -44,14 +68,37 @@ public:
 	{
 	}
 	~Delegate() {}
+	bool operator != (nullptr_t) const;
+	bool operator != (const Delegate& delegate) const;
 	void operator = (Func func);
+	bool operator == (const Delegate& delegate) const;
 	void operator () (T0 arg0, T1 arg1);
 };
+
+template<typename T0, typename T1>
+inline bool Delegate<T0, T1>::operator != (nullptr_t) const
+{
+	return this->_func != nullptr || this->_func != NULL;
+}
+
+template<typename T0, typename T1>
+inline bool Delegate<T0, T1>::operator != (const Delegate& delegate) const
+{
+	return &(delegate._func) != &_func;
+}
+
+template<typename T0, typename T1>
+inline bool Delegate<T0, T1>::operator == (const Delegate& delegate) const
+{
+	return &(delegate._func) == &_func;
+}
+
 template<typename T0, typename T1>
 inline void Delegate<T0, T1>::operator = (Func func)
 {
 	_func = func;
 }
+
 template<typename T0, typename T1>
 inline void Delegate<T0, T1>::operator () (T0 arg0, T1 arg1)
 {
@@ -72,9 +119,32 @@ public:
 	{
 	}
 	~Delegate() {}
+
 	void operator = (Func func);
+	bool operator != (nullptr_t) const;
+	bool operator != (const Delegate& delegate) const;
+	bool operator == (const Delegate& delegate) const;
 	void operator () (T);
 };
+
+template<typename T>
+inline bool Delegate<T>::operator != (nullptr_t) const
+{
+	return this->_func != nullptr || this->_func != NULL;
+}
+
+template<typename T>
+inline bool Delegate<T>::operator == (const Delegate& delegate) const
+{
+	return &(delegate._func) == &_func;
+}
+
+template<typename T>
+inline bool Delegate<T>::operator != (const Delegate& delegate) const
+{
+	return &(delegate._func) != &_func;
+}
+
 template<typename T>
 inline void Delegate<T>::operator = (Func func)
 {
@@ -83,7 +153,6 @@ inline void Delegate<T>::operator = (Func func)
 template<typename T>
 inline void Delegate<T>::operator () (T arg0)
 {
-	_func(e);
+	_func(arg0);
 }
-
 NS_COMMON_END

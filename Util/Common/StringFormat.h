@@ -44,6 +44,10 @@ private:
 				{ "lld", Signature::lld },
 			};
 		}
+		virtual ~FormatEmun()
+		{
+			_enumMap.clear();
+		}
 	private:
 		Signature Find(std::string signature);
 		Signature Find(std::wstring signature);

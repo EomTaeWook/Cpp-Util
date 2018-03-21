@@ -12,7 +12,7 @@ public:
 	{
 		this->_func = func;
 	}
-	~Finally()
+	virtual ~Finally()
 	{
 		if (_func != nullptr) _func();
 	}

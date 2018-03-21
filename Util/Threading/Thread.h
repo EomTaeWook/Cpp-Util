@@ -2,46 +2,43 @@
 #include <functional>
 #include <Windows.h>
 #include <process.h>
+#include "../Common/Delegate.h"
 #include "NS.h"
 
 NS_THREADING_BEGIN
+USING_COMMON
 class Thread
 {
 private:
+	Delegate<void*> _delegate;
 	HANDLE _handle;
-	std::function<void(void *)> _func;
 	void* _obj;
 public:
+	Thread(const Thread&) = delete;
 	Thread() {
-		this->_func = NULL;
+		this->_delegate = NULL;
 		this->_obj = NULL;
 	};
-	Thread(const Thread&) = delete;
-	Thread& operator=(const Thread&) = delete;
 	Thread(std::function<void(void *)> pFunc, void* p_obj = NULL)
 	{
-		this->_func = pFunc;
+		_delegate = pFunc;
 		this->_obj = p_obj;
 	}
-	~Thread() {}
+	virtual ~Thread()
+	{
+	}
 	void Start();
-	void Start(std::function<void(void *)> pFunc, void* p_obj = NULL);
 public:
 	void operator()(std::function<void(void *)> pFunc, void* p_obj = NULL);
+	Thread& operator=(const Thread&) = delete;
 private:
 	static unsigned int __stdcall Run(void*);
 	void Call();
 };
-void Thread::operator()(std::function<void(void *)> pFunc, void* p_obj)
+inline void Thread::operator()(std::function<void(void *)> pFunc, void* p_obj)
 {
-	this->_func = pFunc;
+	_delegate = pFunc;
 	this->_obj = p_obj;
-}
-inline void Thread::Start(std::function<void(void *)> pFunc, void* p_obj)
-{
-	this->_func = pFunc;
-	this->_obj = p_obj;
-	Start();
 }
 inline unsigned int __stdcall Thread::Run(void* p_obj)
 {
@@ -55,9 +52,9 @@ inline void Thread::Start()
 }
 inline void Thread::Call()
 {
-	if (_func != NULL)
+	if (_delegate != NULL)
 	{
-		_func(_obj);
+		_delegate(_obj);
 	}
 	CloseHandle(_handle);
 }

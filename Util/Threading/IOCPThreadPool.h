@@ -44,7 +44,7 @@ public:
 		_completionPort = NULL;
 		InitializeCriticalSection(&_cs);
 	}
-	~IOCPThreadPool()
+	virtual ~IOCPThreadPool()
 	{
 		Stop();
 		DeleteCriticalSection(&_cs);
