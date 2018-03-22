@@ -5,32 +5,12 @@
 #include <memory>
 #include "WaitCallback.h"
 #include "NS.h"
+#include "../DesignPattern/Singleton.h"
 #define CLOSE_THREAD -1
 
 NS_THREADING_BEGIN
-template <typename T>
-class Singleton
-{
-public:
-	Singleton() {}
-	~Singleton() {}
-	static std::shared_ptr<T> Instance();
-private:
-	static std::shared_ptr<T> _instance;
-};
-template <typename T>
-std::shared_ptr<T> Singleton<T>::Instance()
-{
-	if (_instance.get() == 0)
-	{
-		_instance = std::make_shared<T>();
-	}
-	return _instance;
-}
 
-template <typename T>
-std::shared_ptr<T> Threading::Singleton<T>::_instance = NULL;
-
+USING_DESIGN_PATTERN
 class IOCPThreadPool : public Singleton<IOCPThreadPool>
 {
 private:
@@ -44,7 +24,7 @@ public:
 		_completionPort = NULL;
 		InitializeCriticalSection(&_cs);
 	}
-	virtual ~IOCPThreadPool()
+	~IOCPThreadPool()
 	{
 		Stop();
 		DeleteCriticalSection(&_cs);

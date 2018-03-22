@@ -154,6 +154,8 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
   <ItemGroup>
     <ClInclude Include="Common\NS.h" />
     <ClInclude Include="Common\StringFormat.h" />
+    <ClInclude Include="DesignPattern\NS.h" />
+    <ClInclude Include="DesignPattern\Singleton.h" />
     <ClInclude Include="Event\Event.h" />
     <ClInclude Include="Common\Delegate.h" />
     <ClInclude Include="Common\Finally.h" />

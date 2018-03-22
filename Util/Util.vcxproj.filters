@@ -16,6 +16,9 @@
     <Filter Include="Common">
       <UniqueIdentifier>{ee418441-c468-483f-9d70-bdbe525a337b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DesignPattern">
+      <UniqueIdentifier>{b25b045c-9b32-4d50-a859-8ae497ba17f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Threading\WaitCallback.h">
@@ -47,6 +50,12 @@
     </ClInclude>
     <ClInclude Include="Threading\NS.h">
       <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="DesignPattern\NS.h">
+      <Filter>DesignPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="DesignPattern\Singleton.h">
+      <Filter>DesignPattern</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
