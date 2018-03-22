@@ -1,6 +1,7 @@
 #pragma once
 #include "NS.h"
 #include "../Threading/CriticalSection.h"
+
 NS_DESIGN_PATTERN_BEGIN
 USING_THREADING
 template <typename T>
@@ -26,6 +27,8 @@ std::shared_ptr<T> Singleton<T>::Instance()
 	_CreateMutex.LeaveCriticalSection();
 	return _instance;
 }
+template <typename T>
+CriticalSection Singleton<T>::_CreateMutex;
 
 template <typename T>
 std::shared_ptr<T> Singleton<T>::_instance = NULL;

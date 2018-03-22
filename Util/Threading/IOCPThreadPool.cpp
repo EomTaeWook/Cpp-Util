@@ -65,10 +65,10 @@ bool IOCPThreadPool::InsertQueueItem(WaitCallback::Func waitCallback, void* args
 {
 	if (_completionPort == NULL) return false;
 
-	std::unique_ptr<Finally> finallyObj(new Finally(std::bind(&LeaveCriticalSection, &_cs)));
+	std::unique_ptr<Finally> finallyObj(new Finally(std::bind(&CriticalSection::LeaveCriticalSection, &_cs)));
 	try
 	{
-		EnterCriticalSection(&_cs);
+		_cs.EnterCriticalSection();
 		WaitCallback* p_waitCallback = new WaitCallback(waitCallback, args);
 		if (p_waitCallback == NULL) return false;
 		return PostQueuedCompletionStatus(_completionPort, 0, (ULONG_PTR)p_waitCallback, NULL);
@@ -80,8 +80,8 @@ bool IOCPThreadPool::InsertQueueItem(WaitCallback::Func waitCallback, void* args
 }
 int IOCPThreadPool::Run()
 {
-	DWORD numberOfBytes = 0;
-	ULONG_PTR callback = 0;
+	unsigned long numberOfBytes = 0;
+	unsigned long callback = 0;
 	LPOVERLAPPED pOverlapped = 0;
 
 	while (true)

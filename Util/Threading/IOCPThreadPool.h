@@ -16,17 +16,15 @@ private:
 	HANDLE _completionPort;
 	std::vector<HANDLE> _hWorkerThread;
 	unsigned int _thread_Max_Size;
-	CRITICAL_SECTION _cs;
+	CriticalSection _cs;
 public:
 	IOCPThreadPool()
 	{
 		_completionPort = NULL;
-		InitializeCriticalSection(&_cs);
 	}
 	~IOCPThreadPool()
 	{
 		Stop();
-		DeleteCriticalSection(&_cs);
 	}
 	bool Init(unsigned int threadSize = 0);
 	bool InsertQueueItem(WaitCallback::Func waitCallback, void* args);
