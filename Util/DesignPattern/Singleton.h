@@ -11,8 +11,7 @@ public:
 	static std::shared_ptr<T> Instance();
 private:
 	static std::shared_ptr<T> _instance;
-private:
-	CRITICAL_SECTION _cs;
+	static CRITICAL_SECTION _cs;
 };
 
 template <typename T>
