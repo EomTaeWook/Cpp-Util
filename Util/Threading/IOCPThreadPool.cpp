@@ -2,10 +2,9 @@
 #include "../Common/Finally.h"
 #include <memory>
 
+NS_THREADING_BEGIN
 USING_COMMON
 USING_THREADING
-
-NS_THREADING_BEGIN
 bool IOCPThreadPool::Init(unsigned int threadMaxSize)
 {
 	try

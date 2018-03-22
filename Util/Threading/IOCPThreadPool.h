@@ -9,7 +9,6 @@
 #define CLOSE_THREAD -1
 
 NS_THREADING_BEGIN
-
 USING_DESIGN_PATTERN
 class IOCPThreadPool : public Singleton<IOCPThreadPool>
 {

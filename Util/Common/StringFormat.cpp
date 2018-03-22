@@ -209,7 +209,7 @@ static std::basic_string<T, Traits, Alloc> String::FillDigit(std::basic_string<T
 	int idx = digit.find(find_key);
 	if (idx == -1)
 	{
-		int size = std::stoi(digit) - arg.size();
+		auto size = std::stoi(digit) - arg.size();
 		for (int i = 0; i < size; i++)
 		{
 			output.push_back(' ');
@@ -257,7 +257,7 @@ static std::basic_string<T, Traits, Alloc> String::FillDigit(std::basic_string<T
 		auto integerDigit = digit.substr(0, idx);
 		if (!integerDigit.empty())
 		{
-			int size = std::stoi(integerDigit) - output.size();
+			auto size = std::stoi(integerDigit) - output.size();
 			for (int i = 0; i < size; i++)
 			{
 				output.insert(output.begin(), ' ');

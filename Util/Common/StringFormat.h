@@ -74,10 +74,6 @@ inline String::FormatEmun::Signature String::FormatEmun::Find(std::string signat
 inline String::FormatEmun::Signature String::FormatEmun::Find(std::wstring signature)
 {
 	std::string _signature(signature.begin(), signature.end());
-	auto it = _enumMap.find(_signature);
-	if (it != _enumMap.end())
-		return it->second;
-	else
-		return Signature::None;
+	return Find(_signature);
 }
 NS_COMMON_END
