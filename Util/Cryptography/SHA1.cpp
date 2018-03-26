@@ -17,6 +17,7 @@ Translation to simpler C++ Code
 Safety fixes
 -- Eugene Hopkinson <slowriot at voxelstorm dot com>
 */
+
 NS_CRYPTOGRAPHY_BEGIN
 std::string SHA1::ComputeHash(char* plainText)
 {
