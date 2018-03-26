@@ -47,7 +47,7 @@ bool IOCPThreadPool::Stop()
 	if (_completionPort)
 	{
 		for (size_t i = 0; i < _hWorkerThread.size(); i++)
-			PostQueuedCompletionStatus(_completionPort, 0, CLOSE_THREAD, NULL);
+			PostQueuedCompletionStatus(_completionPort, 0, _CLOSE_THREAD, NULL);
 
 		for (size_t i = 0; i < _hWorkerThread.size(); i++)
 		{
@@ -90,7 +90,7 @@ int IOCPThreadPool::Run()
 		{
 			break;
 		}
-		if ((int)callback == CLOSE_THREAD) break;
+		if ((int)callback == _CLOSE_THREAD) break;
 
 		WaitCallback* pCallback = reinterpret_cast<WaitCallback*>(callback);
 		if (pCallback != NULL)

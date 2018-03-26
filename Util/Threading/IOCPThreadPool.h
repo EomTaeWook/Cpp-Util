@@ -6,13 +6,14 @@
 #include "WaitCallback.h"
 #include "NS.h"
 #include "../DesignPattern/Singleton.h"
-#define CLOSE_THREAD -1
 
 NS_THREADING_BEGIN
 USING_DESIGN_PATTERN
 class IOCPThreadPool : public Singleton<IOCPThreadPool>
 {
 private:
+	static const int _CLOSE_THREAD = -1;
+
 	HANDLE _completionPort;
 	std::vector<HANDLE> _hWorkerThread;
 	unsigned int _thread_Max_Size;

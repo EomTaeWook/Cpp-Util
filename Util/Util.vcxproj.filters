@@ -22,6 +22,9 @@
     <Filter Include="Threading\Synchronization">
       <UniqueIdentifier>{a31d2f2c-805e-4df8-b6fb-895eeca50ebb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Cryptography">
+      <UniqueIdentifier>{b75b2d46-6129-4df1-afe2-3c29ce623eab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Threading\WaitCallback.h">
@@ -63,6 +66,9 @@
     <ClInclude Include="Threading\CriticalSection.h">
       <Filter>Threading\Synchronization</Filter>
     </ClInclude>
+    <ClInclude Include="Cryptography\SHA1.h">
+      <Filter>Cryptography</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Threading\IOCPThreadPool.cpp">
@@ -70,6 +76,12 @@
     </ClCompile>
     <ClCompile Include="Common\StringFormat.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Cryptography\SHA1.cpp">
+      <Filter>Cryptography</Filter>
+    </ClCompile>
+    <ClCompile Include="Cryptography\NS.h">
+      <Filter>Cryptography</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -154,6 +154,7 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
   <ItemGroup>
     <ClInclude Include="Common\NS.h" />
     <ClInclude Include="Common\StringFormat.h" />
+    <ClInclude Include="Cryptography\SHA1.h" />
     <ClInclude Include="DesignPattern\NS.h" />
     <ClInclude Include="DesignPattern\Singleton.h" />
     <ClInclude Include="Event\Event.h" />
@@ -168,6 +169,8 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\StringFormat.cpp" />
+    <ClCompile Include="Cryptography\NS.h" />
+    <ClCompile Include="Cryptography\SHA1.cpp" />
     <ClCompile Include="Threading\IOCPThreadPool.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
