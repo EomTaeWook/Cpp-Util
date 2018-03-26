@@ -24,7 +24,7 @@ public:
 	SHA1() { Reset(); }
 	virtual ~SHA1() {}
 public:
-	/*std::string ComputeHash(std::ifstream& stream);*/
+	std::string ComputeHash(std::ifstream& stream);
 	std::string ComputeHash(std::string& plainText);
 	std::string ComputeHash(char* plainText);
 private:

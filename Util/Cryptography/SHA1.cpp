@@ -23,7 +23,30 @@ std::string SHA1::ComputeHash(char* plainText)
 	std::string _plainText(plainText);
 	return ComputeHash(_plainText);
 }
-
+std::string SHA1::ComputeHash(std::ifstream& stream)
+{
+	if (!stream.is_open())
+	{
+		throw std::exception("File Open Exception");
+	}
+	char buf[_BLOCK_BYTES];
+	size_t read = 0;
+	while (true)
+	{
+		stream.read(buf, _BLOCK_BYTES);
+		read = (size_t)stream.gcount();
+		_buffer.append(buf, read);
+		if (_buffer.size() != _BLOCK_BYTES)
+		{
+			return Final();
+		}
+		uint32_t block[_BLOCK_INTS];
+		Buffer_To_Block(_buffer, block);
+		Transform(_digest, block, _transforms);
+		_buffer.clear();
+	}
+	return Final();
+}
 std::string SHA1::ComputeHash(std::string& plainText)
 {
 	size_t size = 0;
