@@ -56,9 +56,9 @@ public:
 	static std::wstring String::Format(std::wstring format, ...);
 	static std::string String::Format(std::string format, ...);
 private:
-	template<typename T, typename Traits = std::char_traits<T>, typename Alloc = std::allocator<T>>
+	template<typename T, typename Traits, typename Alloc>
 	static std::basic_string<T, Traits, Alloc> Format(std::basic_string<T, Traits, Alloc> format, va_list& args);
-	template<typename T, typename Traits = std::char_traits<T>, typename Alloc = std::allocator<T>>
+	template<typename T, typename Traits, typename Alloc>
 	static std::basic_string<T, Traits, Alloc> FillDigit(std::basic_string<T, Traits, Alloc>& arg, std::basic_string<T, Traits, Alloc>& digit);
 };
 

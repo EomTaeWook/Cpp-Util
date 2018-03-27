@@ -2,7 +2,7 @@
 #include <typeinfo>
 
 NS_COMMON_BEGIN
-template<typename T, typename Traits = std::char_traits<T>, typename Alloc = std::allocator<T>>
+template<typename T, typename Traits, typename Alloc>
 std::basic_string<T, Traits, Alloc> String::Format(std::basic_string<T, Traits, Alloc> format, va_list& args)
 {
 	FormatEmun formatEnum;
@@ -198,7 +198,7 @@ std::wstring String::Format(std::wstring format, ...)
 		throw ex;
 	}
 }
-template<typename T, typename Traits = std::char_traits<T>, typename Alloc = std::allocator<T>>
+template<typename T, typename Traits, typename Alloc>
 static std::basic_string<T, Traits, Alloc> String::FillDigit(std::basic_string<T, Traits, Alloc>& arg, std::basic_string<T, Traits, Alloc>& digit)
 {
 	if (digit.empty()) return arg;
