@@ -32,16 +32,16 @@ private:
 		FormatEmun()
 		{
 			_enumMap = {
-				{ "d", Signature::d },
-				{ "u", Signature::u },
-				{ "f", Signature::f },
-				{ "c", Signature::c },
-				{ "s", Signature::s },
-				{ "wc", Signature::wc },
-				{ "ws", Signature::ws },
-				{ "lf", Signature::lf },
-				{ "ld", Signature::ld },
-				{ "lld", Signature::lld },
+				{ "d", d },
+				{ "u", u },
+				{ "f", f },
+				{ "c", c },
+				{ "s", s },
+				{ "wc", wc },
+				{ "ws", ws },
+				{ "lf", lf },
+				{ "ld", ld },
+				{ "lld", lld },
 			};
 		}
 		virtual ~FormatEmun()
