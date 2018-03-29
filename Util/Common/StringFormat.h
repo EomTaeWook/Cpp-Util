@@ -13,10 +13,10 @@ private:
 	private:
 		friend class String;
 	private:
-		enum Signature
+		enum class Signature
 		{
-			None = 0,
-			d = 1, //int
+			None,
+			d, //int
 			u, //unsigned int
 			f, //float
 			c, //char
@@ -32,16 +32,16 @@ private:
 		FormatEmun()
 		{
 			_enumMap = {
-				{ "d", d },
-				{ "u", u },
-				{ "f", f },
-				{ "c", c },
-				{ "s", s },
-				{ "wc", wc },
-				{ "ws", ws },
-				{ "lf", lf },
-				{ "ld", ld },
-				{ "lld", lld },
+				{ "d", Signature::d },
+				{ "u", Signature::u },
+				{ "f", Signature::f },
+				{ "c", Signature::c },
+				{ "s", Signature::s },
+				{ "wc", Signature::wc },
+				{ "ws", Signature::ws },
+				{ "lf", Signature::lf },
+				{ "ld", Signature::ld },
+				{ "lld", Signature::lld }
 			};
 		}
 		virtual ~FormatEmun()
