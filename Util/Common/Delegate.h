@@ -42,7 +42,7 @@ bool IDelegate<R, Types...>::operator == (const IDelegate& d) const
 template<typename R, typename ...Types>
 void IDelegate<R, Types...>::operator = (nullptr_t)
 {
-	_target = nullptr_t;
+	_target = nullptr;
 }
 
 template<typename ...Types>
