@@ -3,156 +3,103 @@
 #include "NS.h"
 
 NS_COMMON_BEGIN
-template<typename T0, typename T1 = void, typename T2 = void>
-class Delegate
+template<typename R, typename ...Types>
+class IDelegate
+{
+protected:
+	std::function<R(Types...)> _target;
+public:
+	bool operator != (const IDelegate& d) const;
+	bool operator != (nullptr_t) const;
+	bool operator == (const IDelegate& d) const;
+	bool operator == (nullptr_t) const;
+	void operator = (nullptr_t);
+};
+template<typename R, typename ...Types>
+bool IDelegate<R, Types...>::operator != (nullptr_t) const
+{
+	return _target != nullptr || _target != NULL;
+}
+
+template<typename R, typename ...Types>
+bool IDelegate<R, Types...>::operator != (const IDelegate& d) const
+{
+	return this != &d;
+}
+
+template<typename R, typename ...Types>
+bool IDelegate<R, Types...>::operator == (nullptr_t) const
+{
+	return _target == nullptr || _target == NULL;
+}
+
+template<typename R, typename ...Types>
+bool IDelegate<R, Types...>::operator == (const IDelegate& d) const
+{
+	return this == &d;
+}
+
+template<typename R, typename ...Types>
+void IDelegate<R, Types...>::operator = (nullptr_t)
+{
+	_target = nullptr_t;
+}
+
+template<typename ...Types>
+class Delegate : public IDelegate<void, Types...>
 {
 public:
-	typedef std::function<void(T0, T1, T2)> Func;
-private:
-	Func _func;
-public:
-	Delegate() {}
-	Delegate(Func func) : _func(func)
+	Delegate()
 	{
+		_target = nullptr;
+	}
+	Delegate(std::function<void(Types...)> target)
+	{
+		_target = target;
 	}
 	~Delegate() {}
-	bool operator != (nullptr_t) const;
-	bool operator != (const Delegate& delegate) const;
-	void operator = (Func func);
-	bool operator == (const Delegate& delegate) const;
-	void operator () (T0 arg0, T1 arg1, T2 arg2);
+public:
+	void operator () (Types... args);
+	void operator = (std::function<void(Types...)> func);
 };
 
-template<typename T0, typename T1, typename T2>
-inline bool Delegate<T0, T1, T2>::operator != (nullptr_t) const
+template<typename ...Types>
+inline void Delegate<Types...>::operator = (std::function<void(Types...)> target)
 {
-	return this->_func != nullptr || this->_func != NULL;
+	_target = target;
+}
+template<typename ...Types>
+inline void Delegate<Types...>::operator() (Types... args)
+{
+	_target(std::forward<Types ...>(args...));
 }
 
-template<typename T0, typename T1, typename T2>
-inline bool Delegate<T0, T1, T2>::operator != (const Delegate& delegate) const
-{
-	return &(delegate._func) != &_func;
-}
-
-template<typename T0, typename T1, typename T2>
-inline bool Delegate<T0, T1, T2>::operator == (const Delegate& delegate) const
-{
-	return &(delegate._func) == &_func;
-}
-
-
-template<typename T0, typename T1, typename T2>
-inline void Delegate<T0, T1, T2>::operator = (Func func)
-{
-	_func = func;
-}
-
-template<typename T0, typename T1, typename T2>
-inline void Delegate<T0, T1, T2>::operator () (T0 arg0, T1 arg1, T2 arg2)
-{
-	_func(arg0, arg1, arg2);
-}
-
-
-template<typename T0, typename T1>
-class Delegate<T0, T1, void>
+template<typename R, typename ...Types>
+class MulticastDelegate : public IDelegate<R, Types...>
 {
 public:
-	typedef std::function<void(T0, T1)> Func;
-private:
-	Func _func;
-public:
-	Delegate() {}
-	Delegate(Func func) : _func(func)
+	MulticastDelegate()
 	{
+		_target = nullptr;
 	}
-	~Delegate() {}
-	bool operator != (nullptr_t) const;
-	bool operator != (const Delegate& delegate) const;
-	void operator = (Func func);
-	bool operator == (const Delegate& delegate) const;
-	void operator () (T0 arg0, T1 arg1);
-};
-
-template<typename T0, typename T1>
-inline bool Delegate<T0, T1>::operator != (nullptr_t) const
-{
-	return this->_func != nullptr || this->_func != NULL;
-}
-
-template<typename T0, typename T1>
-inline bool Delegate<T0, T1>::operator != (const Delegate& delegate) const
-{
-	return &(delegate._func) != &_func;
-}
-
-template<typename T0, typename T1>
-inline bool Delegate<T0, T1>::operator == (const Delegate& delegate) const
-{
-	return &(delegate._func) == &_func;
-}
-
-template<typename T0, typename T1>
-inline void Delegate<T0, T1>::operator = (Func func)
-{
-	_func = func;
-}
-
-template<typename T0, typename T1>
-inline void Delegate<T0, T1>::operator () (T0 arg0, T1 arg1)
-{
-	_func(arg0, arg1);
-}
-
-
-template<typename T>
-class Delegate<T, void, void>
-{
-public:
-	typedef std::function<void(T)> Func;
-private:
-	Func _func;
-public:
-	Delegate() {}
-	Delegate(Func func) : _func(func)
+	MulticastDelegate(std::function<R(Types...)> target)
 	{
+		_target = target;
 	}
-	~Delegate() {}
-
-	void operator = (Func func);
-	bool operator != (nullptr_t) const;
-	bool operator != (const Delegate& delegate) const;
-	bool operator == (const Delegate& delegate) const;
-	void operator () (T);
+	~MulticastDelegate() {}
+public:
+	R operator () (Types... args);
+	void operator = (std::function<R(Types...)> func);
 };
 
-template<typename T>
-inline bool Delegate<T>::operator != (nullptr_t) const
+template<typename R, typename ...Types>
+inline void MulticastDelegate<R, Types...>::operator = (std::function<R(Types...)> target)
 {
-	return this->_func != nullptr || this->_func != NULL;
+	_target = target;
 }
-
-template<typename T>
-inline bool Delegate<T>::operator == (const Delegate& delegate) const
+template<typename R, typename ...Types>
+inline R MulticastDelegate<R, Types...>::operator () (Types ... args)
 {
-	return &(delegate._func) == &_func;
-}
-
-template<typename T>
-inline bool Delegate<T>::operator != (const Delegate& delegate) const
-{
-	return &(delegate._func) != &_func;
-}
-
-template<typename T>
-inline void Delegate<T>::operator = (Func func)
-{
-	_func = func;
-}
-template<typename T>
-inline void Delegate<T>::operator () (T arg0)
-{
-	_func(arg0);
+	return _target(std::forward<Types ...>(args...));
 }
 NS_COMMON_END

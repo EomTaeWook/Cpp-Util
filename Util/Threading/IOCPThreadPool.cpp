@@ -61,7 +61,7 @@ bool IOCPThreadPool::Stop()
 	}
 	return true;
 }
-bool IOCPThreadPool::InsertQueueItem(WaitCallback::Func waitCallback, void* args)
+bool IOCPThreadPool::InsertQueueItem(std::function<void(void*)> callback, void* args)
 {
 	if (_completionPort == NULL) return false;
 
@@ -69,7 +69,7 @@ bool IOCPThreadPool::InsertQueueItem(WaitCallback::Func waitCallback, void* args
 	try
 	{
 		_cs.EnterCriticalSection();
-		WaitCallback* p_waitCallback = new WaitCallback(waitCallback, args);
+		WaitCallback* p_waitCallback = new WaitCallback(callback, args);
 		if (p_waitCallback == NULL) return false;
 		return PostQueuedCompletionStatus(_completionPort, 0, (ULONG_PTR)p_waitCallback, NULL);
 	}

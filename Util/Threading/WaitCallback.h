@@ -1,28 +1,29 @@
 #pragma once
 #include <functional>
 #include "NS.h"
+#include "../Common/Delegate.h"
 
 NS_THREADING_BEGIN
-class WaitCallback
+USING_COMMON
+class WaitCallback : public Delegate<void*>
 {
 	friend class IOCPThreadPool;
 private:
-	typedef std::function<void(void*)> Func;
-	std::function<void(void*)> _func;
-	void* _obj;
+	void* _state;
 private:
 	void Run();
 public:
-	WaitCallback(Func callback, void* obj = NULL)
+	WaitCallback(std::function<void(void*)> callback, void* state = NULL)
 	{
-		this->_func = callback;
-		this->_obj = obj;
+		this->_target = callback;
+		_state = state;
 	}
 	virtual ~WaitCallback() {}
+public:
 };
 
 inline void WaitCallback::Run()
 {
-	this->_func(this->_obj);
+	this->operator()(this->_state);
 }
 NS_THREADING_END
