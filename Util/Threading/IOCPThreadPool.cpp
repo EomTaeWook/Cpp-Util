@@ -18,7 +18,7 @@ bool IOCPThreadPool::Init(unsigned int threadMaxSize)
 			return false;
 
 		SYSTEM_INFO info;
-		GetSystemInfo(&info);
+		::GetSystemInfo(&info);
 
 		if (threadMaxSize > 0)
 		{
@@ -47,16 +47,16 @@ bool IOCPThreadPool::Stop()
 	if (_completionPort)
 	{
 		for (size_t i = 0; i < _hWorkerThread.size(); i++)
-			PostQueuedCompletionStatus(_completionPort, 0, _CLOSE_THREAD, NULL);
+			::PostQueuedCompletionStatus(_completionPort, 0, _CLOSE_THREAD, NULL);
 
 		for (size_t i = 0; i < _hWorkerThread.size(); i++)
 		{
-			WaitForSingleObject(_hWorkerThread[i], INFINITE);
-			CloseHandle(_hWorkerThread[i]);
+			::WaitForSingleObject(_hWorkerThread[i], INFINITE);
+			::CloseHandle(_hWorkerThread[i]);
 		}
 
 		_hWorkerThread.clear();
-		CloseHandle(_completionPort);
+		::CloseHandle(_completionPort);
 		_completionPort = NULL;
 	}
 	return true;
@@ -71,7 +71,7 @@ bool IOCPThreadPool::InsertQueueItem(std::function<void(void*)> callback, void* 
 		_cs.EnterCriticalSection();
 		WaitCallback* p_waitCallback = new WaitCallback(callback, args);
 		if (p_waitCallback == NULL) return false;
-		return PostQueuedCompletionStatus(_completionPort, 0, (ULONG_PTR)p_waitCallback, NULL);
+		return ::PostQueuedCompletionStatus(_completionPort, 0, (ULONG_PTR)p_waitCallback, NULL);
 	}
 	catch (...)
 	{
@@ -86,7 +86,7 @@ int IOCPThreadPool::Run()
 
 	while (true)
 	{
-		if (!GetQueuedCompletionStatus(_completionPort, &numberOfBytes, &callback, &pOverlapped, INFINITE))
+		if (!::GetQueuedCompletionStatus(_completionPort, &numberOfBytes, &callback, &pOverlapped, INFINITE))
 		{
 			break;
 		}
