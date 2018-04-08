@@ -21,10 +21,10 @@ private:
 };
 inline void CriticalSection::EnterCriticalSection()
 {
-	::EnterCriticalSection(&_cs);
+	EnterCriticalSection(&_cs);
 }
 inline void CriticalSection::LeaveCriticalSection()
 {
-	::LeaveCriticalSection(&_cs);
+	LeaveCriticalSection(&_cs);
 }
 NS_THREADING_END
