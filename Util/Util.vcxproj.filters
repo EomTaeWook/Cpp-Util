@@ -25,6 +25,9 @@
     <Filter Include="Cryptography">
       <UniqueIdentifier>{b75b2d46-6129-4df1-afe2-3c29ce623eab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Socket">
+      <UniqueIdentifier>{bb5de941-859d-4d39-b6db-44fe81d737f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Threading\WaitCallback.h">
@@ -69,6 +72,18 @@
     <ClInclude Include="Cryptography\SHA1.h">
       <Filter>Cryptography</Filter>
     </ClInclude>
+    <ClInclude Include="Socket\NS.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\MutexCount.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\IOCPAbstractionServer.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\StateObject.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Threading\IOCPThreadPool.cpp">
@@ -82,6 +97,9 @@
     </ClCompile>
     <ClCompile Include="Cryptography\NS.h">
       <Filter>Cryptography</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\IOCPAbstractionServer.cpp">
+      <Filter>Socket</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
