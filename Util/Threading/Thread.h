@@ -1,6 +1,5 @@
 #pragma once
 #include <functional>
-#include <Windows.h>
 #include <process.h>
 #include "../Common/Delegate.h"
 #include "NS.h"

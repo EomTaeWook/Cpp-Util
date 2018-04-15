@@ -78,9 +78,6 @@
     <ClInclude Include="Common\MutexCount.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Socket\IOCPAbstractionServer.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
     <ClInclude Include="Socket\StateObject.h">
       <Filter>Socket</Filter>
     </ClInclude>
@@ -97,9 +94,6 @@
     </ClCompile>
     <ClCompile Include="Cryptography\NS.h">
       <Filter>Cryptography</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket\IOCPAbstractionServer.cpp">
-      <Filter>Socket</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
