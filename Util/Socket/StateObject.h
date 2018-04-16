@@ -3,6 +3,7 @@
 #include <WinSock2.h>
 #include <memory>
 NS_SOCKET_BEGIN
+//소켓 정보를 담는 객체
 class StateObject
 {
 public:

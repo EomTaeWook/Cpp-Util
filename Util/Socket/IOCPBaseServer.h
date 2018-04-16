@@ -48,6 +48,9 @@ private:
 	static unsigned int __stdcall WorkerThread(void*);
 private:
 	virtual void AddPeer(StateObject* pStateObject) {}
-	virtual void ClosePeer(unsigned long long handle) {}
+	virtual void ClosePeer(StateObject* pStateObject) 
+	{
+		delete pStateObject;
+	}
 };
 NS_SOCKET_END

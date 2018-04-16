@@ -161,12 +161,12 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <ClInclude Include="Common\Delegate.h" />
     <ClInclude Include="Common\Finally.h" />
     <ClInclude Include="Event\NS.h" />
-    <ClInclude Include="Common\MutexCount.h" />
     <ClInclude Include="Socket\FunctionMap.h" />
     <ClInclude Include="Socket\IOCPBaseServer.h" />
     <ClInclude Include="Socket\IOCPServer.h" />
     <ClInclude Include="Socket\MutexCount.h" />
     <ClInclude Include="Socket\NS.h" />
+    <ClInclude Include="Socket\Packet.h" />
     <ClInclude Include="Socket\StateObject.h" />
     <ClInclude Include="Threading\CriticalSection.h" />
     <ClInclude Include="Threading\IOCPThreadPool.h" />

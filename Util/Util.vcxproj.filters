@@ -75,9 +75,6 @@
     <ClInclude Include="Socket\NS.h">
       <Filter>Socket</Filter>
     </ClInclude>
-    <ClInclude Include="Common\MutexCount.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="Socket\StateObject.h">
       <Filter>Socket</Filter>
     </ClInclude>
@@ -91,6 +88,9 @@
       <Filter>Socket</Filter>
     </ClInclude>
     <ClInclude Include="Socket\IOCPServer.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\Packet.h">
       <Filter>Socket</Filter>
     </ClInclude>
   </ItemGroup>

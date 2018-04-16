@@ -1,6 +1,5 @@
 #include "IOCPBaseServer.h"
-
-//#include"Packet.h"
+#include "Packet.h"
 
 NS_SOCKET_BEGIN
 void IOCPBaseServer::Stop()
@@ -16,6 +15,10 @@ void IOCPBaseServer::Stop()
 	}
 	closesocket(_listener);
 	WSACleanup();
+	_listener = NULL;
+	CloseHandle(_completionPort);
+	_completionPort = NULL;
+	_hWorkerThread.clear();
 }
 
 void IOCPBaseServer::Init()
@@ -69,6 +72,7 @@ void IOCPBaseServer::StartListening(void* pObj)
 		Stop();
 		throw std::exception("Listener Create Error");
 	}
+	//accept시 NonBlock
 	//unsigned long mode = 1;
 	//ioctlsocket(_listener, FIONBIO, &mode);
 	int option = 1;
@@ -115,19 +119,20 @@ int IOCPBaseServer::Run()
 		{
 			break;
 		}
+		if ((int)stateObject == _CLOSE_THREAD && bytesTrans == 0)
+			break;
 		auto pHandler = reinterpret_cast<StateObject*>(stateObject);
 		if (bytesTrans == 0)
 		{
 			closesocket(pHandler->Socket());
-			ClosePeer(pHandler->Handle());
+			ClosePeer(pHandler);
 			continue;
 		}
 		if (pHandler->IsRead())
 		{
-			//Packet packet;
-
+			Packet packet;
+			//Packet 뜯어서 헤더 사이즈 확인 후 Callback 처리
 		}
-
 	}
 	return 0;
 }
