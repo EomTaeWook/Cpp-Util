@@ -13,7 +13,7 @@ bool IOCPThreadPool::Init(unsigned int threadMaxSize)
 		{
 			return false;
 		}
-		_completionPort = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
+		_completionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 		if (_completionPort == INVALID_HANDLE_VALUE)
 			return false;
 

@@ -1,8 +1,9 @@
 #pragma once
+#include "NS.h"
 #include <functional>
 #include <process.h>
 #include "../Common/Delegate.h"
-#include "NS.h"
+#include <Windows.h>
 
 NS_THREADING_BEGIN
 USING_COMMON
