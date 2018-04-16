@@ -81,6 +81,15 @@
     <ClInclude Include="Socket\StateObject.h">
       <Filter>Socket</Filter>
     </ClInclude>
+    <ClInclude Include="Socket\FunctionMap.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\IOCPBaseServer.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\MutexCount.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Threading\IOCPThreadPool.cpp">
@@ -94,6 +103,9 @@
     </ClCompile>
     <ClCompile Include="Cryptography\NS.h">
       <Filter>Cryptography</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\IOCPBaseServer.cpp">
+      <Filter>Socket</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

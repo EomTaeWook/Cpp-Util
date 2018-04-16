@@ -162,6 +162,9 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <ClInclude Include="Common\Finally.h" />
     <ClInclude Include="Event\NS.h" />
     <ClInclude Include="Common\MutexCount.h" />
+    <ClInclude Include="Socket\FunctionMap.h" />
+    <ClInclude Include="Socket\IOCPBaseServer.h" />
+    <ClInclude Include="Socket\MutexCount.h" />
     <ClInclude Include="Socket\NS.h" />
     <ClInclude Include="Socket\StateObject.h" />
     <ClInclude Include="Threading\CriticalSection.h" />
@@ -174,6 +177,7 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <ClCompile Include="Common\StringFormat.cpp" />
     <ClCompile Include="Cryptography\NS.h" />
     <ClCompile Include="Cryptography\SHA1.cpp" />
+    <ClCompile Include="Socket\IOCPBaseServer.cpp" />
     <ClCompile Include="Threading\IOCPThreadPool.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
