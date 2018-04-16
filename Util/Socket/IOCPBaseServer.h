@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "NS.h"
 #include <WinSock2.h>
 #include "StateObject.h"
