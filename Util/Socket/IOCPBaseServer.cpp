@@ -6,6 +6,13 @@ void IOCPBaseServer::Stop()
 {
 	_isStart = false;
 
+	for (auto it = _clientPool.begin(); it != _clientPool.end(); ++it)
+	{
+		it->second->Close();
+		it->second.reset();
+	}
+	_clientPool.clear();
+
 	for (size_t i = 0; i < _hWorkerThread.size(); i++)
 		PostQueuedCompletionStatus(_completionPort, 0, _CLOSE_THREAD, NULL);
 	for (size_t i = 0; i < _hWorkerThread.size(); i++)
@@ -66,7 +73,7 @@ void IOCPBaseServer::Start(std::string ip, int port)
 void IOCPBaseServer::StartListening(void* pObj)
 {
 	_isStart = true;
-	_listener = WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
+	_listener = WSASocketW(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
 	if (_listener == INVALID_SOCKET)
 	{
 		Stop();
@@ -124,7 +131,6 @@ int IOCPBaseServer::Run()
 		auto pHandler = reinterpret_cast<StateObject*>(stateObject);
 		if (bytesTrans == 0)
 		{
-			closesocket(pHandler->Socket());
 			ClosePeer(pHandler);
 			continue;
 		}
@@ -135,6 +141,35 @@ int IOCPBaseServer::Run()
 		}
 	}
 	return 0;
+}
+void IOCPBaseServer::AddPeer(StateObject* pStateObject)
+{
+	_read.EnterCriticalSection();
+	auto client = _clientPool.find(pStateObject->Handle());
+	if (client == _clientPool.end())
+	{
+		auto _pStateObject = std::make_shared<StateObject>(*pStateObject);
+		_clientPool.insert(std::make_pair(_pStateObject->Handle(), std::move(_pStateObject)));
+	}
+	else
+	{
+		closesocket(client->second->Socket());
+		client->second.reset();
+		_clientPool.erase(client->second->Handle());
+	}
+	_read.LeaveCriticalSection();
+}
+
+void IOCPBaseServer::ClosePeer(StateObject* handle)
+{
+	_remove.EnterCriticalSection();
+	auto it = _clientPool.find(handle->Handle());
+	if (it != _clientPool.end())
+	{
+		it->second.reset();
+		_clientPool.erase(it);
+	}
+	_remove.LeaveCriticalSection();
 }
 unsigned int __stdcall IOCPBaseServer::WorkerThread(void* obj)
 {

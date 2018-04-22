@@ -9,6 +9,7 @@
 #include <functional>
 #include "../Threading/Thread.h"
 #include "MutexCount.h"
+#include <map>
 #pragma comment(lib, "Ws2_32.lib")
 
 NS_SOCKET_BEGIN
@@ -17,13 +18,6 @@ class IOCPBaseServer
 private:
 	static const int _CLOSE_THREAD = -1;
 	static const int _BUFF_SIZE = 2048;
-private:
-	std::unique_ptr<Util::Threading::Thread> _thread;
-	bool _isStart;
-	HANDLE _completionPort;
-	std::vector<HANDLE> _hWorkerThread;
-	sockaddr_in _iPEndPoint;
-	MutexCount _mutexCount;
 public:
 	IOCPBaseServer()
 	{
@@ -35,22 +29,31 @@ public:
 		Stop();
 	}
 private:
+	std::unique_ptr<Util::Threading::Thread> _thread;
+	std::map<unsigned long, std::shared_ptr<StateObject>> _clientPool;
+	bool _isStart;
+	HANDLE _completionPort;
+	std::vector<HANDLE> _hWorkerThread;
+	sockaddr_in _iPEndPoint;
+	MutexCount _mutexCount;
+private:
 	SOCKET _listener;
+	Util::Threading::CriticalSection _remove;
+	Util::Threading::CriticalSection _read;
 public:
 	void Start(std::string ip, int port);
 	void Stop();
 private:
 	int Run();
 	void StartListening(void* pObj = nullptr);
+	void AddPeer(StateObject* pStateObject);
+	void ClosePeer(StateObject* pStateObject);
 public:
 	void Init();
+protected:
+	void virtual AcceptComplete(StateObject& handler) = 0;
+	void virtual CloseComplete(StateObject& handler) = 0;
 private:
 	static unsigned int __stdcall WorkerThread(void*);
-private:
-	virtual void AddPeer(StateObject* pStateObject) {}
-	virtual void ClosePeer(StateObject* pStateObject) 
-	{
-		delete pStateObject;
-	}
 };
 NS_SOCKET_END

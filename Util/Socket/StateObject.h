@@ -3,7 +3,6 @@
 #include <WinSock2.h>
 #include <memory>
 NS_SOCKET_BEGIN
-//소켓 정보를 담는 객체
 class StateObject
 {
 public:
@@ -29,16 +28,21 @@ private:
 	WSABUF _wsaBuf;
 	char buffer[BUFF_SIZE];
 	int _mode;
-	unsigned long long _handle;
+	unsigned long _handle;
 public:
 	SOCKET& Socket();
 	SOCKADDR_IN& SocketAddr();
 	std::shared_ptr<OVERLAPPED>& Overlapped();
 	WSABUF& WSABuff();
 	bool IsRead();
-	unsigned long long& Handle();
+	unsigned long& Handle();
+	void Close();
 };
-
+inline void StateObject::Close()
+{
+	//동기화 추가작업
+	closesocket(_sock);
+}
 inline SOCKET& StateObject::Socket()
 {
 	return _sock;
@@ -59,7 +63,7 @@ inline bool StateObject::IsRead()
 {
 	return _mode == READ;
 }
-inline unsigned long long& StateObject::Handle()
+inline unsigned long& StateObject::Handle()
 {
 	return _handle;
 }

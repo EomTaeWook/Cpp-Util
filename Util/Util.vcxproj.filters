@@ -87,10 +87,10 @@
     <ClInclude Include="Socket\MutexCount.h">
       <Filter>Socket</Filter>
     </ClInclude>
-    <ClInclude Include="Socket\IOCPServer.h">
+    <ClInclude Include="Socket\Packet.h">
       <Filter>Socket</Filter>
     </ClInclude>
-    <ClInclude Include="Socket\Packet.h">
+    <ClInclude Include="Socket\ServerBase.h">
       <Filter>Socket</Filter>
     </ClInclude>
   </ItemGroup>
@@ -110,7 +110,7 @@
     <ClCompile Include="Socket\IOCPBaseServer.cpp">
       <Filter>Socket</Filter>
     </ClCompile>
-    <ClCompile Include="Socket\IOCPServer.cpp">
+    <ClCompile Include="Socket\ServerBase.cpp">
       <Filter>Socket</Filter>
     </ClCompile>
   </ItemGroup>
