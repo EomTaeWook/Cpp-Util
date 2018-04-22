@@ -6,12 +6,12 @@ void IOCPBaseServer::Stop()
 {
 	_isStart = false;
 
-	for (auto it = _clientPool.begin(); it != _clientPool.end(); ++it)
+	for (auto it = _clients.begin(); it != _clients.end(); ++it)
 	{
 		it->second->Close();
 		it->second.reset();
 	}
-	_clientPool.clear();
+	_clients.clear();
 
 	for (size_t i = 0; i < _hWorkerThread.size(); i++)
 		PostQueuedCompletionStatus(_completionPort, 0, _CLOSE_THREAD, NULL);
@@ -109,6 +109,8 @@ void IOCPBaseServer::StartListening(void* pObj)
 		std::memcpy(&stateObject->SocketAddr(), &clientAddr, size);
 		stateObject->Handle() = _mutexCount.Add();
 		AddPeer(stateObject);
+		AcceptComplete(*stateObject);
+
 		CreateIoCompletionPort((HANDLE)stateObject->Socket(), _completionPort, (unsigned long)stateObject, 0);
 		unsigned long flag = 0;
 		WSARecv(stateObject->Socket(), &stateObject->WSABuff(), 1, 0, &flag, &*stateObject->Overlapped(), NULL);
@@ -136,7 +138,6 @@ int IOCPBaseServer::Run()
 		}
 		if (pHandler->IsRead())
 		{
-			Packet packet;
 			//Packet 뜯어서 헤더 사이즈 확인 후 Callback 처리
 		}
 	}
@@ -144,32 +145,45 @@ int IOCPBaseServer::Run()
 }
 void IOCPBaseServer::AddPeer(StateObject* pStateObject)
 {
-	_read.EnterCriticalSection();
-	auto client = _clientPool.find(pStateObject->Handle());
-	if (client == _clientPool.end())
+	try
 	{
+		_read.EnterCriticalSection();
+		auto it = _clients.find(pStateObject->Handle());
+		if (it != _clients.end())
+		{
+			it->second->Close();
+			it->second.reset();
+			_clients.erase(pStateObject->Handle());
+		}
 		auto _pStateObject = std::make_shared<StateObject>(*pStateObject);
-		_clientPool.insert(std::make_pair(_pStateObject->Handle(), std::move(_pStateObject)));
+		_clients.insert(std::make_pair(_pStateObject->Handle(), std::move(_pStateObject)));
 	}
-	else
+	catch (...)
 	{
-		closesocket(client->second->Socket());
-		client->second.reset();
-		_clientPool.erase(client->second->Handle());
+		//log
 	}
 	_read.LeaveCriticalSection();
 }
 
-void IOCPBaseServer::ClosePeer(StateObject* handle)
+void IOCPBaseServer::ClosePeer(StateObject* handler)
 {
-	_remove.EnterCriticalSection();
-	auto it = _clientPool.find(handle->Handle());
-	if (it != _clientPool.end())
+	auto handle = handler->Handle();
+	try
 	{
-		it->second.reset();
-		_clientPool.erase(it);
+		_remove.EnterCriticalSection();
+		auto it = _clients.find(handle);
+		if (it != _clients.end())
+		{
+			it->second.reset();
+			_clients.erase(it);
+		}
+	}
+	catch (...)
+	{
+		//log
 	}
 	_remove.LeaveCriticalSection();
+	CloseComplete(handle);
 }
 unsigned int __stdcall IOCPBaseServer::WorkerThread(void* obj)
 {

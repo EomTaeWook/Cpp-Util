@@ -1,20 +1,27 @@
 #pragma once
 #include "NS.h"
 #include "FunctionMap.h"
+#include "IOCPBaseServer.h"
 #include "../Threading\CriticalSection.h"
 #include <string>
 
 NS_SOCKET_BEGIN
-class ServerBase
+template<typename ...T>
+class IOCPServer : public IOCPBaseServer
 {
 public:
-	ServerBase() {}
-	virtual ~ServerBase() {}
-public:
-	void BindCallback(int protocol, std::function<void(Packet& packet, StateObject& handler)> callback);
+	IOCPServer() {}
+	virtual ~IOCPServer() {}
 protected:
-	
-private :
-	ServerFunctionMap<std::string> _functionMap;
+	Util::Socket::ServerFunctionMap<T...> _callbackMap;
+private:
+public:
+	void BindCallback(int protocol, std::function<void(Packet&, StateObject&, T...)> callback);
 };
+
+template<typename ...T>
+inline void IOCPServer<T...>::BindCallback(int protocol, std::function<void(Packet&, StateObject&, T...)> callback)
+{
+	_callbackMap.BindCallback(protocol, callback);
+}
 NS_SOCKET_END

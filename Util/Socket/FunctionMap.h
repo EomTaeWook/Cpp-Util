@@ -4,13 +4,14 @@
 #include "StateObject.h"
 #include "Packet.h"
 #include <map>
+
 NS_SOCKET_BEGIN
 template<typename ...T>
 class ServerFunctionMap
 {
 public:
-	ServerFunctionMap() {};
-	virtual ~ServerFunctionMap() {};
+	ServerFunctionMap() {}
+	virtual ~ServerFunctionMap() { Clear(); }
 private:
 	std::map<int, Util::Common::Delegate<Packet&, StateObject&, T...>> _funcMap;
 

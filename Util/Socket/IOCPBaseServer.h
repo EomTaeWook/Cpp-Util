@@ -30,7 +30,7 @@ public:
 	}
 private:
 	std::unique_ptr<Util::Threading::Thread> _thread;
-	std::map<unsigned long, std::shared_ptr<StateObject>> _clientPool;
+	std::map<unsigned long, std::shared_ptr<StateObject>> _clients;
 	bool _isStart;
 	HANDLE _completionPort;
 	std::vector<HANDLE> _hWorkerThread;
@@ -50,9 +50,12 @@ private:
 	void ClosePeer(StateObject* pStateObject);
 public:
 	void Init();
+	//abstract Method
 protected:
 	void virtual AcceptComplete(StateObject& handler) = 0;
-	void virtual CloseComplete(StateObject& handler) = 0;
+	void virtual CloseComplete(unsigned long handle) = 0;
+	void virtual PacketConversionComplete(Packet& packet, StateObject& handler, ...) = 0;
+
 private:
 	static unsigned int __stdcall WorkerThread(void*);
 };

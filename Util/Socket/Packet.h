@@ -1,4 +1,7 @@
 #pragma once
+#include "NS.h"
+
+NS_SOCKET_BEGIN
 #pragma pack(1)
 class Packet
 {
@@ -12,3 +15,4 @@ public:
 	unsigned short Reserved_0;
 	unsigned short Reserved_1;
 };
+NS_SOCKET_END
