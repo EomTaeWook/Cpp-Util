@@ -9,10 +9,12 @@
 #include <functional>
 #include "../Threading/Thread.h"
 #include "MutexCount.h"
+#include "Packet.h"
 #include <map>
 #pragma comment(lib, "Ws2_32.lib")
 
 NS_SOCKET_BEGIN
+
 class IOCPBaseServer
 {
 private:

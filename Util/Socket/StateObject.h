@@ -2,6 +2,7 @@
 #include "NS.h"
 #include <WinSock2.h>
 #include <memory>
+
 NS_SOCKET_BEGIN
 class StateObject
 {

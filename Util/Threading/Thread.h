@@ -10,7 +10,7 @@ USING_COMMON
 class Thread
 {
 private:
-	Delegate<void*> _delegate;
+	MulticastDelegate<void, void*> _delegate;
 	HANDLE _handle;
 	void* _obj;
 public:

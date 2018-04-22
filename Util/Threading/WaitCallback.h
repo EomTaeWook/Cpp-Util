@@ -5,7 +5,7 @@
 
 NS_THREADING_BEGIN
 USING_COMMON
-class WaitCallback : public Delegate<void*>
+class WaitCallback : public MulticastDelegate<void, void*>
 {
 	friend class IOCPThreadPool;
 private:

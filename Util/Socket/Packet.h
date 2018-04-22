@@ -1,8 +1,9 @@
 #pragma once
 #include "NS.h"
 
-NS_SOCKET_BEGIN
 #pragma pack(1)
+
+NS_SOCKET_BEGIN
 class Packet
 {
 public:

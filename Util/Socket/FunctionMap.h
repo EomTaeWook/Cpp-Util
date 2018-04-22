@@ -13,7 +13,7 @@ public:
 	ServerFunctionMap() {}
 	virtual ~ServerFunctionMap() { Clear(); }
 private:
-	std::map<int, Util::Common::Delegate<Packet&, StateObject&, T...>> _funcMap;
+	std::map<int, Util::Common::MulticastDelegate<void, Packet&, StateObject&, T...>> _funcMap;
 
 public:
 	void BindCallback(int protocol, std::function<void(Packet&, StateObject&, T...)> callback);

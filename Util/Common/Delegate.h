@@ -45,154 +45,42 @@ void IDelegate<R, Types...>::operator = (nullptr_t)
 	_target = nullptr;
 }
 
-template<typename T1, typename T2 = void, typename T3 = void, typename T4 = void, typename T5 = void>
-class Delegate : public IDelegate<void, T1, T2, T3, T4, T5>
+template<typename R, typename ...Types>
+class Delegate : public IDelegate<R, Types...>
 {
 public:
 	Delegate()
 	{
 		_target = nullptr;
 	}
-	Delegate(std::function<void(T1, T2, T3, T4, T5)> target)
+	Delegate(std::function<R()> target)
 	{
 		_target = target;
 	}
 	virtual ~Delegate() {}
 public:
-	void operator () (T1, T2, T3, T4, T5);
-	void operator = (std::function<void(T1, T2, T3, T4, T5)> func);
+	R operator() ();
+	void operator = (std::function<R()> func);
 };
 
-template<typename T1, typename T2, typename T3, typename T4, typename T5>
-inline void Delegate<T1, T2, T3, T4, T5>::operator = (std::function<void(T1, T2, T3, T4, T5)> target)
+template<typename R, typename ...Types>
+inline void Delegate<R, Types...>::operator = (std::function<R()> target)
 {
 	_target = target;
 }
-template<typename T1, typename T2, typename T3, typename T4, typename T5>
-inline void Delegate<T1, T2, T3, T4, T5>::operator() (T1 param1, T2 param2, T3 param3, T4 param4, T5 param5)
+template<>
+inline void Delegate<void>::operator() ()
 {
-	_target(param1, param2, param3, param4, param5);
+	_target();
 }
-
-template<typename T1, typename T2, typename T3, typename T4>
-class Delegate<T1, T2, T3, T4, void> : public IDelegate<void, T1, T2, T3, T4>
+template<typename R, typename ...Types>
+inline R Delegate<R, Types...>::operator() ()
 {
-public:
-	Delegate()
-	{
-		_target = nullptr;
-	}
-	Delegate(std::function<void(T1, T2, T3, T4)> target)
-	{
-		_target = target;
-	}
-	virtual ~Delegate() {}
-public:
-	void operator () (T1, T2, T3, T4);
-	void operator = (std::function<void(T1, T2, T3, T4)> func);
-};
-
-template<typename T1, typename T2, typename T3, typename T4>
-inline void Delegate<T1, T2, T3, T4>::operator = (std::function<void(T1, T2, T3, T4)> target)
-{
-	_target = target;
-}
-
-template<typename T1, typename T2, typename T3, typename T4>
-inline void Delegate<T1, T2, T3, T4>::operator() (T1 param1, T2 param2, T3 param3, T4 param4)
-{
-	_target(param1, param2, param3, param4);
-}
-
-template<typename T1, typename T2, typename T3>
-class Delegate<T1, T2, T3, void, void> : public IDelegate<void, T1, T2, T3>
-{
-public:
-	Delegate()
-	{
-		_target = nullptr;
-	}
-	Delegate(std::function<void(T1, T2, T3)> target)
-	{
-		_target = target;
-	}
-	virtual ~Delegate() {}
-public:
-	void operator () (T1, T2, T3);
-	void operator = (std::function<void(T1, T2, T3)> func);
-};
-
-template<typename T1, typename T2, typename T3>
-inline void Delegate<T1, T2, T3>::operator = (std::function<void(T1, T2, T3)> target)
-{
-	_target = target;
-}
-template<typename T1, typename T2, typename T3>
-inline void Delegate<T1, T2, T3>::operator() (T1 param1, T2 param2, T3 param3)
-{
-	_target(param1, param2, param3);
-}
-
-template<typename T1, typename T2>
-class Delegate<T1, T2, void, void, void> : public IDelegate<void, T1, T2>
-{
-public:
-	Delegate()
-	{
-		_target = nullptr;
-	}
-	Delegate(std::function<void(T1, T2)> target)
-	{
-		_target = target;
-	}
-	virtual ~Delegate() {}
-public:
-	void operator () (T1, T2);
-	void operator = (std::function<void(T1, T2)> func);
-};
-
-template<typename T1, typename T2>
-inline void Delegate<T1, T2>::operator = (std::function<void(T1, T2)> target)
-{
-	_target = target;
-}
-template<typename T1, typename T2>
-inline void Delegate<T1, T2>::operator() (T1 param1, T2 param2)
-{
-	_target(param1, param2);
-}
-
-template<typename T>
-class Delegate <T, void, void, void, void> : public IDelegate<void, T>
-{
-public:
-	Delegate()
-	{
-		_target = nullptr;
-	}
-	Delegate(std::function<void(T)> target)
-	{
-		_target = target;
-	}
-	~Delegate() {}
-public:
-	void operator () (T);
-	void operator = (std::function<void(T)> func);
-};
-
-template<typename T>
-inline void Delegate<T>::operator = (std::function<void(T)> target)
-{
-	_target = target;
-}
-template<typename T>
-inline void Delegate<T>::operator () (T param)
-{
-	_target(param);
+	return _target();
 }
 
 template<typename R, typename T1, typename T2 = void, typename T3 = void, typename T4 = void, typename T5 = void>
-class MulticastDelegate : public IDelegate<R, T1, T2, T3, T4, T5>
+class MulticastDelegate : public Delegate<R, T1, T2 ,T3, T4, T5>
 {
 public:
 	MulticastDelegate()
@@ -222,7 +110,7 @@ inline R MulticastDelegate<R, T1, T2, T3, T4, T5>::operator() (T1 param1, T2 par
 
 
 template<typename R, typename T1, typename T2, typename T3, typename T4>
-class MulticastDelegate<R, T1, T2, T3, T4, void> : public IDelegate<R, T1, T2, T3, T4>
+class MulticastDelegate<R, T1, T2, T3, T4, void> : Delegate<R, T1, T2, T3, T4>
 {
 public:
 	MulticastDelegate()
@@ -251,7 +139,7 @@ inline R MulticastDelegate<R, T1, T2, T3, T4>::operator() (T1 param1, T2 param2,
 }
 
 template<typename R, typename T1, typename T2, typename T3>
-class MulticastDelegate<R, T1, T2, T3, void, void> : public IDelegate<R, T1, T2, T3>
+class MulticastDelegate<R, T1, T2, T3, void, void> : public Delegate<R, T1, T2, T3>
 {
 public:
 	MulticastDelegate()
@@ -280,7 +168,7 @@ inline R MulticastDelegate<R, T1, T2, T3>::operator() (T1 param1, T2 param2, T3 
 }
 
 template<typename R, typename T1, typename T2>
-class MulticastDelegate<R, T1, T2, void, void, void> : public IDelegate<R, T1, T2>
+class MulticastDelegate<R, T1, T2, void, void, void> : public Delegate<R, T1, T2>
 {
 public:
 	MulticastDelegate()
@@ -309,7 +197,7 @@ inline R MulticastDelegate<R, T1, T2>::operator() (T1 param1, T2 param2)
 }
 
 template<typename R, typename T>
-class MulticastDelegate<R, T, void, void, void, void> : public IDelegate<R, T>
+class MulticastDelegate<R, T, void, void, void, void> : public Delegate<R, T>
 {
 public:
 	MulticastDelegate()
@@ -336,5 +224,4 @@ inline R MulticastDelegate<R, T>::operator() (T param)
 {
 	return _target(param);
 }
-
 NS_COMMON_END
