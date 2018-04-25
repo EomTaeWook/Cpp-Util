@@ -2,7 +2,7 @@
 #include "NS.h"
 #include <functional>
 #include <process.h>
-#include "../Common/Delegate.h"
+#include "../Common/MulticastDelegate.h"
 #include <Windows.h>
 
 NS_THREADING_BEGIN

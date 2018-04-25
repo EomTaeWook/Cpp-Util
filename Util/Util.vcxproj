@@ -152,6 +152,7 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Common\MulticastDelegate.h" />
     <ClInclude Include="Common\NS.h" />
     <ClInclude Include="Common\StringFormat.h" />
     <ClInclude Include="Cryptography\SHA1.h" />

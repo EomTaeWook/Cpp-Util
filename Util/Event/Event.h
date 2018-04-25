@@ -1,5 +1,5 @@
 #pragma once
-#include "../Common/Delegate.h"
+#include "../Common/MulticastDelegate.h"
 #include <vector>
 #include <memory>
 #include "NS.h"
@@ -16,19 +16,19 @@ public:
 		_delegates.clear();
 	}
 private:
-	std::vector<std::unique_ptr<Delegate<void*, T>>> _delegates;
+	std::vector<std::unique_ptr<MulticastDelegate<void, void*, T>>> _delegates;
 private:
-	void operator += (std::unique_ptr<Delegate<void*, T>> func);
-	void operator -= (std::unique_ptr<Delegate<void*, T>> func);
+	void operator += (std::unique_ptr<MulticastDelegate<void, void*, T>> func);
+	void operator -= (std::unique_ptr<MulticastDelegate<void, void*, T>> func);
 public:
 	void operator()(void* sender, T e);
-	void operator += (typename Delegate<void*, T>::Func func);
-	void operator -= (typename Delegate<void*, T>::Func func);
-	void operator += (Delegate<void*, T>* func);
-	void operator -= (Delegate<void*, T>* func);
+	void operator += (std::function<void(void*, T)> func);
+	void operator -= (std::function<void(void*, T)> func);
+	void operator += (MulticastDelegate<void, void*, T>* func);
+	void operator -= (MulticastDelegate<void, void*, T>* func);
 };
 template<typename T>
-inline void Event<T>::operator += (std::unique_ptr<Delegate<void*, T>> func)
+inline void Event<T>::operator += (std::unique_ptr<MulticastDelegate<void, void*, T>> func)
 {
 	auto it = _delegates.begin();
 	while (it != _delegates.end())
@@ -42,7 +42,7 @@ inline void Event<T>::operator += (std::unique_ptr<Delegate<void*, T>> func)
 	}
 }
 template<typename T>
-inline void Event<T>::operator -= (std::unique_ptr<Delegate<void*, T>> func)
+inline void Event<T>::operator -= (std::unique_ptr<MulticastDelegate<void, void*, T>> func)
 {
 	for (auto it = _delegates.begin(); it != _delegates.end(); ++it)
 	{
@@ -53,27 +53,27 @@ inline void Event<T>::operator -= (std::unique_ptr<Delegate<void*, T>> func)
 	}
 }
 template<typename T>
-inline void Event<T>::operator += (typename Delegate<void*, T>::Func func)
+inline void Event<T>::operator += (std::function<void(void*, T)> func)
 {
-	std::unique_ptr<Delegate<void*, T>> ptr(new Delegate<void*, T>(func));
+	std::unique_ptr<MulticastDelegate<void, void*, T>> ptr(new MulticastDelegate<void, void*, T>(func));
 	this->operator+=(std::move(ptr));
 }
 template<typename T>
-inline void Event<T>::operator -= (typename Delegate<void*, T>::Func func)
+inline void Event<T>::operator -= (std::function<void(void*, T)> func)
 {
-	std::unique_ptr<Delegate<void*, T>> ptr(new Delegate<void*, T>(func));
+	std::unique_ptr<MulticastDelegate<void, void*, T>> ptr(new MulticastDelegate<void, void*, T>(func));
 	this->operator-=(std::move(ptr));
 }
 template<typename T>
-inline void Event<T>::operator += (Delegate<void*, T>* func)
+inline void Event<T>::operator += (MulticastDelegate<void, void*, T>* func)
 {
-	std::unique_ptr<Delegate<void*, T>> ptr(func);
+	std::unique_ptr<MulticastDelegate<void, void*, T>> ptr(func);
 	this->operator+=(std::move(ptr));
 }
 template<typename T>
-inline void Event<T>::operator -= (Delegate<void*, T>* func)
+inline void Event<T>::operator -= (MulticastDelegate<void, void*, T>* func)
 {
-	std::unique_ptr<Delegate<void*, T>> ptr(func);
+	std::unique_ptr<MulticastDelegate<void, void*, T>> ptr(func);
 	this->operator-=(std::move(ptr));
 }
 template<typename T>
