@@ -38,6 +38,7 @@ inline void ServerFunctionMap<T...>::BindCallback(int protocol, std::function<vo
 	Util::Common::MulticastDelegate<Packet&, StateObject&, T...> _delegate = callback;
 	_funcMap.insert(std::make_pair(protocol, _delegate));
 }
+
 template<typename ...T>
 inline void ServerFunctionMap<T...>::Clear()
 {

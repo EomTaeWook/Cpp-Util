@@ -1,6 +1,8 @@
 #include "IOCPBaseServer.h"
 #include "Packet.h"
 
+#include <iostream>
+
 NS_SOCKET_BEGIN
 void IOCPBaseServer::Stop()
 {
@@ -30,6 +32,8 @@ void IOCPBaseServer::Stop()
 
 void IOCPBaseServer::Init()
 {
+	std::ios::sync_with_stdio(false);
+
 	this->_completionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 	if (_completionPort == INVALID_HANDLE_VALUE)
 		throw std::exception("CreateIoCompletionPort Fail");
@@ -124,7 +128,7 @@ int IOCPBaseServer::Run()
 	OVERLAPPED* overlapped = 0;
 	while (true)
 	{
-		if (!GetQueuedCompletionStatus(_completionPort, &bytesTrans, &stateObject, &overlapped, INFINITE))
+		if (!GetQueuedCompletionStatus(_completionPort, &bytesTrans, reinterpret_cast<PULONG_PTR>(stateObject), &overlapped, INFINITE))
 		{
 			break;
 		}
@@ -160,7 +164,7 @@ void IOCPBaseServer::AddPeer(StateObject* pStateObject)
 	}
 	catch (...)
 	{
-		//log
+		std::cout << "AddPeer Exception" << std::endl;
 	}
 	_read.LeaveCriticalSection();
 }
@@ -180,7 +184,7 @@ void IOCPBaseServer::ClosePeer(StateObject* handler)
 	}
 	catch (...)
 	{
-		//log
+		std::cout << "ClosePeer Exception" << std::endl;
 	}
 	_remove.LeaveCriticalSection();
 	CloseComplete(handle);

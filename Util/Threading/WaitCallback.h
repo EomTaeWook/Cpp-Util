@@ -15,7 +15,7 @@ private:
 public:
 	WaitCallback(std::function<void(void*)> callback, void* state = NULL)
 	{
-		this->_target = callback;
+		MulticastDelegate<void, void*>::operator=(callback);
 		_state = state;
 	}
 	virtual ~WaitCallback() {}

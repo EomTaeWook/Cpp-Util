@@ -96,6 +96,9 @@
     <ClInclude Include="Common\MulticastDelegate.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="Common\Delegate98.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Threading\IOCPThreadPool.cpp">

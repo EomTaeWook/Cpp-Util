@@ -24,4 +24,21 @@ inline void IOCPServer<T...>::BindCallback(int protocol, std::function<void(Pack
 {
 	_callbackMap.BindCallback(protocol, callback);
 }
+
+class IOCPServer<void> : public IOCPBaseServer
+{
+public:
+	IOCPServer() {}
+	virtual ~IOCPServer() {}
+protected:
+	Util::Socket::ServerFunctionMap<> _callbackMap;
+private:
+public:
+	void BindCallback(int protocol, std::function<void(Packet&, StateObject&)> callback);
+};
+
+inline void IOCPServer<void>::BindCallback(int protocol, std::function<void(Packet&, StateObject&)> callback)
+{
+	_callbackMap.BindCallback(protocol, callback);
+}
 NS_SOCKET_END

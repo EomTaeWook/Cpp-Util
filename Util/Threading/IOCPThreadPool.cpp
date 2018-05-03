@@ -86,7 +86,7 @@ int IOCPThreadPool::Run()
 
 	while (true)
 	{
-		if (!GetQueuedCompletionStatus(_completionPort, &numberOfBytes, &callback, &pOverlapped, INFINITE))
+		if (!GetQueuedCompletionStatus(_completionPort, &numberOfBytes, reinterpret_cast<PULONG_PTR>(callback), &pOverlapped, INFINITE))
 		{
 			break;
 		}
