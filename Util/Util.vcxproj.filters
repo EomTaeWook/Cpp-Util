@@ -90,14 +90,14 @@
     <ClInclude Include="Socket\Packet.h">
       <Filter>Socket</Filter>
     </ClInclude>
-    <ClInclude Include="Socket\ServerBase.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
     <ClInclude Include="Common\MulticastDelegate.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Common\Delegate98.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\IOCPServer.h">
+      <Filter>Socket</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -114,9 +114,6 @@
       <Filter>Cryptography</Filter>
     </ClCompile>
     <ClCompile Include="Socket\IOCPBaseServer.cpp">
-      <Filter>Socket</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket\ServerBase.cpp">
       <Filter>Socket</Filter>
     </ClCompile>
   </ItemGroup>

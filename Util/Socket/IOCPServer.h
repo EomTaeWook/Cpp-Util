@@ -3,7 +3,6 @@
 #include "FunctionMap.h"
 #include "IOCPBaseServer.h"
 #include "../Threading\CriticalSection.h"
-#include <string>
 
 NS_SOCKET_BEGIN
 template<typename ...T>
