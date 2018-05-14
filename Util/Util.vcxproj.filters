@@ -28,6 +28,15 @@
     <Filter Include="Socket">
       <UniqueIdentifier>{bb5de941-859d-4d39-b6db-44fe81d737f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{bfb0a63b-aa49-403d-9ba1-322a8b8184c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Message">
+      <UniqueIdentifier>{e1013e6d-4da6-4cd4-a7c5-9cf33e1e666e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Message\MSMQ">
+      <UniqueIdentifier>{eb2e487c-0227-4d5a-a1cf-60a35116d670}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Threading\WaitCallback.h">
@@ -99,6 +108,18 @@
     <ClInclude Include="Socket\IOCPServer.h">
       <Filter>Socket</Filter>
     </ClInclude>
+    <ClInclude Include="System\Message\MSMQEnum.h">
+      <Filter>System\Message\MSMQ</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Message\MSMQ.h">
+      <Filter>System\Message\MSMQ</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Message\Message.h">
+      <Filter>System\Message\MSMQ</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Message\NS.h">
+      <Filter>System\Message\MSMQ</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Threading\IOCPThreadPool.cpp">
@@ -115,6 +136,9 @@
     </ClCompile>
     <ClCompile Include="Socket\IOCPBaseServer.cpp">
       <Filter>Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Message\MSMQ.cpp">
+      <Filter>System\Message\MSMQ</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
