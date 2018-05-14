@@ -4,5 +4,6 @@ ThreadPool,
 SHA1,
 Delegate,
 StringFormat,
-Event(observer pattern)
+Event(observer pattern),
+MSMQ
 IOCP Server Working..
