@@ -27,8 +27,8 @@ public:
 	}
 public:
 	void Init(std::wstring pathName, MessageQueueMode mode);
-	HRESULT ReadingQueue(Message& message, int timeOutMillis);
-	HRESULT SendingQueue(Message& message);
+	HRESULT Receive(Message& message, int timeOutMillis);
+	HRESULT Send(Message& message);
 	const bool IsRead() { return _mode == MessageQueueMode::READ; };
 };
 

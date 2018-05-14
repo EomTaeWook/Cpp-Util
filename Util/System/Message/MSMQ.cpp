@@ -33,7 +33,7 @@ void MSMQ::Init(std::wstring pathName, MessageQueueMode mode)
 	else
 		MQOpenQueue(formatNameBuffer, (int)MessageQueueAccess::SEND_ACCESS, (int)MessageQueueShare::DENY_NONE, &_hQueue);
 }
-HRESULT MSMQ::ReadingQueue(Message& message, int timeOutMillis)
+HRESULT MSMQ::Receive(Message& message, int timeOutMillis)
 {
 	if (_hQueue == NULL)
 		throw "Invalid Handle";
@@ -92,7 +92,7 @@ HRESULT MSMQ::ReadingQueue(Message& message, int timeOutMillis)
 		message.SetReadSize(msgPropVar[2].ulVal);
 	return hr;
 }
-HRESULT MSMQ::SendingQueue(Message& message)
+HRESULT MSMQ::Send(Message& message)
 {
 	if (_hQueue == NULL)
 		throw "Invalid Handle";
