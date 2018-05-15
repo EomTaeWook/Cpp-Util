@@ -111,13 +111,13 @@
     <ClInclude Include="System\Message\MSMQEnum.h">
       <Filter>System\Message\MSMQ</Filter>
     </ClInclude>
-    <ClInclude Include="System\Message\MSMQ.h">
-      <Filter>System\Message\MSMQ</Filter>
-    </ClInclude>
     <ClInclude Include="System\Message\Message.h">
       <Filter>System\Message\MSMQ</Filter>
     </ClInclude>
     <ClInclude Include="System\Message\NS.h">
+      <Filter>System\Message\MSMQ</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Message\MessageQueue.h">
       <Filter>System\Message\MSMQ</Filter>
     </ClInclude>
   </ItemGroup>
@@ -137,7 +137,7 @@
     <ClCompile Include="Socket\IOCPBaseServer.cpp">
       <Filter>Socket</Filter>
     </ClCompile>
-    <ClCompile Include="System\Message\MSMQ.cpp">
+    <ClCompile Include="System\Message\MessageQueue.cpp">
       <Filter>System\Message\MSMQ</Filter>
     </ClCompile>
   </ItemGroup>

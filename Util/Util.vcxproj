@@ -172,7 +172,7 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <ClInclude Include="Socket\StateObject.h" />
     <ClInclude Include="System\Message\Message.h" />
     <ClInclude Include="System\Message\MSMQEnum.h" />
-    <ClInclude Include="System\Message\MSMQ.h" />
+    <ClInclude Include="System\Message\MessageQueue.h" />
     <ClInclude Include="System\Message\NS.h" />
     <ClInclude Include="Threading\CriticalSection.h" />
     <ClInclude Include="Threading\IOCPThreadPool.h" />
@@ -185,7 +185,7 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <ClCompile Include="Cryptography\NS.h" />
     <ClCompile Include="Cryptography\SHA1.cpp" />
     <ClCompile Include="Socket\IOCPBaseServer.cpp" />
-    <ClCompile Include="System\Message\MSMQ.cpp" />
+    <ClCompile Include="System\Message\MessageQueue.cpp" />
     <ClCompile Include="Threading\IOCPThreadPool.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

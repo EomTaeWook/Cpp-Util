@@ -10,18 +10,17 @@
 #pragma comment (lib, "Mqrt.lib")
 
 NS_MESSAGE_MSMQ_BEGIN
-
-class MSMQ
+class MessageQueue
 {
 private:
 	HANDLE _hQueue;
 	MessageQueueMode _mode;
 public:
-	MSMQ()
+	MessageQueue()
 	{
 		_hQueue = INVALID_HANDLE_VALUE;
 	}
-	virtual ~MSMQ()
+	virtual ~MessageQueue()
 	{
 		MQCloseQueue(_hQueue);
 	}
@@ -29,7 +28,7 @@ public:
 	void Init(std::wstring pathName, MessageQueueMode mode);
 	HRESULT Receive(Message& message, int timeOutMillis);
 	HRESULT Send(Message& message);
-	const bool IsRead() { return _mode == MessageQueueMode::READ; };
+	bool IsRead();
 };
-
+inline bool MessageQueue::IsRead() { return _mode == MessageQueueMode::READ; }
 NS_MESSAGE_MSMQ_END

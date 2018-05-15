@@ -1,8 +1,8 @@
-#include "MSMQ.h"
+#include "MessageQueue.h"
 
 NS_MESSAGE_MSMQ_BEGIN
 
-void MSMQ::Init(std::wstring pathName, MessageQueueMode mode)
+void MessageQueue::Init(std::wstring pathName, MessageQueueMode mode)
 {
 	if (pathName.size() == 0)
 		throw "MQ_ERROR_INVALID_PARAMETER";
@@ -33,7 +33,7 @@ void MSMQ::Init(std::wstring pathName, MessageQueueMode mode)
 	else
 		MQOpenQueue(formatNameBuffer, (int)MessageQueueAccess::SEND_ACCESS, (int)MessageQueueShare::DENY_NONE, &_hQueue);
 }
-HRESULT MSMQ::Receive(Message& message, int timeOutMillis)
+HRESULT MessageQueue::Receive(Message& message, int timeOutMillis)
 {
 	if (_hQueue == NULL)
 		throw "Invalid Handle";
@@ -92,12 +92,12 @@ HRESULT MSMQ::Receive(Message& message, int timeOutMillis)
 		message.SetReadSize(msgPropVar[2].ulVal);
 	return hr;
 }
-HRESULT MSMQ::Send(Message& message)
+HRESULT MessageQueue::Send(Message& message)
 {
 	if (_hQueue == NULL)
 		throw "Invalid Handle";
 
-	const int NUMBEROFPROPERTIES = 5;
+	const int NUMBEROFPROPERTIES = 2;
 	DWORD propId = 0;
 
 	// Define an MQMSGPROPS structure.  
@@ -106,17 +106,17 @@ HRESULT MSMQ::Send(Message& message)
 	MQPROPVARIANT msgPropVar[NUMBEROFPROPERTIES];
 	HRESULT msgStatus[NUMBEROFPROPERTIES];
 
-	// Specify the message properties to be sent.  
-	WCHAR labelBuffer[MQ_MAX_MSG_LABEL_LEN];
-	msgPropId[propId] = PROPID_M_LABEL;					// Property ID  
-	msgPropVar[propId].vt = VT_LPWSTR;					// Type indicator  
-	msgPropVar[propId].pwszVal = labelBuffer;			// The message label  
-	propId++;
-
+	// Specify the message properties to be retrieved.  
 	msgPropId[propId] = PROPID_M_BODY;							// Property ID 
 	msgPropVar[propId].vt = VT_VECTOR | VT_UI1;					// Type indicator  
 	msgPropVar[propId].caub.pElems = message.GetBuffer().get();	// Body buffer
 	msgPropVar[propId].caub.cElems = message.GetBufferSize();	// Buffer size
+	propId++;
+
+	WCHAR labelBuffer[MQ_MAX_MSG_LABEL_LEN];        // Label buffer  
+	msgPropId[propId] = PROPID_M_LABEL;				// Property ID  
+	msgPropVar[propId].vt = VT_LPWSTR;				// Type indicator  
+	msgPropVar[propId].pwszVal = L"";       // Label buffer  
 	propId++;
 
 	// Initialize the MQMSGPROPS structure.  

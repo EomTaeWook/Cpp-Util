@@ -22,6 +22,13 @@ public:
 		_buffer = std::make_unique<unsigned char[]>(bufferSize);
 		memcpy(_buffer.get(), buffer, bufferSize);
 	}
+	Message(std::string item)
+	{
+		_buffer = std::make_unique<unsigned char[]>(item.size());
+		memcpy(_buffer.get(), item.c_str(), item.size());
+		_bufferSize = item.size();
+	}
+
 	virtual ~Message() {
 		_buffer.reset();
 	}
