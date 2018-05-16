@@ -171,7 +171,7 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <ClInclude Include="Socket\NS.h" />
     <ClInclude Include="Socket\Packet.h" />
     <ClInclude Include="Socket\StateObject.h" />
-    <ClInclude Include="Collections\BufferQueue.h" />
+    <ClInclude Include="Collections\SynchronizeQueue.h" />
     <ClInclude Include="System\Message\Message.h" />
     <ClInclude Include="System\Message\MSMQEnum.h" />
     <ClInclude Include="System\Message\MessageQueue.h" />

@@ -6,18 +6,18 @@
 #include "..\Common\Finally.h"
 NS_COLLECTIONS_BEGIN
 template<typename T>
-class BufferQueue
+class SynchronizeQueue
 {
 public:
-	BufferQueue();
-	virtual ~BufferQueue();
+	SynchronizeQueue();
+	virtual ~SynchronizeQueue();
 private:
 	Util::Threading::CriticalSection _read;
 	Util::Threading::CriticalSection _append;
 	std::queue<T> _items;
 public:
-	BufferQueue<T>& Append(T item);
-	BufferQueue<T>& Append(T* items, int size);
+	SynchronizeQueue<T>& Append(T item);
+	SynchronizeQueue<T>& Append(T* items, int size);
 	T Read();
 	std::vector<T> Read(int length);
 	void Clear();
@@ -25,17 +25,17 @@ public:
 	int Count();
 };
 template<typename T>
-BufferQueue<T>::BufferQueue()
+SynchronizeQueue<T>::SynchronizeQueue()
 {
 }
 template<typename T>
-BufferQueue<T>::~BufferQueue()
+SynchronizeQueue<T>::~SynchronizeQueue()
 {
 	Clear();
 }
 
 template<typename T>
-inline BufferQueue<T>& BufferQueue<T>::Append(T item)
+inline SynchronizeQueue<T>& SynchronizeQueue<T>::Append(T item)
 {
 	auto finally = Util::Common::Finally(std::bind(&Util::Threading::CriticalSection::LeaveCriticalSection, &_append));
 	try
@@ -45,12 +45,12 @@ inline BufferQueue<T>& BufferQueue<T>::Append(T item)
 	}
 	catch (...)
 	{
-		throw std::exception();
+		throw std::exception("Append Excption");
 	}
 	return *this;
 }
 template<typename T>
-inline BufferQueue<T>& BufferQueue<T>::Append(T* items, int size)
+inline SynchronizeQueue<T>& SynchronizeQueue<T>::Append(T* items, int size)
 {
 	auto finally = Util::Common::Finally(std::bind(&Util::Threading::CriticalSection::LeaveCriticalSection, &_append));
 	try
@@ -61,14 +61,16 @@ inline BufferQueue<T>& BufferQueue<T>::Append(T* items, int size)
 	}
 	catch (...)
 	{
-		throw std::exception();
+		throw std::exception("Append Excption");
 	}
 	return *this;
 }
 
 template<typename T>
-inline T BufferQueue<T>::Read()
+inline T SynchronizeQueue<T>::Read()
 {
+	if (_items.size() == 0)
+		throw "IndexOutOfRangeException";
 	T item;
 	auto finally = Util::Common::Finally(std::bind(&Util::Threading::CriticalSection::LeaveCriticalSection, &_read));
 	try
@@ -79,13 +81,13 @@ inline T BufferQueue<T>::Read()
 	}
 	catch (...)
 	{
-		throw std::exception();
+		throw std::exception("Read Exception");
 	}
 	return item;
 }
 
 template<typename T>
-inline std::vector<T> BufferQueue<T>::Read(int length)
+inline std::vector<T> SynchronizeQueue<T>::Read(int length)
 {
 	if (offset + length >= _items.size())
 		throw "IndexOutOfRangeException";
@@ -103,20 +105,20 @@ inline std::vector<T> BufferQueue<T>::Read(int length)
 	}
 	catch (...)
 	{
-		throw std::exception();
+		throw std::exception("Read Exception");
 	}
 	return items;
 }
 
 template<typename T>
-inline void BufferQueue<T>::Clear()
+inline void SynchronizeQueue<T>::Clear()
 {
 	while(!_items.empty())
 		_items.pop();
 }
 
 template<typename T>
-inline T BufferQueue<T>::Peek()
+inline T SynchronizeQueue<T>::Peek()
 {
 	T item;
 	auto finally = Util::Common::Finally(std::bind(&Util::Threading::CriticalSection::LeaveCriticalSection, &_read));
@@ -127,13 +129,13 @@ inline T BufferQueue<T>::Peek()
 	}
 	catch (...)
 	{
-		throw std::exception();
+		throw std::exception("Peek Exception");
 	}
 	return item;
 }
 
 template<typename T>
-inline int BufferQueue<T>::Count()
+inline int SynchronizeQueue<T>::Count()
 {
 	return _items.size();
 }

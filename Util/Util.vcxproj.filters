@@ -123,10 +123,10 @@
     <ClInclude Include="System\Message\MessageQueue.h">
       <Filter>System\Message\MSMQ</Filter>
     </ClInclude>
-    <ClInclude Include="Collections\BufferQueue.h">
+    <ClInclude Include="Collections\NS.h">
       <Filter>Collections</Filter>
     </ClInclude>
-    <ClInclude Include="Collections\NS.h">
+    <ClInclude Include="Collections\SynchronizeQueue.h">
       <Filter>Collections</Filter>
     </ClInclude>
   </ItemGroup>
