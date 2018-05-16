@@ -113,7 +113,6 @@ HRESULT MessageQueue::Send(Message& message)
 	msgPropVar[propId].caub.cElems = message.GetBufferSize();	// Buffer size
 	propId++;
 
-	WCHAR labelBuffer[MQ_MAX_MSG_LABEL_LEN];        // Label buffer  
 	msgPropId[propId] = PROPID_M_LABEL;				// Property ID  
 	msgPropVar[propId].vt = VT_LPWSTR;				// Type indicator  
 	msgPropVar[propId].pwszVal = L"";       // Label buffer  

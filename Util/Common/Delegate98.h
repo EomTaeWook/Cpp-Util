@@ -34,7 +34,7 @@ public:
 template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5>
 inline R Delegate<R, T1, T2, T3, T4, T5>::operator() (T1 param1, T2 param2, T3 param3, T4 param4, T5 param5)
 {
-	for (int i = 0; i < _methods.size() - 1; i++)
+	for (size_t i = 0; i < del._methods.size(); i++)
 	{
 		_methods[i](param1, param2, param3, param4, param5);
 	}
@@ -123,7 +123,7 @@ public:
 template<typename R, typename T1, typename T2, typename T3, typename T4>
 inline R Delegate<R, T1, T2, T3, T4>::operator() (T1 param1, T2 param2, T3 param3, T4 param4)
 {
-	for (int i = 0; i < _methods.size() - 1; i++)
+	for (size_t i = 0; i < del._methods.size(); i++)
 	{
 		_methods[i](param1, param2, param3, param4);
 	}
@@ -212,7 +212,7 @@ public:
 template<typename R, typename T1, typename T2, typename T3>
 inline R Delegate<R, T1, T2, T3>::operator() (T1 param1, T2 param2, T3 param3)
 {
-	for (int i = 0; i < _methods.size() - 1; i++)
+	for (size_t i = 0; i < del._methods.size(); i++)
 	{
 		_methods[i](param1, param2, param3);
 	}
@@ -301,7 +301,7 @@ public:
 template<typename R, typename T1, typename T2>
 inline R Delegate<R, T1, T2>::operator() (T1 param1, T2 param2)
 {
-	for (int i = 0; i < _methods.size() - 1; i++)
+	for (size_t i = 0; i < del._methods.size(); i++)
 	{
 		_methods[i](param1, param2);
 	}
@@ -390,7 +390,7 @@ public:
 template<typename R, typename T>
 inline R Delegate<R, T>::operator() (T param)
 {
-	for (int i = 0; i < _methods.size() - 1; i++)
+	for (size_t i = 0; i < del._methods.size(); i++)
 	{
 		_methods[i](param);
 	}
@@ -438,7 +438,7 @@ inline Delegate<R, T>& Delegate<R, T>::operator += (std::function<R(T)> method)
 template<typename R, typename T>
 inline Delegate<R, T>& Delegate<R, T>::Combine(Delegate<R, T> del)
 {
-	for (int i = 0; i < del._methods.size(); i++)
+	for (size_t i = 0; i < del._methods.size(); i++)
 	{
 		_methods.push_back(del._methods[i]);
 	}
@@ -479,7 +479,7 @@ public:
 template<typename R>
 inline R Delegate<R>::operator() ()
 {
-	for (int i = 0; i < _methods.size() - 1; i++)
+	for (size_t i = 0; i < del._methods.size(); i++)
 	{
 		_methods[i]();
 	}
@@ -527,7 +527,7 @@ inline Delegate<R>& Delegate<R>::operator += (std::function<R()> method)
 template<typename R>
 inline Delegate<R>& Delegate<R>::Combine(Delegate<R> del)
 {
-	for (int i = 0; i < del._methods.size(); i++)
+	for (size_t i = 0; i < del._methods.size(); i++)
 	{
 		_methods.push_back(del._methods[i]);
 	}

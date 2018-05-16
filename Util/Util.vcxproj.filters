@@ -37,6 +37,9 @@
     <Filter Include="System\Message\MSMQ">
       <UniqueIdentifier>{eb2e487c-0227-4d5a-a1cf-60a35116d670}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Collections">
+      <UniqueIdentifier>{5b796408-25bf-495f-9d1d-cdd4895965d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Threading\WaitCallback.h">
@@ -119,6 +122,12 @@
     </ClInclude>
     <ClInclude Include="System\Message\MessageQueue.h">
       <Filter>System\Message\MSMQ</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\BufferQueue.h">
+      <Filter>Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\NS.h">
+      <Filter>Collections</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

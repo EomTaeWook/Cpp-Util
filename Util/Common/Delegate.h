@@ -73,7 +73,7 @@ inline void Delegate<void>::operator() ()
 template<typename R, typename ...Types>
 inline R Delegate<R, Types...>::operator() (Types... params)
 {
-	for (int i = 0; i < _methods.size() - 1; i++)
+	for (size_t i = 0; i < _methods.size() - 1; i++)
 	{
 		_methods[i](params...);
 	}

@@ -1,5 +1,5 @@
 #include "IOCPThreadPool.h"
-#include "../Common/Finally.h"
+#include "..\Common\Finally.h"
 #include <memory>
 
 NS_THREADING_BEGIN
@@ -65,7 +65,7 @@ bool IOCPThreadPool::InsertQueueItem(std::function<void(void*)> callback, void* 
 {
 	if (_completionPort == NULL) return false;
 
-	std::unique_ptr<Finally> finallyObj(new Finally(std::bind(&CriticalSection::LeaveCriticalSection, &_cs)));
+	auto finally = Util::Common::Finally(std::bind(&CriticalSection::LeaveCriticalSection, &_cs));
 	try
 	{
 		_cs.EnterCriticalSection();

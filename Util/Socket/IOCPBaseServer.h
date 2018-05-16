@@ -7,7 +7,7 @@
 #include <vector>
 #include <memory>
 #include <functional>
-#include "../Threading/Thread.h"
+#include "..\Threading\Thread.h"
 #include "MutexCount.h"
 #include "Packet.h"
 #include <map>
@@ -20,12 +20,13 @@ class IOCPBaseServer
 private:
 	static const int _CLOSE_THREAD = -1;
 	static const int _BUFF_SIZE = 2048;
-public:
+protected:
 	IOCPBaseServer()
 	{
 		_completionPort = NULL;
 		_isStart = false;
 	}
+public:
 	virtual ~IOCPBaseServer()
 	{
 		Stop();

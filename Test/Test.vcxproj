@@ -20,32 +20,32 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{06F24B69-DED0-4A4D-A667-B5BE7F22AD0C}</ProjectGuid>
-    <RootNamespace>APIUtil</RootNamespace>
+    <ProjectGuid>{355DF279-0B92-411B-BE16-637727E9D5D9}</ProjectGuid>
+    <RootNamespace>Test</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -70,15 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>$(ProjectName)_d</TargetName>
-    <OutDir>$(SolutionDir)$(Configuration)\$(PlatformTarget)</OutDir>
-    <IntDir>$(SolutionDir)$(Configuration)</IntDir>
-    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)$(Configuration)\$(PlatformTarget)</OutDir>
-    <IntDir>$(SolutionDir)$(Configuration)</IntDir>
-    <TargetExt>.lib</TargetExt>
+    <IncludePath>C:\Users\Eomtw\Documents\Visual Studio 2017\Projects\Util\Debug\x86\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Eomtw\Documents\Visual Studio 2017\Projects\Util\Debug\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -86,15 +79,6 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
-    <PreBuildEvent>
-      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
-    </PreBuildEvent>
-    <PostBuildEvent>
-      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")
-xcopy /S/Y "$(ProjectDir)*.h" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include\"
-IF EXIST "$(SolutionDir)Lib" (xcopy /S/Y "$(SolutionDir)Lib\*.lib" "$(SolutionDir)$(Configuration)\$(PlatformTarget)")
-IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -102,12 +86,6 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
-    <PreBuildEvent>
-      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
-    </PreBuildEvent>
-    <PostBuildEvent>
-      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -116,21 +94,11 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
-    <PreBuildEvent>
-      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
-    </PreBuildEvent>
-    <PostBuildEvent>
-      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")
-xcopy /S/Y "$(ProjectDir)*.h" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include\"
-IF EXIST "$(SolutionDir)Lib" (xcopy /S/Y "$(SolutionDir)Lib\*.lib" "$(SolutionDir)$(Configuration)\$(PlatformTarget)")
-IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -144,51 +112,9 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
-    <PreBuildEvent>
-      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
-    </PreBuildEvent>
-    <PostBuildEvent>
-      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Collections\NS.h" />
-    <ClInclude Include="Common\Delegate98.h" />
-    <ClInclude Include="Common\MulticastDelegate.h" />
-    <ClInclude Include="Common\NS.h" />
-    <ClInclude Include="Common\StringFormat.h" />
-    <ClInclude Include="Cryptography\SHA1.h" />
-    <ClInclude Include="DesignPattern\NS.h" />
-    <ClInclude Include="DesignPattern\Singleton.h" />
-    <ClInclude Include="Event\Event.h" />
-    <ClInclude Include="Common\Delegate.h" />
-    <ClInclude Include="Common\Finally.h" />
-    <ClInclude Include="Event\NS.h" />
-    <ClInclude Include="Socket\FunctionMap.h" />
-    <ClInclude Include="Socket\IOCPBaseServer.h" />
-    <ClInclude Include="Socket\IOCPServer.h" />
-    <ClInclude Include="Socket\MutexCount.h" />
-    <ClInclude Include="Socket\NS.h" />
-    <ClInclude Include="Socket\Packet.h" />
-    <ClInclude Include="Socket\StateObject.h" />
-    <ClInclude Include="Collections\BufferQueue.h" />
-    <ClInclude Include="System\Message\Message.h" />
-    <ClInclude Include="System\Message\MSMQEnum.h" />
-    <ClInclude Include="System\Message\MessageQueue.h" />
-    <ClInclude Include="System\Message\NS.h" />
-    <ClInclude Include="Threading\CriticalSection.h" />
-    <ClInclude Include="Threading\IOCPThreadPool.h" />
-    <ClInclude Include="Threading\NS.h" />
-    <ClInclude Include="Threading\Thread.h" />
-    <ClInclude Include="Threading\WaitCallback.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Common\StringFormat.cpp" />
-    <ClCompile Include="Cryptography\NS.h" />
-    <ClCompile Include="Cryptography\SHA1.cpp" />
-    <ClCompile Include="Socket\IOCPBaseServer.cpp" />
-    <ClCompile Include="System\Message\MessageQueue.cpp" />
-    <ClCompile Include="Threading\IOCPThreadPool.cpp" />
+    <ClCompile Include="Entry.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,6 @@
 #pragma once
 #include "NS.h"
-#include "../Threading/CriticalSection.h"
+#include "..\Threading\CriticalSection.h"
 
 NS_SOCKET_BEGIN
 class MutexCount
