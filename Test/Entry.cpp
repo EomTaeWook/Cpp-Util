@@ -1,29 +1,42 @@
 
+#include <Socket\IOCPServer.h>
+#include <System\Message\MessageQueue.h>
 #pragma comment (lib, "Util_d.lib")
 
-#include <Collections\BufferQueue.h>
-
-struct Test
+class MyClass : Util::Socket::IOCPServer<>
 {
-	int x;
+public:
+	MyClass();
+	~MyClass();
+public:
+
+
+	// IOCPServer을(를) 통해 상속됨
+	virtual void AcceptComplete(Util::Socket::StateObject & handler) override
+	{
+	}
+
+	virtual void CloseComplete(unsigned long handle) override
+	{
+	}
+
+	virtual void PacketConversionComplete(Util::Socket::Packet & packet, Util::Socket::StateObject & handler, std::vector<Util::Common::Type::Object>& params) override
+	{
+	}
+
 };
+
+MyClass::MyClass()
+{
+}
+
+MyClass::~MyClass()
+{
+}
+
 int main()
 {
-	Util::Collections::BufferQueue<Test> q;
-	Test t; 
-	t.x = 10;
-	auto tt = new Test[10];
-	for (int i = 0; i < 10; i++)
-		tt[i].x = i;
-	try
-	{
-		q.Append(t).Append(tt, 10);
-	}
-	catch(...)
-	{
+	MyClass c;
 
-	}
-	
-	auto count = q.Count();
 	return 0;
 }

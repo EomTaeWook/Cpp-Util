@@ -3,11 +3,11 @@
 #include "..\Threading\CriticalSection.h"
 
 NS_SOCKET_BEGIN
-class MutexCount
+class SyncCount
 {
 public:
-	MutexCount() {}
-	virtual ~MutexCount() {}
+	SyncCount() {}
+	virtual ~SyncCount() {}
 private:
 	unsigned long _count;
 	Util::Threading::CriticalSection _cs;
@@ -15,14 +15,21 @@ public:
 	unsigned long Add();
 	unsigned long Read();
 };
-inline unsigned long MutexCount::Add()
+inline unsigned long SyncCount::Add()
 {
-	_cs.EnterCriticalSection();
-	_count++;
+	try
+	{
+		_cs.EnterCriticalSection();
+		_count++;
+	}
+	catch (...)
+	{
+		_cs.LeaveCriticalSection();
+	}
 	_cs.LeaveCriticalSection();
 	return _count;
 }
-inline unsigned long MutexCount::Read()
+inline unsigned long SyncCount::Read()
 {
 	return _count;
 }

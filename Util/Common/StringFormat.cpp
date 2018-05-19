@@ -211,9 +211,7 @@ static std::basic_string<T, Traits, Alloc> String::FillDigit(std::basic_string<T
 	{
 		auto size = std::stoi(digit) - arg.size();
 		for (unsigned int i = 0; i < size; i++)
-		{
 			output.push_back(' ');
-		}
 		output.append(arg);
 	}
 	else
@@ -238,16 +236,12 @@ static std::basic_string<T, Traits, Alloc> String::FillDigit(std::basic_string<T
 			if (size > argDecimal.size())
 			{
 				for (size_t i = 0; i < size - argDecimal.size(); i++)
-				{
 					output.push_back('0');
-				}
 			}
 			else if (size != 0)
 			{
 				for (size_t i = 0; i < size; i++)
-				{
 					output.push_back(argDecimal[i]);
-				}
 			}
 			else
 			{
@@ -259,9 +253,7 @@ static std::basic_string<T, Traits, Alloc> String::FillDigit(std::basic_string<T
 		{
 			auto size = std::stoi(integerDigit) - output.size();
 			for (unsigned int i = 0; i < size; i++)
-			{
 				output.insert(output.begin(), ' ');
-			}
 		}
 	}
 	return output;

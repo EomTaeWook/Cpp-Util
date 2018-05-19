@@ -8,13 +8,13 @@
 #include <memory>
 #include <functional>
 #include "..\Threading\Thread.h"
-#include "MutexCount.h"
+#include "SyncCount.h"
 #include "Packet.h"
+#include "..\Common\Type\Object.h"
 #include <map>
 #pragma comment(lib, "Ws2_32.lib")
 
 NS_SOCKET_BEGIN
-
 class IOCPBaseServer
 {
 private:
@@ -38,7 +38,7 @@ private:
 	HANDLE _completionPort;
 	std::vector<HANDLE> _hWorkerThread;
 	sockaddr_in _iPEndPoint;
-	MutexCount _mutexCount;
+	SyncCount _handleCount;
 private:
 	SOCKET _listener;
 	Util::Threading::CriticalSection _remove;
@@ -55,11 +55,11 @@ public:
 	void Init();
 	//abstract Method
 protected:
-	void virtual AcceptComplete(StateObject& handler) = 0;
+	void virtual AcceptComplete(Util::Socket::StateObject& handler) = 0;
 	void virtual CloseComplete(unsigned long handle) = 0;
-	void virtual PacketConversionComplete(Packet& packet, StateObject& handler, ...) = 0;
-
+	void virtual PacketConversionComplete(Util::Socket::Packet& packet, Util::Socket::StateObject& handler, std::vector<Util::Common::Type::Object>& params) = 0;
 private:
 	static unsigned int __stdcall WorkerThread(void*);
 };
+
 NS_SOCKET_END

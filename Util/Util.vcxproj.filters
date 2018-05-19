@@ -40,6 +40,9 @@
     <Filter Include="Collections">
       <UniqueIdentifier>{5b796408-25bf-495f-9d1d-cdd4895965d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common\Type">
+      <UniqueIdentifier>{90ec7ebc-8fe4-4ba1-8e1c-235ffa040e88}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Threading\WaitCallback.h">
@@ -96,9 +99,6 @@
     <ClInclude Include="Socket\IOCPBaseServer.h">
       <Filter>Socket</Filter>
     </ClInclude>
-    <ClInclude Include="Socket\MutexCount.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
     <ClInclude Include="Socket\Packet.h">
       <Filter>Socket</Filter>
     </ClInclude>
@@ -126,9 +126,17 @@
     <ClInclude Include="Collections\NS.h">
       <Filter>Collections</Filter>
     </ClInclude>
-    <ClInclude Include="Collections\SynchronizeQueue.h">
+    <ClInclude Include="Collections\SyncQueue.h">
       <Filter>Collections</Filter>
     </ClInclude>
+    <ClInclude Include="Socket\SyncCount.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Type\Type.h">
+      <Filter>Common\Type</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Type\Object.h" />
+    <ClInclude Include="Common\Type\NS.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Threading\IOCPThreadPool.cpp">

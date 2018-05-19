@@ -153,6 +153,9 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Collections\NS.h" />
+    <ClInclude Include="Common\Type\NS.h" />
+    <ClInclude Include="Common\Type\Object.h" />
+    <ClInclude Include="Common\Type\Type.h" />
     <ClInclude Include="Common\Delegate98.h" />
     <ClInclude Include="Common\MulticastDelegate.h" />
     <ClInclude Include="Common\NS.h" />
@@ -167,11 +170,11 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <ClInclude Include="Socket\FunctionMap.h" />
     <ClInclude Include="Socket\IOCPBaseServer.h" />
     <ClInclude Include="Socket\IOCPServer.h" />
-    <ClInclude Include="Socket\MutexCount.h" />
+    <ClInclude Include="Socket\SyncCount.h" />
     <ClInclude Include="Socket\NS.h" />
     <ClInclude Include="Socket\Packet.h" />
     <ClInclude Include="Socket\StateObject.h" />
-    <ClInclude Include="Collections\SynchronizeQueue.h" />
+    <ClInclude Include="Collections\SyncQueue.h" />
     <ClInclude Include="System\Message\Message.h" />
     <ClInclude Include="System\Message\MSMQEnum.h" />
     <ClInclude Include="System\Message\MessageQueue.h" />

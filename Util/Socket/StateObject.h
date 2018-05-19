@@ -2,6 +2,7 @@
 #include "NS.h"
 #include <WinSock2.h>
 #include <memory>
+#include "..\Collections\SyncQueue.h"
 
 NS_SOCKET_BEGIN
 class StateObject
@@ -16,6 +17,7 @@ public:
 	}
 	virtual ~StateObject()
 	{
+		Close();
 		_overlapped.reset();
 	}
 private:
@@ -30,6 +32,7 @@ private:
 	char buffer[BUFF_SIZE];
 	int _mode;
 	unsigned long _handle;
+	Collections::SyncQueue<char> _receiveBuffer;
 public:
 	SOCKET& Socket();
 	SOCKADDR_IN& SocketAddr();
@@ -38,7 +41,12 @@ public:
 	bool IsRead();
 	unsigned long& Handle();
 	void Close();
+	Collections::SyncQueue<char>& ReceiveBuffer();
 };
+inline Collections::SyncQueue<char>& StateObject::ReceiveBuffer()
+{
+	return _receiveBuffer;
+}
 inline void StateObject::Close()
 {
 	//동기화 추가작업

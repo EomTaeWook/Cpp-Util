@@ -35,7 +35,14 @@ inline void ServerFunctionMap<T...>::RunFun(int protocol, Packet& packet, StateO
 template<typename ...T>
 inline void ServerFunctionMap<T...>::BindCallback(int protocol, std::function<void(Packet&, StateObject&, T...)> callback)
 {
-	Util::Common::MulticastDelegate<Packet&, StateObject&, T...> _delegate = callback;
+	Util::Common::MulticastDelegate<void, Packet&, StateObject&, T...> _delegate = callback;
+	_funcMap.insert(std::make_pair(protocol, _delegate));
+}
+
+template<>
+inline void ServerFunctionMap<>::BindCallback(int protocol, std::function<void(Packet&, StateObject&)> callback)
+{
+	Util::Common::MulticastDelegate<void, Packet&, StateObject&> _delegate = callback;
 	_funcMap.insert(std::make_pair(protocol, _delegate));
 }
 

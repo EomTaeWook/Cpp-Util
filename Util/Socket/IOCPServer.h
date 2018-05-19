@@ -24,7 +24,7 @@ inline void IOCPServer<T...>::BindCallback(int protocol, std::function<void(Pack
 }
 
 template<>
-class IOCPServer<void> : public IOCPBaseServer
+class IOCPServer<void> : IOCPBaseServer
 {
 protected:
 	IOCPServer() {}
@@ -36,8 +36,8 @@ private:
 public:
 	void BindCallback(int protocol, std::function<void(Packet&, StateObject&)> callback);
 };
-
-inline void IOCPServer<void>::BindCallback(int protocol, std::function<void(Packet&, StateObject&)> callback)
+template<>
+inline void IOCPServer<>::BindCallback(int protocol, std::function<void(Packet&, StateObject&)> callback)
 {
 	_callbackMap.BindCallback(protocol, callback);
 }

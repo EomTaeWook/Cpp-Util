@@ -17,15 +17,22 @@ void MessageQueue::Init(std::wstring pathName, MessageQueueMode mode)
 	if (FAILED(hr))
 	{
 		// Set queue properties.
-		const int NUMBEROFPROPERTIES = 2;
+		const int NUMBEROFPROPERTIES = 1;
 		MQQUEUEPROPS queueProps;
 		QUEUEPROPID queuePropId[NUMBEROFPROPERTIES];
 		MQPROPVARIANT queuePropVar[NUMBEROFPROPERTIES];
+		HRESULT queueStatus[NUMBEROFPROPERTIES];
 		DWORD propId = 0;
 		queuePropId[propId] = PROPID_Q_PATHNAME;
 		queuePropVar[propId].vt = VT_LPWSTR;
 		queuePropVar[propId].pwszVal = const_cast<wchar_t*>(pathName.c_str());
 		propId++;
+
+		queueProps.cProp = propId;
+		queueProps.aPropID = queuePropId;
+		queueProps.aPropVar = queuePropVar;
+		queueProps.aStatus = queueStatus;
+
 		MQCreateQueue(NULL, &queueProps, formatNameBuffer, &formatNameBufferLength);
 	}
 	if (_mode == MessageQueueMode::READ)
