@@ -43,6 +43,12 @@
     <Filter Include="Common\Type">
       <UniqueIdentifier>{90ec7ebc-8fe4-4ba1-8e1c-235ffa040e88}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Web">
+      <UniqueIdentifier>{64ce98c4-0eaf-4f13-9669-aa5660daac1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Web\Http">
+      <UniqueIdentifier>{2b48f338-7afe-43b8-980a-d853e5c2a87b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Threading\WaitCallback.h">
@@ -137,6 +143,18 @@
     </ClInclude>
     <ClInclude Include="Common\Type\Object.h" />
     <ClInclude Include="Common\Type\NS.h" />
+    <ClInclude Include="Web\NS.h">
+      <Filter>Web\Http</Filter>
+    </ClInclude>
+    <ClInclude Include="Web\Url.h">
+      <Filter>Web</Filter>
+    </ClInclude>
+    <ClInclude Include="Web\WebEnum.h">
+      <Filter>Web</Filter>
+    </ClInclude>
+    <ClInclude Include="Web\HttpClient.h">
+      <Filter>Web\Http</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Threading\IOCPThreadPool.cpp">
@@ -156,6 +174,9 @@
     </ClCompile>
     <ClCompile Include="System\Message\MessageQueue.cpp">
       <Filter>System\Message\MSMQ</Filter>
+    </ClCompile>
+    <ClCompile Include="Web\HttpClient.cpp">
+      <Filter>Web\Http</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

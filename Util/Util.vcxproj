@@ -184,6 +184,10 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <ClInclude Include="Threading\NS.h" />
     <ClInclude Include="Threading\Thread.h" />
     <ClInclude Include="Threading\WaitCallback.h" />
+    <ClInclude Include="Web\HttpClient.h" />
+    <ClInclude Include="Web\NS.h" />
+    <ClInclude Include="Web\Url.h" />
+    <ClInclude Include="Web\WebEnum.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\StringFormat.cpp" />
@@ -192,6 +196,7 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <ClCompile Include="Socket\IOCPBaseServer.cpp" />
     <ClCompile Include="System\Message\MessageQueue.cpp" />
     <ClCompile Include="Threading\IOCPThreadPool.cpp" />
+    <ClCompile Include="Web\HttpClient.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
