@@ -206,7 +206,7 @@ static std::basic_string<T, Traits, Alloc> String::FillDigit(std::basic_string<T
 	std::basic_string<T, Traits, Alloc> output;
 	std::basic_string<T, Traits, Alloc> find_key;
 	find_key.push_back('.');
-	int idx = digit.find(find_key);
+	auto idx = digit.find(find_key);
 	if (idx == -1)
 	{
 		auto size = std::stoi(digit) - arg.size();

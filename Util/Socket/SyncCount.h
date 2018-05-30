@@ -1,7 +1,7 @@
 #pragma once
 #include "NS.h"
 #include "..\Threading\CriticalSection.h"
-
+#include "..\Common\Finally.h"
 NS_SOCKET_BEGIN
 class SyncCount
 {
@@ -17,6 +17,7 @@ public:
 };
 inline unsigned long SyncCount::Add()
 {
+	auto finally = Util::Common::Finally(std::bind(&Util::Threading::CriticalSection::LeaveCriticalSection, &_cs));
 	try
 	{
 		_cs.EnterCriticalSection();
@@ -24,9 +25,8 @@ inline unsigned long SyncCount::Add()
 	}
 	catch (...)
 	{
-		_cs.LeaveCriticalSection();
+		throw std::exception(GetLastError() + "");
 	}
-	_cs.LeaveCriticalSection();
 	return _count;
 }
 inline unsigned long SyncCount::Read()

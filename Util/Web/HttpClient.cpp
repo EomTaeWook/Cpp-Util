@@ -90,8 +90,10 @@ std::string HttpClient::SendRequest(std::string requestData, Method method)
 	}
 	catch (...)
 	{
+		Close();
 		throw std::exception("RequestException");
 	}
+	Close();
 	return _response;
 }
 bool HttpClient::SendRequestAsync(std::string requestData, Method method, std::function<void(int, std::string&)> callback)
@@ -131,7 +133,7 @@ bool HttpClient::SendRequestAsync(std::string requestData, Method method, std::f
 			type = L"Delete";
 			break;
 		}
-		//Reqeust Init
+
 		_request = WinHttpOpenRequest(_connect,
 			type.c_str(),
 			path.c_str(),
@@ -214,13 +216,19 @@ void HttpClient::OnCallback(unsigned long code, void* info, unsigned long length
 		else
 		{
 			if (_callback != nullptr)
+			{
 				_callback(_responseCode, _response);
+				this->Close();
+			}
 		}
 		break;
 	}
 	case WINHTTP_CALLBACK_STATUS_REQUEST_ERROR:
 		if (_callback != nullptr)
+		{
 			_callback(code, _response.append("WINHTTP_CALLBACK_STATUS_REQUEST_ERROR"));
+			this->Close();
+		}
 		break;
 	}
 }

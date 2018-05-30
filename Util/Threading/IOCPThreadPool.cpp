@@ -81,16 +81,16 @@ bool IOCPThreadPool::InsertQueueItem(std::function<void(void*)> callback, void* 
 int IOCPThreadPool::Run()
 {
 	unsigned long numberOfBytes = 0;
-	unsigned long callback = 0;
+	ULONG_PTR callback = 0;
 	LPOVERLAPPED pOverlapped = 0;
 
 	while (true)
 	{
-		if (!GetQueuedCompletionStatus(_completionPort, &numberOfBytes, reinterpret_cast<PULONG_PTR>(callback), &pOverlapped, INFINITE))
+		if (!GetQueuedCompletionStatus(_completionPort, &numberOfBytes, &callback, &pOverlapped, INFINITE))
 		{
 			break;
 		}
-		if ((int)callback == _CLOSE_THREAD) break;
+		if ((LONG_PTR)callback == _CLOSE_THREAD) break;
 
 		WaitCallback* pCallback = reinterpret_cast<WaitCallback*>(callback);
 		if (pCallback != NULL)

@@ -12,7 +12,7 @@ USING_DESIGN_PATTERN
 class IOCPThreadPool : public Singleton<IOCPThreadPool>
 {
 private:
-	static const int _CLOSE_THREAD = -1;
+	static const LONG_PTR _CLOSE_THREAD = -1;
 
 	HANDLE _completionPort;
 	std::vector<HANDLE> _hWorkerThread;

@@ -18,7 +18,7 @@ NS_SOCKET_BEGIN
 class IOCPBaseServer
 {
 private:
-	static const int _CLOSE_THREAD = -1;
+	static const LONG_PTR _CLOSE_THREAD = -1;
 	static const int _BUFF_SIZE = 2048;
 protected:
 	IOCPBaseServer()

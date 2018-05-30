@@ -34,9 +34,9 @@ public:
 	bool SendRequestAsync(std::string requestData = "", Method method = Method::Get, std::function<void(int, std::string&)> callback = nullptr);
 	std::string SendRequest(std::string requestData = "", Method method = Method::Get);
 	void HeaderAppend(std::string header);
-	void Close();
 private:
 	void OnCallback(unsigned long code, void* info, unsigned long length);
+	void Close();
 private:
 	static void __stdcall AsyncCallback(HINTERNET handle, DWORD_PTR context, DWORD status, void* info, DWORD infoLength);
 };

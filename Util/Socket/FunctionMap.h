@@ -57,4 +57,56 @@ inline bool ServerFunctionMap<T...>::FindKey(int key)
 {
 	return _funcMap.find(key) != _funcMap.end();
 }
+
+template<typename ...T>
+class FunctionMap
+{
+public:
+	FunctionMap() {}
+	virtual ~FunctionMap() { Clear(); }
+private:
+	std::map<int, Util::Common::MulticastDelegate<void, Packet&, T...>> _funcMap;
+
+public:
+	void BindCallback(int protocol, std::function<void(Packet&, T...)> callback);
+	void RunFun(int protocol, Packet& packet, T...);
+	void Clear();
+	bool FindKey(int key);
+};
+
+template<typename ...T>
+inline void FunctionMap<T...>::RunFun(int protocol, Packet& packet, T... params)
+{
+	auto it = _funcMap.find(protocol);
+	if (it != _funcMap.end())
+	{
+		it->second(packet, handler, params...);
+	}
+}
+
+template<typename ...T>
+inline void FunctionMap<T...>::BindCallback(int protocol, std::function<void(Packet&, T...)> callback)
+{
+	Util::Common::MulticastDelegate<void, Packet&, StateObject&, T...> _delegate = callback;
+	_funcMap.insert(std::make_pair(protocol, _delegate));
+}
+
+template<>
+inline void FunctionMap<>::BindCallback(int protocol, std::function<void(Packet&)> callback)
+{
+	Util::Common::MulticastDelegate<void, Packet&> _delegate = callback;
+	_funcMap.insert(std::make_pair(protocol, _delegate));
+}
+
+template<typename ...T>
+inline void FunctionMap<T...>::Clear()
+{
+	_funcMap.clear();
+}
+
+template<typename ...T>
+inline bool FunctionMap<T...>::FindKey(int key)
+{
+	return _funcMap.find(key) != _funcMap.end();
+}
 NS_SOCKET_END

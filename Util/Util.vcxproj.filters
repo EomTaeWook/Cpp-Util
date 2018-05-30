@@ -49,6 +49,12 @@
     <Filter Include="Web\Http">
       <UniqueIdentifier>{2b48f338-7afe-43b8-980a-d853e5c2a87b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Socket\Server">
+      <UniqueIdentifier>{aa6f3088-55b9-4751-bdab-485088c5d053}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Socket\Client">
+      <UniqueIdentifier>{bbb3f6de-c760-4294-a69b-78ccce68ffd6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Threading\WaitCallback.h">
@@ -102,9 +108,6 @@
     <ClInclude Include="Socket\FunctionMap.h">
       <Filter>Socket</Filter>
     </ClInclude>
-    <ClInclude Include="Socket\IOCPBaseServer.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
     <ClInclude Include="Socket\Packet.h">
       <Filter>Socket</Filter>
     </ClInclude>
@@ -113,9 +116,6 @@
     </ClInclude>
     <ClInclude Include="Common\Delegate98.h">
       <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\IOCPServer.h">
-      <Filter>Socket</Filter>
     </ClInclude>
     <ClInclude Include="System\Message\MSMQEnum.h">
       <Filter>System\Message\MSMQ</Filter>
@@ -141,11 +141,6 @@
     <ClInclude Include="Common\Type\Type.h">
       <Filter>Common\Type</Filter>
     </ClInclude>
-    <ClInclude Include="Common\Type\Object.h" />
-    <ClInclude Include="Common\Type\NS.h" />
-    <ClInclude Include="Web\NS.h">
-      <Filter>Web\Http</Filter>
-    </ClInclude>
     <ClInclude Include="Web\Url.h">
       <Filter>Web</Filter>
     </ClInclude>
@@ -154,6 +149,27 @@
     </ClInclude>
     <ClInclude Include="Web\HttpClient.h">
       <Filter>Web\Http</Filter>
+    </ClInclude>
+    <ClInclude Include="Web\NS.h">
+      <Filter>Web</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Type\NS.h">
+      <Filter>Common\Type</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Type\Object.h">
+      <Filter>Common\Type</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\IOCPBaseServer.h">
+      <Filter>Socket\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\IOCPServer.h">
+      <Filter>Socket\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\IOCPBaseClient.h">
+      <Filter>Socket\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\IOCPClient.h">
+      <Filter>Socket\Client</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -169,14 +185,17 @@
     <ClCompile Include="Cryptography\NS.h">
       <Filter>Cryptography</Filter>
     </ClCompile>
-    <ClCompile Include="Socket\IOCPBaseServer.cpp">
-      <Filter>Socket</Filter>
-    </ClCompile>
     <ClCompile Include="System\Message\MessageQueue.cpp">
       <Filter>System\Message\MSMQ</Filter>
     </ClCompile>
     <ClCompile Include="Web\HttpClient.cpp">
       <Filter>Web\Http</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\IOCPBaseServer.cpp">
+      <Filter>Socket\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\IOCPBaseClient.cpp">
+      <Filter>Socket\Client</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@ class Message
 {
 private:
 	std::unique_ptr<unsigned char[]> _buffer;
-	int _bufferSize = 4096;
+	size_t _bufferSize = 4096;
 	int _readSize = 0;
 public:
 	Message() : Message(4096)
@@ -34,7 +34,7 @@ public:
 	}
 public:
 	std::unique_ptr<unsigned char[]>& GetBuffer();
-	int GetBufferSize();
+	size_t GetBufferSize();
 	std::string GetBody();
 	void SetReadSize(int size);
 };
@@ -46,7 +46,7 @@ inline void Message::SetReadSize(int size)
 {
 	_readSize = size;
 }
-inline int Message::GetBufferSize()
+inline size_t Message::GetBufferSize()
 {
 	return _bufferSize;
 }

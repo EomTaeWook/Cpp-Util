@@ -57,6 +57,7 @@ void IOCPBaseServer::Start(std::string ip, int port)
 			throw std::exception();
 		if (_thread.get() == NULL)
 		{
+			memset(&_iPEndPoint, 0, sizeof(_iPEndPoint));
 			if (inet_pton(PF_INET, ip.c_str(), &_iPEndPoint) != 1)
 			{
 				throw std::exception();
@@ -78,8 +79,9 @@ void IOCPBaseServer::StartListening(void* pObj)
 	_listener = WSASocketW(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
 	if (_listener == INVALID_SOCKET)
 	{
+		auto error = GetLastError();
 		Stop();
-		throw std::exception("Listener Create Error");
+		throw std::exception("Listener Create Error : " + error);
 	}
 	//accept½Ã NonBlock
 	//unsigned long mode = 1;
@@ -88,13 +90,15 @@ void IOCPBaseServer::StartListening(void* pObj)
 	setsockopt(_listener, SOL_SOCKET, SO_REUSEADDR, (char*)&option, sizeof(option));
 	if (bind(_listener, (SOCKADDR*)&_iPEndPoint, sizeof(_iPEndPoint)) == SOCKET_ERROR)
 	{
+		auto error = GetLastError();
 		Stop();
-		throw std::exception("BindException");
+		throw std::exception("BindException : " + error);
 	}
 	if (listen(_listener, 100) == SOCKET_ERROR)
 	{
+		auto error = GetLastError();
 		Stop();
-		throw std::exception("ListenExcption");
+		throw std::exception("ListenExcption : " + error);
 	}
 	while (_isStart)
 	{
@@ -113,7 +117,7 @@ void IOCPBaseServer::StartListening(void* pObj)
 		AddPeer(stateObject);
 		AcceptComplete(*stateObject);
 
-		CreateIoCompletionPort((HANDLE)stateObject->Socket(), _completionPort, (unsigned long)stateObject, 0);
+		CreateIoCompletionPort((HANDLE)stateObject->Socket(), _completionPort, (unsigned long long)stateObject, 0);
 		unsigned long flag = 0;
 		WSARecv(stateObject->Socket(), &stateObject->WSABuff(), 1, 0, &flag, &*stateObject->Overlapped(), NULL);
 	}
@@ -121,15 +125,15 @@ void IOCPBaseServer::StartListening(void* pObj)
 int IOCPBaseServer::Run()
 {
 	unsigned long bytesTrans = 0;
-	unsigned long stateObject = 0;
-	OVERLAPPED* overlapped = 0;
+	ULONG_PTR stateObject = 0;
+	LPOVERLAPPED overlapped = 0;
 	while (true)
 	{
-		if (!GetQueuedCompletionStatus(_completionPort, &bytesTrans, reinterpret_cast<PULONG_PTR>(stateObject), &overlapped, INFINITE))
+		if (!GetQueuedCompletionStatus(_completionPort, &bytesTrans, &stateObject, &overlapped, INFINITE))
 		{
 			break;
 		}
-		if ((int)stateObject == _CLOSE_THREAD && bytesTrans == 0)
+		if ((LONG_PTR)stateObject == _CLOSE_THREAD && bytesTrans == 0)
 			break;
 		auto pHandler = reinterpret_cast<StateObject*>(stateObject);
 		if (bytesTrans == 0)
