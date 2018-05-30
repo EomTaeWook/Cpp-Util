@@ -10,14 +10,14 @@ class TEST : public Util::Socket::IOCPClient<>
 	{
 		return true;
 	}
-	virtual void ConnectCompleteEvent(Util::Socket::StateObject & _stateObject) override
+	virtual void ConnectCompleteEvent(Util::Socket::StateObject & stateObject) override
 	{
 		std::string data = "test";
 		Send(2, data);
 	}
-	virtual VertifyResult VerifyPacket(Util::Socket::Packet & packet) override
+	virtual Util::Socket::VertifyResult VerifyPacket(Util::Socket::Packet & packet) override
 	{
-		return VertifyResult::Vertify_Accept;
+		return Util::Socket::VertifyResult::Vertify_Accept;
 	}
 	virtual void DisconnectedEvent() override
 	{

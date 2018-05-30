@@ -62,6 +62,7 @@ inline bool IOCPClient<>::RunCallbackFunc(unsigned short protocol, Util::Socket:
 	}
 	else
 		return false;
+	return true;
 }
 template<>
 inline void IOCPClient<>::BindCallback(int protocol, std::function<void(Packet&)> callback)

@@ -45,7 +45,7 @@ public:
 	void Send(Util::Socket::Packet& packet);
 protected:
 	virtual bool PacketConversionComplete(Util::Socket::Packet& packet, std::vector<Util::Common::Type::Object>& params) = 0;
-	virtual void ConnectCompleteEvent(StateObject& _stateObject) = 0;
+	virtual void ConnectCompleteEvent(StateObject& stateObject) = 0;
 	virtual Util::Socket::VertifyResult VerifyPacket(Util::Socket::Packet& packet) { return Util::Socket::VertifyResult::Vertify_Accept; }
 	virtual void ForwardFunc(Util::Socket::Packet& packet) {}
 	virtual void DisconnectedEvent() {}
