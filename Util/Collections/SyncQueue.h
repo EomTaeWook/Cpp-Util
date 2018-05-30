@@ -17,12 +17,13 @@ private:
 	std::queue<T> _items;
 public:
 	SyncQueue<T>& Append(T item);
-	SyncQueue<T>& Append(T* items, int size);
+	SyncQueue<T>& Append(T* items, size_t size);
 	T Read();
-	std::vector<T> Read(int length);
+	std::vector<T> Read(size_t length);
+	std::vector<T> Peek(size_t offset, size_t length);
 	void Clear();
 	T Peek();
-	int Count();
+	size_t Count();
 };
 template<typename T>
 SyncQueue<T>::SyncQueue()
@@ -50,13 +51,13 @@ inline SyncQueue<T>& SyncQueue<T>::Append(T item)
 	return *this;
 }
 template<typename T>
-inline SyncQueue<T>& SyncQueue<T>::Append(T* items, int size)
+inline SyncQueue<T>& SyncQueue<T>::Append(T* items, size_t size)
 {
 	auto finally = Util::Common::Finally(std::bind(&Util::Threading::CriticalSection::LeaveCriticalSection, &_append));
 	try
 	{
 		_append.EnterCriticalSection();
-		for (int i = 0; i < size; i++)
+		for (size_t i = 0; i < size; i++)
 			_items.push(items[i]);
 	}
 	catch (...)
@@ -85,11 +86,10 @@ inline T SyncQueue<T>::Read()
 	}
 	return item;
 }
-
 template<typename T>
-inline std::vector<T> SyncQueue<T>::Read(int length)
+inline std::vector<T> SyncQueue<T>::Read(size_t length)
 {
-	if (offset + length >= _items.size())
+	if (length > _items.size())
 		throw std::exception("IndexOutOfRangeException");
 
 	std::vector<T> items;
@@ -97,7 +97,7 @@ inline std::vector<T> SyncQueue<T>::Read(int length)
 	try
 	{
 		_read.EnterCriticalSection();
-		for (int i = 0; i < length; i++)
+		for (size_t i = 0; i < length; i++)
 		{
 			items.push_back(_items.front());
 			_items.pop();
@@ -109,7 +109,26 @@ inline std::vector<T> SyncQueue<T>::Read(int length)
 	}
 	return items;
 }
+template<typename T>
+inline std::vector<T> SyncQueue<T>::Peek(size_t offset, size_t length)
+{
+	if (offset + length >= _items.size())
+		throw std::exception("IndexOutOfRangeException");
 
+	std::vector<T> items;
+	items.assign(length, 0);
+	auto finally = Util::Common::Finally(std::bind(&Util::Threading::CriticalSection::LeaveCriticalSection, &_read));
+	try
+	{
+		_read.EnterCriticalSection();
+		memcpy(&items[0], &_items.front() + offset, length);
+	}
+	catch (...)
+	{
+		throw std::exception("ReadException");
+	}
+	return items;
+}
 template<typename T>
 inline void SyncQueue<T>::Clear()
 {
@@ -135,7 +154,7 @@ inline T SyncQueue<T>::Peek()
 }
 
 template<typename T>
-inline int SyncQueue<T>::Count()
+inline size_t SyncQueue<T>::Count()
 {
 	return _items.size();
 }

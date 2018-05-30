@@ -171,6 +171,9 @@
     <ClInclude Include="Socket\IOCPClient.h">
       <Filter>Socket\Client</Filter>
     </ClInclude>
+    <ClInclude Include="Socket\SocketEnum.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Threading\IOCPThreadPool.cpp">

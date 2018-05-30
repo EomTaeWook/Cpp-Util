@@ -172,6 +172,7 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <ClInclude Include="Socket\IOCPBaseServer.h" />
     <ClInclude Include="Socket\IOCPClient.h" />
     <ClInclude Include="Socket\IOCPServer.h" />
+    <ClInclude Include="Socket\SocketEnum.h" />
     <ClInclude Include="Socket\SyncCount.h" />
     <ClInclude Include="Socket\NS.h" />
     <ClInclude Include="Socket\Packet.h" />

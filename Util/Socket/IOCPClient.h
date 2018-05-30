@@ -13,12 +13,25 @@ public:
 	{
 		_callbackMap.Clear();
 	}
-private:
 protected:
 	Util::Socket::FunctionMap<T...> _callbackMap;
+protected:
+	virtual bool RunCallbackFunc(unsigned short protocol, Util::Socket::Packet& packet, std::vector<Util::Common::Type::Object>& params) override;
 public:
 	void BindCallback(int protocol, std::function<void(Packet&, T...)> callback);
 };
+template<typename ...T>
+inline bool IOCPClient<T...>::RunCallbackFunc(unsigned short protocol, Util::Socket::Packet& packet, std::vector<Util::Common::Type::Object>& params)
+{
+	if (_callbackMap.FindKey(protocol))
+	{
+		_callbackMap.RunFun(protocol, packet, params);
+	}
+	else
+		return false;
+
+	return true;
+}
 template<typename ...T>
 inline void IOCPClient<T...>::BindCallback(int protocol, std::function<void(Packet&, T...)> callback)
 {
@@ -26,7 +39,7 @@ inline void IOCPClient<T...>::BindCallback(int protocol, std::function<void(Pack
 }
 
 template<>
-class IOCPClient<void> : IOCPBaseClient
+class IOCPClient<void> : public IOCPBaseClient
 {
 protected:
 	IOCPClient() {}
@@ -35,15 +48,25 @@ public:
 	{
 		_callbackMap.Clear();
 	}
-private:
 protected:
 	Util::Socket::FunctionMap<> _callbackMap;
 public:
 	void BindCallback(int protocol, std::function<void(Packet&)> callback);
 };
 template<>
+inline bool IOCPClient<>::RunCallbackFunc(unsigned short protocol, Util::Socket::Packet& packet, std::vector<Util::Common::Type::Object>& params)
+{
+	if (_callbackMap.FindKey(protocol))
+	{
+		_callbackMap.RunFun(protocol, packet);
+	}
+	else
+		return false;
+}
+template<>
 inline void IOCPClient<>::BindCallback(int protocol, std::function<void(Packet&)> callback)
 {
 	_callbackMap.BindCallback(protocol, callback);
 }
+
 NS_SOCKET_END

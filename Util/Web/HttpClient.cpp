@@ -60,14 +60,14 @@ std::string HttpClient::SendRequest(std::string requestData, Method method)
 		if (_header.size() == 0)
 			_header = L"content-type:application/x-www-form-urlencoded";
 
-		WinHttpAddRequestHeaders(_request, _header.c_str(), _header.size(), WINHTTP_ADDREQ_FLAG_ADD);
+		WinHttpAddRequestHeaders(_request, _header.c_str(), (DWORD)_header.size(), WINHTTP_ADDREQ_FLAG_ADD);
 
 		if (WinHttpSendRequest(_request,
 			WINHTTP_NO_ADDITIONAL_HEADERS,
 			0,
 			(LPVOID)requestData.c_str(),
-			requestData.size(),
-			requestData.size(),
+			(DWORD)requestData.size(),
+			(DWORD)requestData.size(),
 			(DWORD_PTR)this))
 		{
 			if (WinHttpReceiveResponse(_request, NULL))
@@ -145,7 +145,7 @@ bool HttpClient::SendRequestAsync(std::string requestData, Method method, std::f
 		if (_header.size() == 0)
 			_header = L"content-type:application/x-www-form-urlencoded";
 
-		WinHttpAddRequestHeaders(_request, _header.c_str(), _header.size(), WINHTTP_ADDREQ_FLAG_ADD);
+		WinHttpAddRequestHeaders(_request, _header.c_str(), (DWORD)_header.size(), WINHTTP_ADDREQ_FLAG_ADD);
 
 		WinHttpSetStatusCallback(_request,
 			HttpClient::AsyncCallback,
@@ -156,8 +156,8 @@ bool HttpClient::SendRequestAsync(std::string requestData, Method method, std::f
 			WINHTTP_NO_ADDITIONAL_HEADERS,
 			0,
 			(LPVOID)requestData.c_str(),
-			requestData.size(),
-			requestData.size(),
+			(DWORD)requestData.size(),
+			(DWORD)requestData.size(),
 			(DWORD_PTR)this);
 		return result;
 	}

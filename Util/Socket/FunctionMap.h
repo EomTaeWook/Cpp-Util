@@ -80,7 +80,7 @@ inline void FunctionMap<T...>::RunFun(int protocol, Packet& packet, T... params)
 	auto it = _funcMap.find(protocol);
 	if (it != _funcMap.end())
 	{
-		it->second(packet, handler, params...);
+		it->second(packet, params...);
 	}
 }
 

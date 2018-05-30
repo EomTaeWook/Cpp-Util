@@ -8,6 +8,8 @@ NS_SOCKET_BEGIN
 class Header
 {
 public:
+	Header() {}
+public:
 	char Tag;
 	unsigned short Mark;
 	char Vertify;
@@ -29,13 +31,15 @@ public:
 		_header.Tag = 0x7E;
 		_header.Mark = 0x4134;
 		_header.Vertify = 1;
-		_header.DataSize = 16;
-		memcpy(&_buffer[0], &_header, sizeof(Header));
+		_header.DataSize = sizeof(Header);
+		_buffer.assign(sizeof(Header), '0');
+		memcpy(&_buffer.front(), &_header, sizeof(Header));
 	}
 	Packet(char* items, unsigned int size)
 	{
-		memcpy(&_header, items, sizeof(Header));
-		memcpy(&_buffer[0], items + sizeof(Header), size - sizeof(Header));
+		_buffer.assign(size, '0');
+		memcpy(&_buffer.front(), &*items, size);
+		memcpy(&_header, &_buffer.front(), sizeof(Header));
 	}
 	virtual ~Packet() {}
 public:
@@ -58,6 +62,7 @@ inline Packet& Packet::Insert(char item)
 {
 	_buffer.push_back(item);
 	_header.DataSize++;
+	memcpy(&_buffer.front(), &_header, sizeof(Header));
 	return *this;
 }
 inline Packet& Packet::Insert(char* items, unsigned int size)
@@ -67,6 +72,7 @@ inline Packet& Packet::Insert(char* items, unsigned int size)
 		_buffer.push_back(items[i]);
 	}
 	_header.DataSize += size;
+	memcpy(&_buffer.front(), &_header, sizeof(Header));
 	return *this;
 }
 inline Packet& Packet::Insert(std::string items)
@@ -76,6 +82,7 @@ inline Packet& Packet::Insert(std::string items)
 		_buffer.push_back(items[i]);
 	}
 	_header.DataSize += (unsigned int)items.size();
+	memcpy(&_buffer.front(), &_header, sizeof(Header));
 	return *this;
 }
 NS_SOCKET_END

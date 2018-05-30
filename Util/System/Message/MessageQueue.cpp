@@ -73,7 +73,7 @@ HRESULT MessageQueue::Receive(Message& message, int timeOutMillis)
 	msgPropId[propId] = PROPID_M_BODY;							// Property ID  
 	msgPropVar[propId].vt = VT_VECTOR | VT_UI1;					// Type indicator
 	msgPropVar[propId].caub.pElems = message.GetBuffer().get();	// Body buffer
-	msgPropVar[propId].caub.cElems = message.GetBufferSize();	// Buffer size
+	msgPropVar[propId].caub.cElems = (ULONG)message.GetBufferSize();	// Buffer size
 	propId++;
 
 	msgPropId[propId] = PROPID_M_BODY_TYPE;						// Property ID
@@ -117,7 +117,7 @@ HRESULT MessageQueue::Send(Message& message)
 	msgPropId[propId] = PROPID_M_BODY;							// Property ID 
 	msgPropVar[propId].vt = VT_VECTOR | VT_UI1;					// Type indicator  
 	msgPropVar[propId].caub.pElems = message.GetBuffer().get();	// Body buffer
-	msgPropVar[propId].caub.cElems = message.GetBufferSize();	// Buffer size
+	msgPropVar[propId].caub.cElems = (ULONG)message.GetBufferSize();	// Buffer size
 	propId++;
 
 	msgPropId[propId] = PROPID_M_LABEL;				// Property ID  

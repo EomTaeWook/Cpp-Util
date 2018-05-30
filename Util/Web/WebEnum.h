@@ -8,7 +8,7 @@ enum class Method
 	Get,
 	Post,
 	Put,
-	Delete,
+	Delete
 };
 
 NS_WEB_END

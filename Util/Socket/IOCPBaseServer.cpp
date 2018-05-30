@@ -32,9 +32,7 @@ void IOCPBaseServer::Stop()
 }
 void IOCPBaseServer::Init()
 {
-	std::ios::sync_with_stdio(false);
-
-	this->_completionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
+	_completionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 	if (_completionPort == INVALID_HANDLE_VALUE)
 		throw std::exception("CreateIoCompletionPort Fail");
 
@@ -52,6 +50,8 @@ void IOCPBaseServer::Start(std::string ip, int port)
 	if (_isStart) return;
 	try
 	{
+		if (_completionPort == NULL)
+			Init();
 		WSADATA _wsaData;
 		if (WSAStartup(MAKEWORD(2, 2), &_wsaData) != 0)
 			throw std::exception();
