@@ -24,9 +24,7 @@ template<typename ...T>
 inline bool IOCPClient<T...>::RunCallbackFunc(unsigned short protocol, Util::Socket::Packet& packet, std::vector<Util::Common::Type::Object>& params)
 {
 	if (_callbackMap.FindKey(protocol))
-	{
 		_callbackMap.RunFun(protocol, packet, params);
-	}
 	else
 		return false;
 
@@ -57,9 +55,7 @@ template<>
 inline bool IOCPClient<>::RunCallbackFunc(unsigned short protocol, Util::Socket::Packet& packet, std::vector<Util::Common::Type::Object>& params)
 {
 	if (_callbackMap.FindKey(protocol))
-	{
 		_callbackMap.RunFun(protocol, packet);
-	}
 	else
 		return false;
 	return true;

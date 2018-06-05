@@ -47,6 +47,7 @@ inline Delegate<R, Types...>& Delegate<R, Types...>::Combine(Delegate<R, Types..
 template<typename R, typename ...Types>
 inline Delegate<R, Types...>& Delegate<R, Types...>::operator += (std::function<R(Types...)> method)
 {
+	if (method == NULL) return;
 	_methods.push_back(method);
 	return *this;
 }
@@ -58,6 +59,7 @@ inline Delegate<R, Types...>& Delegate<R, Types...>::operator + (Delegate<R, Typ
 template<typename R, typename ...Types>
 void Delegate<R, Types...>::operator = (std::function<R(Types...)> method)
 {
+	if (method == NULL) return;
 	_methods.clear();
 	_methods.push_back(method);
 }

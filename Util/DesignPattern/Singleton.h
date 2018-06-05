@@ -13,22 +13,22 @@ public:
 	static std::shared_ptr<T> Instance();
 private:
 	static std::shared_ptr<T> _instance;
-	static CriticalSection _CreateMutex;
+	static CriticalSection _createMutex;
 };
 
 template <typename T>
 std::shared_ptr<T> Singleton<T>::Instance()
 {
-	_CreateMutex.EnterCriticalSection();
+	_createMutex.EnterCriticalSection();
 	if (_instance.get() == 0)
 	{
 		_instance = std::make_shared<T>();
 	}
-	_CreateMutex.LeaveCriticalSection();
+	_createMutex.LeaveCriticalSection();
 	return _instance;
 }
 template <typename T>
-CriticalSection Singleton<T>::_CreateMutex;
+CriticalSection Singleton<T>::_createMutex;
 
 template <typename T>
 std::shared_ptr<T> Singleton<T>::_instance = NULL;

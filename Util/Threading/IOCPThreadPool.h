@@ -35,6 +35,7 @@ private:
 	bool Stop();
 	bool DeleteItem(WaitCallback* WaitCallback);
 	int Run();
+private:
 	static unsigned int __stdcall WorkerThread(void*);
 };
 NS_THREADING_END

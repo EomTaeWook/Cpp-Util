@@ -34,6 +34,7 @@ private:
 public:
 	void Init();
 	void Connect(std::string ip, int port, int timeOut = 5000);
+	bool IsConnect();
 private:
 	void BeginReceive();
 	void BeginWork(void *);

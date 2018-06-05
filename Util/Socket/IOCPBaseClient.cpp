@@ -17,6 +17,10 @@ void IOCPBaseClient::Init()
 		_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, WorkerThread, this, 0, NULL));
 	}
 }
+bool IOCPBaseClient::IsConnect()
+{
+	return _stateObject.Socket() != NULL;
+}
 void IOCPBaseClient::Connect(std::string ip, int port, int timeOut)
 {
 	if (_completionPort == NULL)
@@ -75,7 +79,6 @@ void IOCPBaseClient::Connect(std::string ip, int port, int timeOut)
 			throw std::exception("ConnectFail : " + error);
 		}
 	}
-
 }
 void IOCPBaseClient::BeginReceive()
 {
@@ -83,9 +86,7 @@ void IOCPBaseClient::BeginReceive()
 	if (WSARecv(_stateObject.Socket(), &_stateObject.WSABuff(), 1, 0, &flags, &*_stateObject.Overlapped(), NULL) == SOCKET_ERROR)
 	{
 		if (WSAGetLastError() != WSA_IO_PENDING)
-		{
 			_stateObject.Close();
-		}
 	}
 }
 void IOCPBaseClient::Stop()
@@ -132,17 +133,16 @@ void IOCPBaseClient::BeginWork(void *obj)
 				continue;
 			if (!PacketConversionComplete(packet, params))
 				continue;
-			//switch (VerifyPacket(packet))
-			//{
-			//case VertifyResult::Vertify_Ignore:
-			//	continue;
-			//case VertifyResult::Vertify_Forward:
-			//	ForwardFunc(packet);
-			//	continue;
-			//}
+			switch (VerifyPacket(packet))
+			{
+			case VertifyResult::Vertify_Ignore:
+				continue;
+			case VertifyResult::Vertify_Forward:
+				ForwardFunc(packet);
+				continue;
+			}
 			RunCallbackFunc(packet.GetHeader().Protocol, packet, params);
 		}
-		
 	}
 	catch (std::exception ex)
 	{

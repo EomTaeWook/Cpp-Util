@@ -15,9 +15,11 @@ public:
 		_wsaBuf.len = BUFF_SIZE;
 		_wsaBuf.buf = _buffer;
 		_mode = READ;
+		_sock = NULL;
 	}
 	virtual ~StateObject()
 	{
+		_overlapped.reset();
 		Close();
 	}
 private:
@@ -35,7 +37,7 @@ private:
 	Util::Collections::SyncQueue<char> _receiveBuffer;
 	Util::Collections::SyncQueue<Util::Socket::Packet> _packetBuffer;
 public:
-	SOCKET& Socket();
+	SOCKET & Socket();
 	SOCKADDR_IN& SocketAddr();
 	std::shared_ptr<OVERLAPPED>& Overlapped();
 	WSABUF& WSABuff();
@@ -73,8 +75,8 @@ inline void StateObject::Close()
 {
 	_receiveBuffer.Clear();
 	_packetBuffer.Clear();
-	_overlapped.reset();
 	closesocket(_sock);
+	_sock = NULL;
 }
 inline SOCKET& StateObject::Socket()
 {

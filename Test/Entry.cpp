@@ -23,18 +23,33 @@ class TEST : public Util::Socket::IOCPClient<>
 	{
 	}
 public:
+	void Update(void*)
+	{
+
+	}
+
+public:
 	void CallbackTest(Util::Socket::Packet& packet)
 	{
 	}
+public:
+	Util::Threading::Thread _thread;
 };
+
+#include <Common\MulticastDelegate.h>
+#include <Threading\Thread.h>
 
 int main()
 {
 	TEST t;
 	t.Init();
-	t.BindCallback(123, std::bind(&TEST::CallbackTest, &t, std::placeholders::_1));
-	t.Connect("127.0.0.1", 10000);
+	//t.BindCallback(123, std::bind(&TEST::CallbackTest, &t, std::placeholders::_1));
+	//t.Connect("127.0.0.1", 10000);
 	//t.BindCallback(123, std::bind(&TEST::CallbackTest, t, std::placeholders::_1));
+
+	
+	t._thread.operator()(std::bind(&TEST::Update, &t, std::placeholders::_1));
+	t._thread.Start();
 	while (true)
 	{
 		Sleep(1000);

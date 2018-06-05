@@ -9,10 +9,8 @@ bool IOCPThreadPool::Init(unsigned int threadMaxSize)
 {
 	try
 	{
-		if (!Stop())
-		{
-			return false;
-		}
+		if (!Stop()) return false;
+
 		_completionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 		if (_completionPort == INVALID_HANDLE_VALUE)
 			return false;
@@ -28,13 +26,11 @@ bool IOCPThreadPool::Init(unsigned int threadMaxSize)
 				_thread_Max_Size = threadMaxSize;
 		}
 		else
-		{
 			_thread_Max_Size = info.dwNumberOfProcessors * 2;
-		}
+
 		for (unsigned int i = 0; i < _thread_Max_Size; i++)
-		{
 			_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, WorkerThread, this, 0, NULL));
-		}
+
 	}
 	catch (...)
 	{
