@@ -14,12 +14,16 @@ void IOCPBaseClient::Init()
 	auto size = info.dwNumberOfProcessors * 2;
 	for (size_t i = 0; i < size; i++)
 	{
-		_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, WorkerThread, this, 0, NULL));
+		_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, Run, this, 0, NULL));
 	}
 }
 bool IOCPBaseClient::IsConnect()
 {
 	return _stateObject.Socket() != NULL;
+}
+void IOCPBaseClient::DisConnect()
+{
+	_stateObject.Close();
 }
 void IOCPBaseClient::Connect(std::string ip, int port, int timeOut)
 {
@@ -149,7 +153,7 @@ void IOCPBaseClient::BeginWork(void *obj)
 		ex.what();
 	}
 }
-int IOCPBaseClient::Run()
+int IOCPBaseClient::Invoke()
 {
 	unsigned long bytesTrans = 0;
 	ULONG_PTR stateObject = 0;
@@ -206,12 +210,12 @@ int IOCPBaseClient::Run()
 	}
 	return 0;
 }
-unsigned int __stdcall IOCPBaseClient::WorkerThread(void* obj)
+unsigned int __stdcall IOCPBaseClient::Run(void* obj)
 {
 	auto client = reinterpret_cast<IOCPBaseClient*>(obj);
 	if (client != NULL)
 	{
-		return client->Run();
+		return client->Invoke();
 	}
 	return 0;
 }

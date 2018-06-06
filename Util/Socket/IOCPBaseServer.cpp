@@ -42,7 +42,7 @@ void IOCPBaseServer::Init()
 	auto size = info.dwNumberOfProcessors * 2;
 	for (size_t i = 0; i < size; i++)
 	{
-		_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, WorkerThread, this, 0, NULL));
+		_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, Run, this, 0, NULL));
 	}
 }
 void IOCPBaseServer::Start(std::string ip, int port)
@@ -122,7 +122,7 @@ void IOCPBaseServer::StartListening(void* pObj)
 		WSARecv(stateObject->Socket(), &stateObject->WSABuff(), 1, 0, &flag, &*stateObject->Overlapped(), NULL);
 	}
 }
-int IOCPBaseServer::Run()
+int IOCPBaseServer::Invoke()
 {
 	unsigned long bytesTrans = 0;
 	ULONG_PTR stateObject = 0;
@@ -202,9 +202,9 @@ void IOCPBaseServer::ClosePeer(StateObject* handler)
 	}
 	CloseComplete(handler->Handle());
 }
-unsigned int __stdcall IOCPBaseServer::WorkerThread(void* obj)
+unsigned int __stdcall IOCPBaseServer::Run(void* obj)
 {
 	auto server = reinterpret_cast<IOCPBaseServer*>(obj);
-	return server->Run();
+	return server->Invoke();
 }
 NS_SOCKET_END

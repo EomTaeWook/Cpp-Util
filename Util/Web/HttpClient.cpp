@@ -148,7 +148,7 @@ bool HttpClient::SendRequestAsync(std::string requestData, Method method, std::f
 		WinHttpAddRequestHeaders(_request, _header.c_str(), (DWORD)_header.size(), WINHTTP_ADDREQ_FLAG_ADD);
 
 		WinHttpSetStatusCallback(_request,
-			HttpClient::AsyncCallback,
+			HttpClient::OnCallback,
 			WINHTTP_CALLBACK_FLAG_ALL_COMPLETIONS,
 			0);
 
@@ -179,7 +179,7 @@ void HttpClient::Close()
 	if (_session) WinHttpCloseHandle(_session);
 }
 
-void HttpClient::OnCallback(unsigned long code, void* info, unsigned long length)
+void HttpClient::Invoke(unsigned long code, void* info, unsigned long length)
 {
 	switch (code)
 	{
@@ -232,10 +232,10 @@ void HttpClient::OnCallback(unsigned long code, void* info, unsigned long length
 		break;
 	}
 }
-void __stdcall HttpClient::AsyncCallback(HINTERNET handle, DWORD_PTR context, DWORD status, void* info, DWORD infoLength)
+void __stdcall HttpClient::OnCallback(HINTERNET handle, DWORD_PTR context, DWORD status, void* info, DWORD infoLength)
 {
 	auto client = reinterpret_cast<HttpClient*>(context);
 	if (client != NULL)
-		client->OnCallback(status, info, infoLength);
+		client->Invoke(status, info, infoLength);
 }
 NS_WEB_HTTP_END

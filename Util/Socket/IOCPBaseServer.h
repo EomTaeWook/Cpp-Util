@@ -47,7 +47,7 @@ public:
 	void Start(std::string ip, int port);
 	void Stop();
 private:
-	int Run();
+	int Invoke();
 	void StartListening(void* pObj = nullptr);
 	void AddPeer(StateObject* pStateObject);
 	void ClosePeer(StateObject* pStateObject);
@@ -59,7 +59,7 @@ protected:
 	void virtual CloseComplete(unsigned long handle) = 0;
 	void virtual PacketConversionComplete(Util::Socket::Packet& packet, Util::Socket::StateObject& handler, std::vector<Util::Common::Type::Object>& params) = 0;
 private:
-	static unsigned int __stdcall WorkerThread(void*);
+	static unsigned int __stdcall Run(void*);
 };
 
 NS_SOCKET_END

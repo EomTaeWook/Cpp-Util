@@ -35,9 +35,9 @@ public:
 	std::string SendRequest(std::string requestData = "", Method method = Method::Get);
 	void HeaderAppend(std::string header);
 private:
-	void OnCallback(unsigned long code, void* info, unsigned long length);
+	void Invoke(unsigned long code, void* info, unsigned long length);
 	void Close();
 private:
-	static void __stdcall AsyncCallback(HINTERNET handle, DWORD_PTR context, DWORD status, void* info, DWORD infoLength);
+	static void __stdcall OnCallback(HINTERNET handle, DWORD_PTR context, DWORD status, void* info, DWORD infoLength);
 };
 NS_WEB_HTTP_END

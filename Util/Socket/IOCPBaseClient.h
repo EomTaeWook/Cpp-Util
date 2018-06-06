@@ -35,10 +35,11 @@ public:
 	void Init();
 	void Connect(std::string ip, int port, int timeOut = 5000);
 	bool IsConnect();
+	void DisConnect();
 private:
 	void BeginReceive();
 	void BeginWork(void *);
-	int Run();
+	int Invoke();
 	void Stop();
 public:
 	void Send(unsigned short protocol, std::string& data);
@@ -52,6 +53,6 @@ protected:
 	virtual void DisconnectedEvent() {}
 	virtual bool RunCallbackFunc(unsigned short protocol, Util::Socket::Packet& packet, std::vector<Util::Common::Type::Object>& params) = 0;
 public:
-	static unsigned int __stdcall WorkerThread(void*);
+	static unsigned int __stdcall Run(void*);
 };
 NS_SOCKET_END

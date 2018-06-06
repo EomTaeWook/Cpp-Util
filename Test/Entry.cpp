@@ -47,9 +47,20 @@ int main()
 	//t.Connect("127.0.0.1", 10000);
 	//t.BindCallback(123, std::bind(&TEST::CallbackTest, t, std::placeholders::_1));
 
-	
-	t._thread.operator()(std::bind(&TEST::Update, &t, std::placeholders::_1));
-	t._thread.Start();
+	Util::Threading::Thread* thread = NULL;
+	thread = new Util::Threading::Thread(std::bind(&TEST::Update, &t, std::placeholders::_1));
+	if(thread != NULL)
+		delete thread;
+	thread = NULL;
+	if (thread != NULL)
+	{
+		printf("delete");
+	}
+
+	std::unique_ptr<Util::Threading::Thread> pThread = std::unique_ptr<Util::Threading::Thread>(new Util::Threading::Thread(std::bind(&TEST::Update, &t, std::placeholders::_1)));
+	pThread.reset();
+	//t._thread.operator()(std::bind(&TEST::Update, &t, std::placeholders::_1));
+	//t._thread.Start();
 	while (true)
 	{
 		Sleep(1000);

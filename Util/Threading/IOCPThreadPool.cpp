@@ -29,7 +29,7 @@ bool IOCPThreadPool::Init(unsigned int threadMaxSize)
 			_thread_Max_Size = info.dwNumberOfProcessors * 2;
 
 		for (unsigned int i = 0; i < _thread_Max_Size; i++)
-			_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, WorkerThread, this, 0, NULL));
+			_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, Run, this, 0, NULL));
 
 	}
 	catch (...)
@@ -74,7 +74,7 @@ bool IOCPThreadPool::InsertQueueItem(std::function<void(void*)> callback, void* 
 		return false;
 	}
 }
-int IOCPThreadPool::Run()
+int IOCPThreadPool::Invoke()
 {
 	unsigned long numberOfBytes = 0;
 	ULONG_PTR callback = 0;
@@ -107,9 +107,9 @@ bool IOCPThreadPool::DeleteItem(WaitCallback* waitCallback)
 	}
 	return false;
 }
-unsigned int __stdcall IOCPThreadPool::WorkerThread(void* obj)
+unsigned int __stdcall IOCPThreadPool::Run(void* obj)
 {
 	IOCPThreadPool* p_th = static_cast<IOCPThreadPool*>(obj);
-	return p_th->Run();
+	return p_th->Invoke();
 }
 NS_THREADING_END
