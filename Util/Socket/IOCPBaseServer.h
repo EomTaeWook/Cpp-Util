@@ -52,7 +52,7 @@ private:
 	void AddPeer(StateObject* pStateObject);
 	void ClosePeer(StateObject* pStateObject);
 public:
-	void Init();
+	void Init(ULONG size = 0);
 	//abstract Method
 protected:
 	void virtual AcceptComplete(Util::Socket::StateObject& handler) = 0;

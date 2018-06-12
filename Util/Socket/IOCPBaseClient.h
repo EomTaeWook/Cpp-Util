@@ -32,7 +32,7 @@ private:
 	StateObject _stateObject;
 	sockaddr_in _iPEndPoint;
 public:
-	void Init();
+	void Init(ULONG size = 0);
 	void Connect(std::string ip, int port, int timeOut = 5000);
 	bool IsConnect();
 	void DisConnect();

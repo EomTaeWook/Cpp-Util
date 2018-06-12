@@ -30,20 +30,23 @@ void IOCPBaseServer::Stop()
 	_completionPort = NULL;
 	_hWorkerThread.clear();
 }
-void IOCPBaseServer::Init()
+void IOCPBaseServer::Init(ULONG size = 0)
 {
 	_completionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 	if (_completionPort == INVALID_HANDLE_VALUE)
 		throw std::exception("CreateIoCompletionPort Fail");
 
-	SYSTEM_INFO info;
-	GetSystemInfo(&info);
-
-	auto size = info.dwNumberOfProcessors * 2;
-	for (size_t i = 0; i < size; i++)
+	if (size == 0)
 	{
-		_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, Run, this, 0, NULL));
+		SYSTEM_INFO info;
+		GetSystemInfo(&info);
+		size = info.dwNumberOfProcessors * 2;
 	}
+
+	for (size_t i = 0; i < size; i++)
+		_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, Run, this, 0, NULL));
+	
+	
 }
 void IOCPBaseServer::Start(std::string ip, int port)
 {

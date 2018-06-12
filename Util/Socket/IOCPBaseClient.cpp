@@ -1,21 +1,23 @@
 #include "IOCPBaseClient.h"
 #include <WS2tcpip.h>
 NS_SOCKET_BEGIN
-void IOCPBaseClient::Init()
+void IOCPBaseClient::Init(ULONG size)
 {
 	_workThread = std::make_unique<Util::Threading::Thread>(std::bind(&IOCPBaseClient::BeginWork, this, std::placeholders::_1), &_stateObject);
 	_completionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 	if (_completionPort == INVALID_HANDLE_VALUE)
 		throw std::exception("CreateIoCompletionPort Fail : " + GetLastError());
 
-	SYSTEM_INFO info;
-	GetSystemInfo(&info);
-
-	auto size = info.dwNumberOfProcessors * 2;
-	for (size_t i = 0; i < size; i++)
+	if (size == 0)
 	{
-		_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, Run, this, 0, NULL));
+		SYSTEM_INFO info;
+		GetSystemInfo(&info);
+		size = info.dwNumberOfProcessors * 2;
 	}
+
+	for (size_t i = 0; i < size; i++)
+		_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, Run, this, 0, NULL));
+
 }
 bool IOCPBaseClient::IsConnect()
 {
@@ -181,7 +183,9 @@ int IOCPBaseClient::Invoke()
 				{
 					Util::Socket::Header header;
 					memcpy(&header, &pHandler->ReceiveBuffer().Peek(0, sizeof(Util::Socket::Header)).front(), sizeof(Util::Socket::Header));
-					if (header.DataSize <= pHandler->ReceiveBuffer().Count())
+					if (header.Tag != '~')
+						pHandler->ReceiveBuffer().Clear();
+					if (header.DataSize <= pHandler->ReceiveBuffer().Count() && header.DataSize != 0)
 					{
 						Util::Socket::Packet packet(&pHandler->ReceiveBuffer().Read(header.DataSize).front(), header.DataSize);
 						if (pHandler->PacketBuffer().Count() > 0)

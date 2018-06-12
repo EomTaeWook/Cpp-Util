@@ -70,13 +70,14 @@ inline SyncQueue<T>& SyncQueue<T>::Append(T* items, size_t size)
 template<typename T>
 inline T SyncQueue<T>::Read()
 {
-	if (_items.size() == 0)
-		throw std::exception("IndexOutOfRangeException");
 	T item;
 	auto finally = Util::Common::Finally(std::bind(&Util::Threading::CriticalSection::LeaveCriticalSection, &_read));
 	try
 	{
 		_read.EnterCriticalSection();
+		if (_items.size() == 0)
+			throw std::exception("IndexOutOfRangeException");
+
 		item = _items.front();
 		_items.pop();
 	}
@@ -89,14 +90,14 @@ inline T SyncQueue<T>::Read()
 template<typename T>
 inline std::vector<T> SyncQueue<T>::Read(size_t length)
 {
-	if (length > _items.size())
-		throw std::exception("IndexOutOfRangeException");
-
 	std::vector<T> items;
 	auto finally = Util::Common::Finally(std::bind(&Util::Threading::CriticalSection::LeaveCriticalSection, &_read));
 	try
 	{
 		_read.EnterCriticalSection();
+		if (length > _items.size())
+			throw std::exception("IndexOutOfRangeException");
+
 		for (size_t i = 0; i < length; i++)
 		{
 			items.push_back(_items.front());
@@ -112,16 +113,16 @@ inline std::vector<T> SyncQueue<T>::Read(size_t length)
 template<typename T>
 inline std::vector<T> SyncQueue<T>::Peek(size_t offset, size_t length)
 {
-	if (offset + length >= _items.size())
-		throw std::exception("IndexOutOfRangeException");
-
 	std::vector<T> items;
-	items.assign(length, 0);
 	auto finally = Util::Common::Finally(std::bind(&Util::Threading::CriticalSection::LeaveCriticalSection, &_read));
 	try
 	{
 		_read.EnterCriticalSection();
-		memcpy(&items[0], &_items.front() + offset, length);
+		if (offset + length > _items.size())
+			throw std::exception("IndexOutOfRangeException");
+		items.assign(length, 0);
+
+		memcpy(&items.front(), &_items.front() + offset, length);
 	}
 	catch (...)
 	{
@@ -132,8 +133,17 @@ inline std::vector<T> SyncQueue<T>::Peek(size_t offset, size_t length)
 template<typename T>
 inline void SyncQueue<T>::Clear()
 {
-	while (!_items.empty())
-		_items.pop();
+	auto finally = Util::Common::Finally(std::bind(&Util::Threading::CriticalSection::LeaveCriticalSection, &_read));
+	try
+	{
+		_read.EnterCriticalSection();
+		while (!_items.empty())
+			_items.pop();
+	}
+	catch (...)
+	{
+		throw std::exception("ClearException");
+	}
 }
 
 template<typename T>
@@ -144,6 +154,8 @@ inline T SyncQueue<T>::Peek()
 	try
 	{
 		_read.EnterCriticalSection();
+		if (_items.size() == 0)
+			throw std::exception("IndexOutOfRangeException");
 		item = _items.front();
 	}
 	catch (...)
