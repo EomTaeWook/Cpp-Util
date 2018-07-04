@@ -30,23 +30,25 @@ void IOCPBaseServer::Stop()
 	_completionPort = NULL;
 	_hWorkerThread.clear();
 }
-void IOCPBaseServer::Init(ULONG size = 0)
+void IOCPBaseServer::Init(UINT threadSize)
 {
 	_completionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 	if (_completionPort == INVALID_HANDLE_VALUE)
 		throw std::exception("CreateIoCompletionPort Fail");
 
-	if (size == 0)
+	SYSTEM_INFO info;
+	GetSystemInfo(&info);
+	if (threadSize > 0)
 	{
-		SYSTEM_INFO info;
-		GetSystemInfo(&info);
-		size = info.dwNumberOfProcessors * 2;
+		if (info.dwNumberOfProcessors * 2 < threadSize)
+			threadSize = info.dwNumberOfProcessors * 2;
+		else
+			threadSize = info.dwNumberOfProcessors * 2;
 	}
-
-	for (size_t i = 0; i < size; i++)
+	else
+		threadSize = info.dwNumberOfProcessors * 2;
+	for (size_t i = 0; i < threadSize; i++)
 		_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, Run, this, 0, NULL));
-	
-	
 }
 void IOCPBaseServer::Start(std::string ip, int port)
 {
@@ -118,21 +120,21 @@ void IOCPBaseServer::StartListening(void* pObj)
 		std::memcpy(&stateObject->SocketAddr(), &clientAddr, size);
 		stateObject->Handle() = _handleCount.Add();
 		AddPeer(stateObject);
-		AcceptComplete(*stateObject);
+		Accepted(*stateObject);
 
 		CreateIoCompletionPort((HANDLE)stateObject->Socket(), _completionPort, (unsigned long long)stateObject, 0);
 		unsigned long flag = 0;
-		WSARecv(stateObject->Socket(), &stateObject->WSABuff(), 1, 0, &flag, &*stateObject->Overlapped(), NULL);
+		WSARecv(stateObject->Socket(), &stateObject->WSABuff(), 1, 0, &flag, &*stateObject->ReceiveOverlapped(), NULL);
 	}
 }
 int IOCPBaseServer::Invoke()
 {
 	unsigned long bytesTrans = 0;
 	ULONG_PTR stateObject = 0;
-	LPOVERLAPPED overlapped = 0;
+	Util::Socket::Overlapped* overlapped;
 	while (true)
 	{
-		if (!GetQueuedCompletionStatus(_completionPort, &bytesTrans, &stateObject, &overlapped, INFINITE))
+		if (!GetQueuedCompletionStatus(_completionPort, &bytesTrans, &stateObject, (LPOVERLAPPED *)&overlapped, INFINITE))
 		{
 			break;
 		}
@@ -144,15 +146,9 @@ int IOCPBaseServer::Invoke()
 			ClosePeer(pHandler);
 			continue;
 		}
-		if (pHandler->IsRead())
+		if (overlapped->IsReceive())
 		{
-			//Packet 뜯어서 헤더 사이즈 확인 후 Callback 처리
-			Packet packet;
-			std::vector<Util::Common::Type::Object> params;
-			PacketConversionComplete(packet, *pHandler, params);
-
-			params.clear();
-
+			
 		}
 	}
 	return 0;
@@ -175,17 +171,17 @@ void IOCPBaseServer::AddPeer(StateObject* pStateObject)
 	}
 	catch (...)
 	{
-		std::cout << "AddPeer Exception" << std::endl;
 	}
 }
-void IOCPBaseServer::ClosePeer(StateObject* handler)
+void IOCPBaseServer::ClosePeer(StateObject* pStateObject)
 {
 	{
 		auto finally = Util::Common::Finally(std::bind(&CriticalSection::LeaveCriticalSection, &_remove));
 		try
 		{
 			_remove.EnterCriticalSection();
-			auto it = _clients.find(handler->Handle());
+			auto handle = pStateObject->Handle();
+			auto it = _clients.find(handle);
 			if (it != _clients.end())
 			{
 				it->second.get()->Close();
@@ -194,16 +190,18 @@ void IOCPBaseServer::ClosePeer(StateObject* handler)
 			}
 			else
 			{
-				handler->Close();
-				delete handler;
+				pStateObject->Close();
+				delete pStateObject;
 			}
+			Disconnected(handle);
 		}
 		catch (...)
 		{
-			std::cout << "ClosePeer Exception" << std::endl;
 		}
 	}
-	CloseComplete(handler->Handle());
+}
+void IOCPBaseServer::BroadCast(Util::Socket::Packet packet, StateObject state)
+{
 }
 unsigned int __stdcall IOCPBaseServer::Run(void* obj)
 {

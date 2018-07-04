@@ -105,9 +105,6 @@
     <ClInclude Include="Socket\StateObject.h">
       <Filter>Socket</Filter>
     </ClInclude>
-    <ClInclude Include="Socket\FunctionMap.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
     <ClInclude Include="Socket\Packet.h">
       <Filter>Socket</Filter>
     </ClInclude>
@@ -162,17 +159,20 @@
     <ClInclude Include="Socket\IOCPBaseServer.h">
       <Filter>Socket\Server</Filter>
     </ClInclude>
-    <ClInclude Include="Socket\IOCPServer.h">
-      <Filter>Socket\Server</Filter>
-    </ClInclude>
     <ClInclude Include="Socket\IOCPBaseClient.h">
-      <Filter>Socket\Client</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\IOCPClient.h">
       <Filter>Socket\Client</Filter>
     </ClInclude>
     <ClInclude Include="Socket\SocketEnum.h">
       <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\Overlapped.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\IOCPSocketClient.h">
+      <Filter>Socket\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\IOCPServerSocket.h">
+      <Filter>Socket\Server</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

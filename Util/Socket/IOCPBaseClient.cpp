@@ -1,23 +1,25 @@
 #include "IOCPBaseClient.h"
 #include <WS2tcpip.h>
 NS_SOCKET_BEGIN
-void IOCPBaseClient::Init(ULONG size)
+void IOCPBaseClient::Init(UINT threadSize)
 {
-	_workThread = std::make_unique<Util::Threading::Thread>(std::bind(&IOCPBaseClient::BeginWork, this, std::placeholders::_1), &_stateObject);
 	_completionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 	if (_completionPort == INVALID_HANDLE_VALUE)
 		throw std::exception("CreateIoCompletionPort Fail : " + GetLastError());
 
-	if (size == 0)
+	SYSTEM_INFO info;
+	GetSystemInfo(&info);
+	if (threadSize > 0)
 	{
-		SYSTEM_INFO info;
-		GetSystemInfo(&info);
-		size = info.dwNumberOfProcessors * 2;
+		if (info.dwNumberOfProcessors * 2 < threadSize)
+			threadSize = info.dwNumberOfProcessors * 2;
+		else
+			threadSize = info.dwNumberOfProcessors * 2;
 	}
-
-	for (size_t i = 0; i < size; i++)
+	else
+		threadSize = info.dwNumberOfProcessors * 2;
+	for (size_t i = 0; i < threadSize; i++)
 		_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, Run, this, 0, NULL));
-
 }
 bool IOCPBaseClient::IsConnect()
 {
@@ -69,7 +71,7 @@ void IOCPBaseClient::Connect(std::string ip, int port, int timeOut)
 				_stateObject.Socket() = socket;
 				CreateIoCompletionPort((HANDLE)_stateObject.Socket(), _completionPort, (ULONG_PTR)&_stateObject, 0);
 				BeginReceive();
-				ConnectCompleteEvent(_stateObject);
+				Connected(_stateObject);
 			}
 			else
 			{
@@ -89,7 +91,7 @@ void IOCPBaseClient::Connect(std::string ip, int port, int timeOut)
 void IOCPBaseClient::BeginReceive()
 {
 	DWORD flags = 0;
-	if (WSARecv(_stateObject.Socket(), &_stateObject.WSABuff(), 1, 0, &flags, &*_stateObject.Overlapped(), NULL) == SOCKET_ERROR)
+	if (WSARecv(_stateObject.Socket(), &_stateObject.WSABuff(), 1, 0, &flags, &*_stateObject.ReceiveOverlapped(), NULL) == SOCKET_ERROR)
 	{
 		if (WSAGetLastError() != WSA_IO_PENDING)
 			_stateObject.Close();
@@ -110,59 +112,18 @@ void IOCPBaseClient::Stop()
 	_completionPort = NULL;
 	_hWorkerThread.clear();
 }
-void IOCPBaseClient::Send(unsigned short protocol, std::string& data)
-{
-	if (data.size() == 0) return;
-	Send(protocol, &data[0], (unsigned int)data.size());
-}
-void IOCPBaseClient::Send(unsigned short protocol, void* data, unsigned int size)
-{
-	Util::Socket::Packet packet;
-	packet.GetHeader().Protocol = protocol;
-	packet.Insert((char*)data, size);
-	Send(packet);
-}
 void IOCPBaseClient::Send(Util::Socket::Packet& packet)
 {
 	_stateObject.Send(packet);
-}
-void IOCPBaseClient::BeginWork(void *obj)
-{
-	try
-	{
-		auto pHandler = reinterpret_cast<StateObject*>(obj);
-		while (pHandler->PacketBuffer().Count() > 0)
-		{
-			auto packet = pHandler->PacketBuffer().Read();
-			std::vector<Util::Common::Type::Object> params;
-			if (packet.GetHeader().Tag != '~')
-				continue;
-			if (!PacketConversionComplete(packet, params))
-				continue;
-			switch (VerifyPacket(packet))
-			{
-			case VertifyResult::Vertify_Ignore:
-				continue;
-			case VertifyResult::Vertify_Forward:
-				ForwardFunc(packet);
-				continue;
-			}
-			RunCallbackFunc(packet.GetHeader().Protocol, packet, params);
-		}
-	}
-	catch (std::exception ex)
-	{
-		ex.what();
-	}
 }
 int IOCPBaseClient::Invoke()
 {
 	unsigned long bytesTrans = 0;
 	ULONG_PTR stateObject = 0;
-	OVERLAPPED* overlapped = 0;
+	Util::Socket::Overlapped* overlapped;
 	while (true)
 	{
-		if (!GetQueuedCompletionStatus(_completionPort, &bytesTrans, &stateObject, &overlapped, INFINITE))
+		if (!GetQueuedCompletionStatus(_completionPort, &bytesTrans, &stateObject, (LPOVERLAPPED *)&overlapped, INFINITE))
 		{
 			break;
 		}
@@ -174,31 +135,12 @@ int IOCPBaseClient::Invoke()
 			pHandler->Close();
 			continue;
 		}
-		if (pHandler->IsRead())
+		if (overlapped->IsReceive())
 		{
 			try
 			{
 				pHandler->ReceiveBuffer().Append(_stateObject.WSABuff().buf, bytesTrans);
-				if (pHandler->ReceiveBuffer().Count() >= sizeof(Util::Socket::Header))
-				{
-					Util::Socket::Header header;
-					memcpy(&header, &pHandler->ReceiveBuffer().Peek(0, sizeof(Util::Socket::Header)).front(), sizeof(Util::Socket::Header));
-					if (header.Tag != '~')
-						pHandler->ReceiveBuffer().Clear();
-					if (header.DataSize <= pHandler->ReceiveBuffer().Count() && header.DataSize != 0)
-					{
-						Util::Socket::Packet packet(&pHandler->ReceiveBuffer().Read(header.DataSize).front(), header.DataSize);
-						if (pHandler->PacketBuffer().Count() > 0)
-						{
-							pHandler->PacketBuffer().Append(packet);
-						}
-						else
-						{
-							pHandler->PacketBuffer().Append(packet);
-							_workThread->Start();
-						}
-					}
-				}
+				Recieved();
 			}
 			catch (std::exception ex)
 			{
@@ -206,10 +148,6 @@ int IOCPBaseClient::Invoke()
 				pHandler->ReceiveBuffer().Clear();
 			}
 			BeginReceive();
-		}
-		else
-		{
-			pHandler->SetRead();
 		}
 	}
 	return 0;

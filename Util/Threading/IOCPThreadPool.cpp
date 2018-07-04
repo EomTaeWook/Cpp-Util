@@ -5,7 +5,7 @@
 NS_THREADING_BEGIN
 USING_COMMON
 USING_THREADING
-bool IOCPThreadPool::Init(unsigned int threadMaxSize)
+bool IOCPThreadPool::Init(UINT threadMaxSize)
 {
 	try
 	{
@@ -50,7 +50,6 @@ bool IOCPThreadPool::Stop()
 			WaitForSingleObject(_hWorkerThread[i], INFINITE);
 			CloseHandle(_hWorkerThread[i]);
 		}
-
 		_hWorkerThread.clear();
 		CloseHandle(_completionPort);
 		_completionPort = NULL;

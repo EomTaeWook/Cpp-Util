@@ -14,11 +14,16 @@ public:
 		DeleteCriticalSection(&_cs);
 	}
 public:
+	bool TryEnterCriticalSection();
 	void EnterCriticalSection();
 	void LeaveCriticalSection();
 private:
 	CRITICAL_SECTION _cs;
 };
+inline bool CriticalSection::TryEnterCriticalSection()
+{
+	return ::TryEnterCriticalSection(&_cs);
+}
 inline void CriticalSection::EnterCriticalSection()
 {
 	::EnterCriticalSection(&_cs);

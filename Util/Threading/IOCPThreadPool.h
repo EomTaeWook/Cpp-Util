@@ -16,7 +16,7 @@ private:
 
 	HANDLE _completionPort;
 	std::vector<HANDLE> _hWorkerThread;
-	unsigned int _thread_Max_Size;
+	UINT _thread_Max_Size;
 	CriticalSection _cs;
 public:
 	IOCPThreadPool()
@@ -27,10 +27,10 @@ public:
 	{
 		Stop();
 	}
-	bool Init(unsigned int threadSize = 0);
+	bool Init(UINT threadSize = 0);
 	bool InsertQueueItem(std::function<void(void*)> callback, void* args);
 public:
-	IOCPThreadPool& operator=(const IOCPThreadPool&) = delete;
+	IOCPThreadPool & operator=(const IOCPThreadPool&) = delete;
 private:
 	bool Stop();
 	bool DeleteItem(WaitCallback* WaitCallback);

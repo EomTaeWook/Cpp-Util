@@ -52,12 +52,13 @@ private:
 	void AddPeer(StateObject* pStateObject);
 	void ClosePeer(StateObject* pStateObject);
 public:
-	void Init(ULONG size = 0);
-	//abstract Method
+	void Init(UINT threadSize = 0);
 protected:
-	void virtual AcceptComplete(Util::Socket::StateObject& handler) = 0;
-	void virtual CloseComplete(unsigned long handle) = 0;
-	void virtual PacketConversionComplete(Util::Socket::Packet& packet, Util::Socket::StateObject& handler, std::vector<Util::Common::Type::Object>& params) = 0;
+	//abstract Method
+	virtual void Accepted(Util::Socket::StateObject& stateObject) = 0;
+	virtual void Disconnected(unsigned long handle) = 0;
+	virtual void Recieved(Util::Socket::StateObject& stateObject) = 0;
+	virtual void BroadCast(Util::Socket::Packet packet, StateObject state);
 private:
 	static unsigned int __stdcall Run(void*);
 };

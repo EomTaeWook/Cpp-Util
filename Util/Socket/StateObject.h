@@ -4,55 +4,59 @@
 #include <memory>
 #include "Packet.h"
 #include "..\Collections\SyncQueue.h"
+#include "Overlapped.h"
 
 NS_SOCKET_BEGIN
 class StateObject
 {
 public:
-	StateObject()
-	{
-		_overlapped = std::make_shared<OVERLAPPED>();
-		_wsaBuf.len = BUFF_SIZE;
-		_wsaBuf.buf = _buffer;
-		_mode = READ;
-		_sock = NULL;
-	}
-	virtual ~StateObject()
-	{
-		_overlapped.reset();
-		Close();
-	}
+	StateObject();
+	virtual ~StateObject();
 private:
 	static const int BUFF_SIZE = 2048;
-	static const int READ = 1;
-	static const int WRITE = 2;
 private:
 	SOCKET _sock;
 	SOCKADDR_IN _addr;
-	std::shared_ptr<OVERLAPPED> _overlapped;
+	std::shared_ptr<Overlapped> _receiveOverlapped;
+	std::shared_ptr<Overlapped> _sendOverlapped;
 	WSABUF _wsaBuf;
 	char _buffer[BUFF_SIZE];
-	int _mode;
 	unsigned long _handle;
 	Util::Collections::SyncQueue<char> _receiveBuffer;
-	Util::Collections::SyncQueue<Util::Socket::Packet> _packetBuffer;
+	Util::Collections::SyncQueue<Util::Socket::Packet> _receivePacketBuffer;
 public:
 	SOCKET & Socket();
 	SOCKADDR_IN& SocketAddr();
-	std::shared_ptr<OVERLAPPED>& Overlapped();
+	std::shared_ptr<Overlapped>& ReceiveOverlapped();
 	WSABUF& WSABuff();
-	bool IsRead();
-	void SetRead();
 	unsigned long& Handle();
 	Util::Collections::SyncQueue<char>& ReceiveBuffer();
-	Util::Collections::SyncQueue<Util::Socket::Packet>& PacketBuffer();
+	Util::Collections::SyncQueue<Util::Socket::Packet>& ReceivePacketBuffer();
 public:
 	void Close();
 	void Send(Util::Socket::Packet& packet);
 };
-inline Util::Collections::SyncQueue<Util::Socket::Packet>& StateObject::PacketBuffer()
+
+inline StateObject::StateObject()
 {
-	return _packetBuffer;
+	_receiveOverlapped = std::make_shared<Overlapped>();
+	_sendOverlapped = std::make_shared<Overlapped>();
+	_sendOverlapped->SetMode(Util::Socket::Mode::Send);
+
+	_wsaBuf.len = BUFF_SIZE;
+	_wsaBuf.buf = _buffer;
+	_sock = NULL;
+}
+inline StateObject::~StateObject()
+{
+	_receiveOverlapped.reset();
+	_sendOverlapped.reset();
+	Close();
+}
+
+inline Util::Collections::SyncQueue<Util::Socket::Packet>& StateObject::ReceivePacketBuffer()
+{
+	return _receivePacketBuffer;
 }
 inline Util::Collections::SyncQueue<char>& StateObject::ReceiveBuffer()
 {
@@ -60,12 +64,12 @@ inline Util::Collections::SyncQueue<char>& StateObject::ReceiveBuffer()
 }
 inline void StateObject::Send(Util::Socket::Packet& packet)
 {
-	_mode = WRITE;
 	WSABUF wsaBuf;
-	wsaBuf.buf = (char*)&packet.GetBuffer().front();
-	wsaBuf.len = packet.GetHeader().DataSize;
+	ULONG size = 0;
+	wsaBuf.buf = packet.GetBytes(&size);
+	wsaBuf.len = size;
 	DWORD sendBytes;
-	if (WSASend(_sock, &wsaBuf, 1, &sendBytes, 0, &(*_overlapped), NULL) == SOCKET_ERROR)
+	if (WSASend(_sock, &wsaBuf, 1, &sendBytes, 0, &(*_sendOverlapped), NULL) == SOCKET_ERROR)
 	{
 		if (WSAGetLastError() != WSA_IO_PENDING)
 			Close();
@@ -74,7 +78,7 @@ inline void StateObject::Send(Util::Socket::Packet& packet)
 inline void StateObject::Close()
 {
 	_receiveBuffer.Clear();
-	_packetBuffer.Clear();
+	_receivePacketBuffer.Clear();
 	closesocket(_sock);
 	_sock = NULL;
 }
@@ -86,21 +90,15 @@ inline SOCKADDR_IN& StateObject::SocketAddr()
 {
 	return _addr;
 }
-inline std::shared_ptr<OVERLAPPED>& StateObject::Overlapped()
+
+inline std::shared_ptr<Overlapped>& StateObject::ReceiveOverlapped()
 {
-	return _overlapped;
+	return _receiveOverlapped;
 }
+
 inline WSABUF& StateObject::WSABuff()
 {
 	return _wsaBuf;
-}
-inline void StateObject::SetRead()
-{
-	_mode = READ;
-}
-inline bool StateObject::IsRead()
-{
-	return _mode == READ;
 }
 inline unsigned long& StateObject::Handle()
 {

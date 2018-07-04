@@ -27,31 +27,24 @@ public:
 private:
 	HANDLE _completionPort;
 	std::vector<HANDLE> _hWorkerThread;
-	std::unique_ptr<Util::Threading::Thread> _thread;
-	std::unique_ptr<Util::Threading::Thread> _workThread;
 	StateObject _stateObject;
 	sockaddr_in _iPEndPoint;
 public:
-	void Init(ULONG size = 0);
+	void Init(UINT threadSize = 0);
 	void Connect(std::string ip, int port, int timeOut = 5000);
 	bool IsConnect();
 	void DisConnect();
 private:
 	void BeginReceive();
-	void BeginWork(void *);
 	int Invoke();
 	void Stop();
 public:
-	void Send(unsigned short protocol, std::string& data);
-	void Send(unsigned short protocol, void* data, unsigned int size);
 	void Send(Util::Socket::Packet& packet);
 protected:
-	virtual bool PacketConversionComplete(Util::Socket::Packet& packet, std::vector<Util::Common::Type::Object>& params) = 0;
-	virtual void ConnectCompleteEvent(StateObject& stateObject) = 0;
-	virtual Util::Socket::VertifyResult VerifyPacket(Util::Socket::Packet& packet) { return Util::Socket::VertifyResult::Vertify_Accept; }
-	virtual void ForwardFunc(Util::Socket::Packet& packet) {}
-	virtual void DisconnectedEvent() {}
-	virtual bool RunCallbackFunc(unsigned short protocol, Util::Socket::Packet& packet, std::vector<Util::Common::Type::Object>& params) = 0;
+	//abstract Method
+	virtual void Disconnected() = 0;
+	virtual void Connected(Util::Socket::StateObject stateObject) = 0;
+	virtual void Recieved() = 0;
 public:
 	static unsigned int __stdcall Run(void*);
 };

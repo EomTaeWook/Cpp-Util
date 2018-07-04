@@ -8,4 +8,9 @@ enum class VertifyResult
 	Vertify_Ignore,
 	Vertify_Forward
 };
+enum class Mode
+{
+	Receive = 0,
+	Send
+};
 NS_SOCKET_END
