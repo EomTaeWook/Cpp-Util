@@ -40,9 +40,6 @@
     <Filter Include="Collections">
       <UniqueIdentifier>{5b796408-25bf-495f-9d1d-cdd4895965d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Common\Type">
-      <UniqueIdentifier>{90ec7ebc-8fe4-4ba1-8e1c-235ffa040e88}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Web">
       <UniqueIdentifier>{64ce98c4-0eaf-4f13-9669-aa5660daac1c}</UniqueIdentifier>
     </Filter>
@@ -135,9 +132,6 @@
     <ClInclude Include="Socket\SyncCount.h">
       <Filter>Socket</Filter>
     </ClInclude>
-    <ClInclude Include="Common\Type\Type.h">
-      <Filter>Common\Type</Filter>
-    </ClInclude>
     <ClInclude Include="Web\Url.h">
       <Filter>Web</Filter>
     </ClInclude>
@@ -149,12 +143,6 @@
     </ClInclude>
     <ClInclude Include="Web\NS.h">
       <Filter>Web</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\Type\NS.h">
-      <Filter>Common\Type</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\Type\Object.h">
-      <Filter>Common\Type</Filter>
     </ClInclude>
     <ClInclude Include="Socket\IOCPBaseServer.h">
       <Filter>Socket\Server</Filter>

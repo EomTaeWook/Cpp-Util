@@ -21,16 +21,9 @@ private:
 	static const LONG_PTR _CLOSE_THREAD = -1;
 	static const int _BUFF_SIZE = 2048;
 protected:
-	IOCPBaseServer()
-	{
-		_completionPort = NULL;
-		_isStart = false;
-	}
+	IOCPBaseServer();
 public:
-	virtual ~IOCPBaseServer()
-	{
-		Stop();
-	}
+	virtual ~IOCPBaseServer();
 private:
 	std::unique_ptr<Util::Threading::Thread> _thread;
 	std::map<unsigned long, std::shared_ptr<StateObject>> _clients;
@@ -62,5 +55,13 @@ protected:
 private:
 	static unsigned int __stdcall Run(void*);
 };
-
+inline IOCPBaseServer::IOCPBaseServer()
+{
+	_completionPort = NULL;
+	_isStart = false;
+}
+inline IOCPBaseServer::~IOCPBaseServer()
+{
+	Stop();
+}
 NS_SOCKET_END

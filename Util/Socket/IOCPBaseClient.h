@@ -8,7 +8,6 @@
 #include "..\Threading\Thread.h"
 #include "StateObject.h"
 #include "Packet.h"
-#include "..\Common\Type\Object.h"
 #pragma comment(lib, "Ws2_32.lib")
 
 NS_SOCKET_BEGIN
@@ -18,12 +17,9 @@ private:
 	static const LONG_PTR _CLOSE_THREAD = -1;
 	static const int _BUFF_SIZE = 2048;
 protected:
-	IOCPBaseClient() { _completionPort = NULL; }
+	IOCPBaseClient();
 public:
-	virtual ~IOCPBaseClient()
-	{
-		Stop();
-	}
+	virtual ~IOCPBaseClient();
 private:
 	HANDLE _completionPort;
 	std::vector<HANDLE> _hWorkerThread;
@@ -43,9 +39,17 @@ public:
 protected:
 	//abstract Method
 	virtual void Disconnected() = 0;
-	virtual void Connected(Util::Socket::StateObject stateObject) = 0;
-	virtual void Recieved() = 0;
+	virtual void Connected(Util::Socket::StateObject& stateObject) = 0;
+	virtual void Recieved(Util::Socket::StateObject& stateObject) = 0;
 public:
 	static unsigned int __stdcall Run(void*);
 };
+inline IOCPBaseClient::IOCPBaseClient()
+{
+	_completionPort = NULL;
+}
+inline IOCPBaseClient::~IOCPBaseClient()
+{
+	Stop();
+}
 NS_SOCKET_END

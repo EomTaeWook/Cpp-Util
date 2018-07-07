@@ -19,14 +19,10 @@ private:
 	UINT _thread_Max_Size;
 	CriticalSection _cs;
 public:
-	IOCPThreadPool()
-	{
-		_completionPort = NULL;
-	}
-	~IOCPThreadPool()
-	{
-		Stop();
-	}
+	IOCPThreadPool();
+	~IOCPThreadPool();
+public:
+
 	bool Init(UINT threadSize = 0);
 	bool InsertQueueItem(std::function<void(void*)> callback, void* args);
 public:
@@ -38,4 +34,12 @@ private:
 private:
 	static unsigned int __stdcall Run(void*);
 };
+inline IOCPThreadPool::IOCPThreadPool()
+{
+	_completionPort = NULL;
+}
+inline IOCPThreadPool::~IOCPThreadPool()
+{
+	Stop();
+}
 NS_THREADING_END

@@ -15,12 +15,9 @@ private:
 protected:
 	std::vector<std::function<R(Types...)>> _methods;
 private:
-	Delegate()
-	{
-		_methods.clear();
-	}
+	Delegate();
 public:
-	virtual ~Delegate() { _methods.clear(); }
+	virtual ~Delegate();
 public:
 	R operator() (Types...);
 	bool operator != (const Delegate& d) const;
@@ -34,6 +31,16 @@ public:
 	virtual Delegate& Combine(Delegate);
 	virtual Delegate& operator + (Delegate);
 };
+template<typename R, typename ...Types>
+inline Delegate<R, Types...>::Delegate()
+{
+	_methods.clear();
+}
+template<typename R, typename ...Types>
+inline Delegate<R, Types...>::~Delegate()
+{
+	_methods.clear();
+}
 
 template<typename R, typename ...Types>
 inline Delegate<R, Types...>& Delegate<R, Types...>::Combine(Delegate<R, Types...> del)
@@ -77,9 +84,9 @@ inline R Delegate<R, Types...>::operator() (Types... params)
 {
 	for (size_t i = 0; i < _methods.size() - 1; i++)
 	{
-		_methods[i](params...);
+		_methods[i](std::forward<Types>(params)...);
 	}
-	return _methods.back()(params...);
+	return _methods.back()(std::forward<Types>(params)...);
 }
 template<typename R, typename ...Types>
 bool Delegate<R, Types...>::operator != (nullptr_t) const

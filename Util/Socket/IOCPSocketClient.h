@@ -1,46 +1,60 @@
 #pragma once
 #include "NS.h"
 #include "IOCPBaseClient.h"
+#include <map>
 NS_SOCKET_BEGIN
 template<typename ProtocolType, typename ...Types>
 class IOCPSocketClient : public IOCPBaseClient
 {
 protected:
-	IOCPSocketClient() {}
+	IOCPSocketClient();
 public:
-	virtual ~IOCPSocketClient()
-	{
-	}
+	virtual ~IOCPSocketClient();
 protected:
-	std::map<ProtocolType, Util::Common::MulticastDelegate<Types...>> _funcMap;
+	std::map<ProtocolType, Util::Common::MulticastDelegate<void, Types...>> _funcMap;
 protected:
-	
+	std::function<void(Types...)> _test;
 public:
-	template<typename T>
-	void BindCallback(ProtocolType protocol, std::function<void(T)> callback);
-	template<typename T1, typename T2>
-	void BindCallback(ProtocolType protocol, std::function<void(T1, T2)> callback);
-	template<typename T1, typename T2, typename T3>
-	void BindCallback(ProtocolType protocol, std::function<void(T1, T2, T3)> callback);
+	void BindCallback(ProtocolType protocol, std::function<void(Types...)> callback);
+	void RunCallback(ProtocolType protocol, Types...);
 };
 
 template<typename ProtocolType, typename ...Types>
-template<typename T>
-inline void IOCPSocketClient<ProtocolType, Types...>::BindCallback(ProtocolType protocol, std::function<void(T)> callback)
+inline IOCPSocketClient<ProtocolType, Types...>::IOCPSocketClient()
 {
-
 }
 template<typename ProtocolType, typename ...Types>
-template<typename T1, typename T2>
-inline void IOCPSocketClient<ProtocolType, Types...>::BindCallback(ProtocolType protocol, std::function<void(T1, T2)> callback)
+inline IOCPSocketClient<ProtocolType, Types...>::~IOCPSocketClient()
 {
-
+	_funcMap.clear();
 }
+
 template<typename ProtocolType, typename ...Types>
-template<typename T1, typename T2, typename T3>
-inline void IOCPSocketClient<ProtocolType, Types...>::BindCallback(ProtocolType protocol, std::function<void(T1, T2, T3)> callback)
+inline void IOCPSocketClient<ProtocolType, Types...>::BindCallback(ProtocolType protocol, std::function<void(Types...)> callback)
 {
-
+	if (_funcMap.find(protocol) == _funcMap.end())
+		_funcMap.insert(std::pair<ProtocolType, Util::Common::MulticastDelegate<void, Types...>>(protocol, std::move(callback)));
+	else
+		throw std::exception("An item with the same key has already been added");
 }
 
+template<typename ProtocolType, typename ...Types>
+inline void IOCPSocketClient<ProtocolType, Types...>::RunCallback(ProtocolType protocol, Types... params)
+{
+	try
+	{
+		auto it = _funcMap.find(protocol);
+		if (it != _funcMap.end())
+		{
+			it->second(std::forward<Types>(params)...);
+		}
+	}
+	catch (std::exception ex)
+	{
+		ex.what();
+	}
+	catch (...)
+	{
+	}
+}
 NS_SOCKET_END

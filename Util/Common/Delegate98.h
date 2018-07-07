@@ -13,9 +13,9 @@ private:
 	template<typename R, typename U1, typename U2, typename U3, typename U4, typename U5>
 	friend class MulticastDelegate;
 private:
-	Delegate() {}
+	Delegate();
 public:
-	virtual ~Delegate() { _methods.clear(); }
+	virtual ~Delegate();
 protected:
 	std::vector<std::function<R(T1, T2, T3, T4, T5)>> _methods;
 public:
@@ -31,6 +31,15 @@ public:
 	virtual Delegate& Combine(Delegate);
 	virtual Delegate& operator + (Delegate);
 };
+template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5>
+inline Delegate::Delegate()
+{
+}
+template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5>
+inline Delegate::~Delegate()
+{
+	_methods.clear();
+}
 template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5>
 inline R Delegate<R, T1, T2, T3, T4, T5>::operator() (T1 param1, T2 param2, T3 param3, T4 param4, T5 param5)
 {
@@ -102,9 +111,9 @@ private:
 	template<typename R, typename U1, typename U2, typename U3, typename U4, typename U5>
 	friend class MulticastDelegate;
 private:
-	Delegate() {}
+	Delegate();
 public:
-	virtual ~Delegate() { _methods.clear(); }
+	virtual ~Delegate();
 protected:
 	std::vector<std::function<R(T1, T2, T3, T4)>> _methods;
 public:
@@ -120,6 +129,15 @@ public:
 	virtual Delegate& Combine(Delegate);
 	virtual Delegate& operator + (Delegate);
 };
+template<typename R, typename T1, typename T2, typename T3, typename T4>
+inline Delegate::Delegate()
+{
+}
+template<typename R, typename T1, typename T2, typename T3, typename T4>
+inline Delegate::~Delegate()
+{
+	_methods.clear();
+}
 template<typename R, typename T1, typename T2, typename T3, typename T4>
 inline R Delegate<R, T1, T2, T3, T4>::operator() (T1 param1, T2 param2, T3 param3, T4 param4)
 {
@@ -191,9 +209,9 @@ private:
 	template<typename R, typename U1, typename U2, typename U3, typename U4, typename U5>
 	friend class MulticastDelegate;
 private:
-	Delegate() {}
+	Delegate();
 public:
-	virtual ~Delegate() { _methods.clear(); }
+	virtual ~Delegate();
 protected:
 	std::vector<std::function<R(T1, T2, T3)>> _methods;
 public:
@@ -209,6 +227,15 @@ public:
 	virtual Delegate& Combine(Delegate);
 	virtual Delegate& operator + (Delegate);
 };
+template<typename R, typename T1, typename T2, typename T3>
+inline Delegate::Delegate()
+{
+}
+template<typename R, typename T1, typename T2, typename T3>
+inline Delegate::~Delegate()
+{
+	_methods.clear();
+}
 template<typename R, typename T1, typename T2, typename T3>
 inline R Delegate<R, T1, T2, T3>::operator() (T1 param1, T2 param2, T3 param3)
 {
@@ -280,9 +307,9 @@ private:
 	template<typename R, typename U1, typename U2, typename U3, typename U4, typename U5>
 	friend class MulticastDelegate;
 private:
-	Delegate() {}
+	Delegate();
 public:
-	virtual ~Delegate() { _methods.clear(); }
+	virtual ~Delegate();
 protected:
 	std::vector<std::function<R(T1, T2)>> _methods;
 public:
@@ -298,6 +325,16 @@ public:
 	virtual Delegate& Combine(Delegate);
 	virtual Delegate& operator + (Delegate);
 };
+template<typename R, typename T1, typename T2>
+inline Delegate::Delegate()
+{
+}
+template<typename R, typename T1, typename T2>
+inline Delegate::~Delegate()
+{
+	_methods.clear();
+}
+
 template<typename R, typename T1, typename T2>
 inline R Delegate<R, T1, T2>::operator() (T1 param1, T2 param2)
 {
@@ -369,9 +406,9 @@ private:
 	template<typename R, typename U1, typename U2, typename U3, typename U4, typename U5>
 	friend class MulticastDelegate;
 private:
-	Delegate() {}
+	Delegate();
 public:
-	virtual ~Delegate() { _methods.clear(); }
+	virtual ~Delegate();
 protected:
 	std::vector<std::function<R(T)>> _methods;
 public:
@@ -387,6 +424,16 @@ public:
 	virtual Delegate& Combine(Delegate);
 	virtual Delegate& operator + (Delegate);
 };
+template<typename R, typename T>
+inline Delegate::Delegate()
+{
+}
+template<typename R, typename T>
+inline Delegate::~Delegate()
+{
+	_methods.clear();
+}
+
 template<typename R, typename T>
 inline R Delegate<R, T>::operator() (T param)
 {
@@ -458,9 +505,9 @@ private:
 	template<typename R, typename U1, typename U2, typename U3, typename U4, typename U5>
 	friend class MulticastDelegate;
 private:
-	Delegate() {}
+	Delegate();
 public:
-	virtual ~Delegate() { _methods.clear(); }
+	virtual ~Delegate();
 protected:
 	std::vector<std::function<R()>> _methods;
 public:
@@ -476,6 +523,16 @@ public:
 	virtual Delegate& Combine(Delegate);
 	virtual Delegate& operator + (Delegate);
 };
+template<typename R>
+inline Delegate::Delegate()
+{
+}
+template<typename R>
+inline Delegate::~Delegate()
+{
+	_methods.clear();
+}
+
 template<typename R>
 inline R Delegate<R>::operator() ()
 {

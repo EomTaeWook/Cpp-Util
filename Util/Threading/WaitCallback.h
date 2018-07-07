@@ -13,15 +13,15 @@ private:
 private:
 	void Run();
 public:
-	WaitCallback(std::function<void(void*)> callback, void* state = NULL)
-	{
-		MulticastDelegate<void, void*>::operator=(callback);
-		_state = state;
-	}
+	WaitCallback(std::function<void(void*)> callback, void* state = NULL);
 	virtual ~WaitCallback() {}
 public:
 };
-
+inline WaitCallback::WaitCallback(std::function<void(void*)> callback, void* state)
+{
+	MulticastDelegate<void, void*>::operator=(callback);
+	_state = state;
+}
 inline void WaitCallback::Run()
 {
 	this->operator()(this->_state);

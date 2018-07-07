@@ -10,14 +10,8 @@ NS_WEB_HTTP_BEGIN
 class HttpClient
 {
 public:
-	HttpClient()
-	{
-		_protocolType = 0;
-	}
-	virtual ~HttpClient()
-	{
-		Close();
-	}
+	HttpClient();
+	virtual ~HttpClient();
 private:
 	HINTERNET _session;
 	HINTERNET _connect;
@@ -40,4 +34,12 @@ private:
 private:
 	static void __stdcall OnCallback(HINTERNET handle, DWORD_PTR context, DWORD status, void* info, DWORD infoLength);
 };
+inline HttpClient::HttpClient()
+{
+	_protocolType = 0;
+}
+inline HttpClient::~HttpClient()
+{
+	Close();
+}
 NS_WEB_HTTP_END

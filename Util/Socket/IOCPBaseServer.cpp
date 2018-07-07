@@ -124,7 +124,7 @@ void IOCPBaseServer::StartListening(void* pObj)
 
 		CreateIoCompletionPort((HANDLE)stateObject->Socket(), _completionPort, (unsigned long long)stateObject, 0);
 		unsigned long flag = 0;
-		WSARecv(stateObject->Socket(), &stateObject->WSABuff(), 1, 0, &flag, &*stateObject->ReceiveOverlapped(), NULL);
+		WSARecv(stateObject->Socket(), &stateObject->WSABuff(), 1, 0, &flag, (LPWSAOVERLAPPED)(&stateObject->ReceiveOverlapped()), NULL);
 	}
 }
 int IOCPBaseServer::Invoke()
@@ -146,9 +146,17 @@ int IOCPBaseServer::Invoke()
 			ClosePeer(pHandler);
 			continue;
 		}
-		if (overlapped->IsReceive())
+		if (overlapped->mode == Util::Socket::Mode::Receive)
 		{
-			
+			pHandler->ReceiveBuffer().Append(pHandler->WSABuff().buf, pHandler->WSABuff().len);
+			try
+			{
+				Recieved(*pHandler);
+			}
+			catch (std::exception ex)
+			{
+				ex.what();
+			}
 		}
 	}
 	return 0;

@@ -4,8 +4,8 @@ NS_COMMON_TYPE_BEGIN
 class Object
 {
 public:
-	Object() {}
+	Object();
 public:
-	virtual ~Object() {}
+	virtual ~Object();
 };
 NS_COMMON_TYPE_END

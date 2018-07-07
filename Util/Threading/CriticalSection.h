@@ -5,14 +5,8 @@ NS_THREADING_BEGIN
 class CriticalSection
 {
 public:
-	CriticalSection()
-	{
-		InitializeCriticalSection(&_cs);
-	}
-	~CriticalSection()
-	{
-		DeleteCriticalSection(&_cs);
-	}
+	CriticalSection();
+	virtual ~CriticalSection();
 public:
 	bool TryEnterCriticalSection();
 	void EnterCriticalSection();
@@ -20,6 +14,14 @@ public:
 private:
 	CRITICAL_SECTION _cs;
 };
+inline CriticalSection::CriticalSection()
+{
+	InitializeCriticalSection(&_cs);
+}
+inline CriticalSection::~CriticalSection()
+{
+	DeleteCriticalSection(&_cs);
+}
 inline bool CriticalSection::TryEnterCriticalSection()
 {
 	return ::TryEnterCriticalSection(&_cs);

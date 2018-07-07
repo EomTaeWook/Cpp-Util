@@ -17,8 +17,8 @@ private:
 private:
 	SOCKET _sock;
 	SOCKADDR_IN _addr;
-	std::shared_ptr<Overlapped> _receiveOverlapped;
-	std::shared_ptr<Overlapped> _sendOverlapped;
+	Overlapped _receiveOverlapped;
+	Overlapped _sendOverlapped;
 	WSABUF _wsaBuf;
 	char _buffer[BUFF_SIZE];
 	unsigned long _handle;
@@ -27,7 +27,7 @@ private:
 public:
 	SOCKET & Socket();
 	SOCKADDR_IN& SocketAddr();
-	std::shared_ptr<Overlapped>& ReceiveOverlapped();
+	Overlapped& ReceiveOverlapped();
 	WSABUF& WSABuff();
 	unsigned long& Handle();
 	Util::Collections::SyncQueue<char>& ReceiveBuffer();
@@ -39,9 +39,10 @@ public:
 
 inline StateObject::StateObject()
 {
-	_receiveOverlapped = std::make_shared<Overlapped>();
-	_sendOverlapped = std::make_shared<Overlapped>();
-	_sendOverlapped->SetMode(Util::Socket::Mode::Send);
+	memset(&_receiveOverlapped, 0, sizeof(Overlapped));
+
+	memset(&_sendOverlapped, 0, sizeof(Overlapped));
+	_sendOverlapped.mode = Socket::Mode::Send;
 
 	_wsaBuf.len = BUFF_SIZE;
 	_wsaBuf.buf = _buffer;
@@ -49,8 +50,6 @@ inline StateObject::StateObject()
 }
 inline StateObject::~StateObject()
 {
-	_receiveOverlapped.reset();
-	_sendOverlapped.reset();
 	Close();
 }
 
@@ -69,7 +68,7 @@ inline void StateObject::Send(Util::Socket::Packet& packet)
 	wsaBuf.buf = packet.GetBytes(&size);
 	wsaBuf.len = size;
 	DWORD sendBytes;
-	if (WSASend(_sock, &wsaBuf, 1, &sendBytes, 0, &(*_sendOverlapped), NULL) == SOCKET_ERROR)
+	if (WSASend(_sock, &wsaBuf, 1, &sendBytes, 0, (LPWSAOVERLAPPED)&_sendOverlapped, NULL) == SOCKET_ERROR)
 	{
 		if (WSAGetLastError() != WSA_IO_PENDING)
 			Close();
@@ -91,7 +90,7 @@ inline SOCKADDR_IN& StateObject::SocketAddr()
 	return _addr;
 }
 
-inline std::shared_ptr<Overlapped>& StateObject::ReceiveOverlapped()
+inline Overlapped& StateObject::ReceiveOverlapped()
 {
 	return _receiveOverlapped;
 }

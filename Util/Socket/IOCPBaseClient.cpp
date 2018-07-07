@@ -91,7 +91,7 @@ void IOCPBaseClient::Connect(std::string ip, int port, int timeOut)
 void IOCPBaseClient::BeginReceive()
 {
 	DWORD flags = 0;
-	if (WSARecv(_stateObject.Socket(), &_stateObject.WSABuff(), 1, 0, &flags, &*_stateObject.ReceiveOverlapped(), NULL) == SOCKET_ERROR)
+	if (WSARecv(_stateObject.Socket(), &_stateObject.WSABuff(), 1, 0, &flags, (LPWSAOVERLAPPED)(&_stateObject.ReceiveOverlapped()), NULL) == SOCKET_ERROR)
 	{
 		if (WSAGetLastError() != WSA_IO_PENDING)
 			_stateObject.Close();
@@ -120,10 +120,10 @@ int IOCPBaseClient::Invoke()
 {
 	unsigned long bytesTrans = 0;
 	ULONG_PTR stateObject = 0;
-	Util::Socket::Overlapped* overlapped;
+	Util::Socket::Overlapped* overlapped = nullptr;
 	while (true)
 	{
-		if (!GetQueuedCompletionStatus(_completionPort, &bytesTrans, &stateObject, (LPOVERLAPPED *)&overlapped, INFINITE))
+		if (!GetQueuedCompletionStatus(_completionPort, &bytesTrans, &stateObject, (LPOVERLAPPED  *)&overlapped, INFINITE))
 		{
 			break;
 		}
@@ -135,12 +135,12 @@ int IOCPBaseClient::Invoke()
 			pHandler->Close();
 			continue;
 		}
-		if (overlapped->IsReceive())
+		if (overlapped->mode == Util::Socket::Mode::Receive)
 		{
 			try
 			{
 				pHandler->ReceiveBuffer().Append(_stateObject.WSABuff().buf, bytesTrans);
-				Recieved();
+				Recieved(*pHandler);
 			}
 			catch (std::exception ex)
 			{

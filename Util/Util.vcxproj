@@ -80,6 +80,11 @@
     <IntDir>$(SolutionDir)$(Configuration)</IntDir>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)$(Configuration)\$(PlatformTarget)</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)</IntDir>
+    <TargetName>$(ProjectName)_d</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -106,7 +111,10 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
       <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
+      <Command>IF NOT EXIST "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include" (mkdir "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")
+xcopy /S/Y "$(ProjectDir)*.h" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include\"
+IF EXIST "$(SolutionDir)Lib" (xcopy /S/Y "$(SolutionDir)Lib\*.lib" "$(SolutionDir)$(Configuration)\$(PlatformTarget)")
+IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(SolutionDir)$(Configuration)\$(PlatformTarget)\include")</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -153,9 +161,6 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Collections\NS.h" />
-    <ClInclude Include="Common\Type\NS.h" />
-    <ClInclude Include="Common\Type\Object.h" />
-    <ClInclude Include="Common\Type\Type.h" />
     <ClInclude Include="Common\Delegate98.h" />
     <ClInclude Include="Common\MulticastDelegate.h" />
     <ClInclude Include="Common\NS.h" />
