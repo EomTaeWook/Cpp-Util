@@ -7,16 +7,10 @@ NS_WEB_BEGIN
 class Url
 {
 public:
-	Url() {}
-	Url(std::string url)
-	{
-		Parse(std::wstring().assign(url.begin(), url.end()));
-	}
-	Url(std::wstring url)
-	{
-		Parse(url);
-	}
-	virtual ~Url() {}
+	Url();
+	Url(std::string url);
+	Url(std::wstring url);
+	virtual ~Url();
 private:
 	std::wstring _path;
 	std::wstring _protocol;
@@ -30,6 +24,20 @@ public:
 	std::wstring GetHost();
 	int GetPort();
 };
+inline Url::Url()
+{
+}
+inline Url::Url(std::string url)
+{
+	Parse(std::wstring().assign(url.begin(), url.end()));
+}
+inline Url::Url(std::wstring url)
+{
+	Parse(url);
+}
+inline Url::~Url()
+{
+}
 inline void Url::Parse(std::string url)
 {
 	Parse(std::wstring().assign(url.begin(), url.end()));
