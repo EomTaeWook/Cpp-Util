@@ -38,9 +38,9 @@ public:
 	void Send(Util::Socket::Packet& packet);
 protected:
 	//abstract Method
-	virtual void Disconnected() = 0;
-	virtual void Connected(Util::Socket::StateObject& stateObject) = 0;
-	virtual void Recieved(Util::Socket::StateObject& stateObject) = 0;
+	virtual void OnDisconnected() = 0;
+	virtual void OnConnected(Util::Socket::StateObject& stateObject) = 0;
+	virtual void OnRecieved(Util::Socket::StateObject& stateObject) = 0;
 public:
 	static unsigned int __stdcall Run(void*);
 };

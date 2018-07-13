@@ -71,7 +71,7 @@ void IOCPBaseClient::Connect(std::string ip, int port, int timeOut)
 				_stateObject.Socket() = socket;
 				CreateIoCompletionPort((HANDLE)_stateObject.Socket(), _completionPort, (ULONG_PTR)&_stateObject, 0);
 				BeginReceive();
-				Connected(_stateObject);
+				OnConnected(_stateObject);
 			}
 			else
 			{
@@ -140,7 +140,7 @@ int IOCPBaseClient::Invoke()
 			try
 			{
 				pHandler->ReceiveBuffer().Append(_stateObject.WSABuff().buf, bytesTrans);
-				Recieved(*pHandler);
+				OnRecieved(*pHandler);
 			}
 			catch (std::exception ex)
 			{

@@ -48,9 +48,10 @@ public:
 	void Init(UINT threadSize = 0);
 protected:
 	//abstract Method
-	virtual void Accepted(Util::Socket::StateObject& stateObject) = 0;
-	virtual void Disconnected(unsigned long handle) = 0;
-	virtual void Recieved(Util::Socket::StateObject& stateObject) = 0;
+	virtual void OnAccepted(Util::Socket::StateObject& stateObject) = 0;
+	virtual void OnDisconnected(unsigned long handle) = 0;
+	virtual void OnRecieved(Util::Socket::StateObject& stateObject) = 0;
+	//virtual
 	virtual void BroadCast(Util::Socket::Packet packet, StateObject state);
 private:
 	static unsigned int __stdcall Run(void*);

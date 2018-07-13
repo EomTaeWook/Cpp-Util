@@ -120,7 +120,7 @@ void IOCPBaseServer::StartListening(void* pObj)
 		std::memcpy(&stateObject->SocketAddr(), &clientAddr, size);
 		stateObject->Handle() = _handleCount.Add();
 		AddPeer(stateObject);
-		Accepted(*stateObject);
+		OnAccepted(*stateObject);
 
 		CreateIoCompletionPort((HANDLE)stateObject->Socket(), _completionPort, (unsigned long long)stateObject, 0);
 		unsigned long flag = 0;
@@ -151,7 +151,7 @@ int IOCPBaseServer::Invoke()
 			pHandler->ReceiveBuffer().Append(pHandler->WSABuff().buf, pHandler->WSABuff().len);
 			try
 			{
-				Recieved(*pHandler);
+				OnRecieved(*pHandler);
 			}
 			catch (std::exception ex)
 			{
@@ -201,7 +201,7 @@ void IOCPBaseServer::ClosePeer(StateObject* pStateObject)
 				pStateObject->Close();
 				delete pStateObject;
 			}
-			Disconnected(handle);
+			OnDisconnected(handle);
 		}
 		catch (...)
 		{
