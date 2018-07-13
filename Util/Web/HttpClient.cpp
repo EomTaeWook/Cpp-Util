@@ -148,7 +148,7 @@ bool HttpClient::SendRequestAsync(std::string requestData, Method method, std::f
 		WinHttpAddRequestHeaders(_request, _header.c_str(), (DWORD)_header.size(), WINHTTP_ADDREQ_FLAG_ADD);
 
 		WinHttpSetStatusCallback(_request,
-			HttpClient::OnCallback,
+			HttpClient::Invoke,
 			WINHTTP_CALLBACK_FLAG_ALL_COMPLETIONS,
 			0);
 
@@ -232,7 +232,7 @@ void HttpClient::Invoke(unsigned long code, void* info, unsigned long length)
 		break;
 	}
 }
-void __stdcall HttpClient::OnCallback(HINTERNET handle, DWORD_PTR context, DWORD status, void* info, DWORD infoLength)
+void __stdcall HttpClient::Invoke(HINTERNET handle, DWORD_PTR context, DWORD status, void* info, DWORD infoLength)
 {
 	auto client = reinterpret_cast<HttpClient*>(context);
 	if (client != NULL)

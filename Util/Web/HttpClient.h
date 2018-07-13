@@ -32,7 +32,7 @@ private:
 	void Invoke(unsigned long code, void* info, unsigned long length);
 	void Close();
 private:
-	static void __stdcall OnCallback(HINTERNET handle, DWORD_PTR context, DWORD status, void* info, DWORD infoLength);
+	static void __stdcall Invoke(HINTERNET handle, DWORD_PTR context, DWORD status, void* info, DWORD infoLength);
 };
 inline HttpClient::HttpClient()
 {

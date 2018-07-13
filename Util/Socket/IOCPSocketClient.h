@@ -35,7 +35,7 @@ inline void IOCPSocketClient<ProtocolType, Types...>::BindCallback(ProtocolType 
 	if (_funcMap.find(protocol) == _funcMap.end())
 		_funcMap.insert(std::pair<ProtocolType, Util::Common::MulticastDelegate<void, Types...>>(protocol, std::move(callback)));
 	else
-		throw std::exception("An item with the same key has already been added");
+		throw std::exception("An item with the same key has already been Added");
 }
 
 template<typename ProtocolType, typename ...Types>
