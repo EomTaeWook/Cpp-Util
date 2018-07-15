@@ -11,9 +11,7 @@ protected:
 public:
 	virtual ~IOCPSocketClient();
 protected:
-	std::map<ProtocolType, Util::Common::MulticastDelegate<void, Types...>> _funcMap;
-protected:
-	std::function<void(Types...)> _test;
+	std::map<ProtocolType, Util::Common::MulticastDelegate<void, Types...>> _funcMaps;
 public:
 	void BindCallback(ProtocolType protocol, std::function<void(Types...)> callback);
 	void RunCallback(ProtocolType protocol, Types...);
@@ -26,14 +24,14 @@ inline IOCPSocketClient<ProtocolType, Types...>::IOCPSocketClient()
 template<typename ProtocolType, typename ...Types>
 inline IOCPSocketClient<ProtocolType, Types...>::~IOCPSocketClient()
 {
-	_funcMap.clear();
+	_funcMaps.clear();
 }
 
 template<typename ProtocolType, typename ...Types>
 inline void IOCPSocketClient<ProtocolType, Types...>::BindCallback(ProtocolType protocol, std::function<void(Types...)> callback)
 {
-	if (_funcMap.find(protocol) == _funcMap.end())
-		_funcMap.insert(std::pair<ProtocolType, Util::Common::MulticastDelegate<void, Types...>>(protocol, std::move(callback)));
+	if (_funcMaps.find(protocol) == _funcMaps.end())
+		_funcMaps.insert(std::pair<ProtocolType, Util::Common::MulticastDelegate<void, Types...>>(protocol, std::move(callback)));
 	else
 		throw std::exception("An item with the same key has already been Added");
 }
@@ -43,8 +41,8 @@ inline void IOCPSocketClient<ProtocolType, Types...>::RunCallback(ProtocolType p
 {
 	try
 	{
-		auto it = _funcMap.find(protocol);
-		if (it != _funcMap.end())
+		auto it = _funcMaps.find(protocol);
+		if (it != _funcMaps.end())
 		{
 			it->second(std::forward<Types>(params)...);
 		}

@@ -3,18 +3,17 @@
 NS_SOCKET_BEGIN
 class IPacket
 {
-public:
+protected:
 	IPacket::IPacket();
+public:
 	virtual IPacket::~IPacket();
 public:
 	virtual char* GetBytes(OUT ULONG* size) = 0;
 };
-IPacket::IPacket()
+inline IPacket::IPacket()
 {
-
 }
-IPacket::~IPacket()
+inline IPacket::~IPacket()
 {
-
 }
 NS_SOCKET_END

@@ -1,44 +1,56 @@
 #pragma once
 #include "NS.h"
 #include "IOCPBaseServer.h"
-#include "..\Threading\CriticalSection.h"
-#include "..\Common\MulticastDelegate.h"
+#include <tuple>
 
 NS_SOCKET_BEGIN
 template<typename ProtocolType, typename ...Types>
-class IOCPServer : public IOCPBaseServer
+class IOCPServerSocket : public IOCPBaseServer
 {
 protected:
-	IOCPServer() {}
-	virtual ~IOCPServer() {}
-protected:
-	std::map<ProtocolType, Util::Common::MulticastDelegate<...Types>> _funcMap;
+	IOCPServerSocket();
 public:
-	template<typename T>
-	void BindCallback(ProtocolType protocol, std::function<void(StateObject&, T)> callback);
-	template<typename T1, typename T2>
-	void BindCallback(ProtocolType protocol, std::function<void(StateObject&, T1, T2)> callback);
-	template<typename T1, typename T2, typename T3>
-	void BindCallback(ProtocolType protocol, std::function<void(StateObject&, T1, T2, T3)> callback);
+	virtual ~IOCPServerSocket();
+protected:
+	std::map<ProtocolType, Util::Common::MulticastDelegate<void, Util::Socket::StateObject&, Types...>> _funcMaps;
+public:
+	void BindCallback(ProtocolType protocol, std::function<void(Util::Socket::StateObject&, Types...)> callback);
+	void RunCallback(ProtocolType protocol, Util::Socket::StateObject& stateObject, Types...);
 };
 template<typename ProtocolType, typename ...Types>
-template<typename T>
-inline void IOCPServer<ProtocolType, ...Types>::BindCallback(ProtocolType protocol, std::function<void(StateObject&, T)> callback)
+IOCPServerSocket<ProtocolType, Types...>::IOCPServerSocket()
 {
-	
 }
 template<typename ProtocolType, typename ...Types>
-template<typename T1, typename T2>
-inline void IOCPServer<ProtocolType, ...Types>::BindCallback(ProtocolType protocol, std::function<void(StateObject&, T1, T2)> callback)
+IOCPServerSocket<ProtocolType, Types...>::~IOCPServerSocket()
 {
-
 }
 template<typename ProtocolType, typename ...Types>
-template<typename T1, typename T2, typename T3>
-inline void IOCPServer<ProtocolType, ...Types>::BindCallback(ProtocolType protocol, std::function<void(StateObject&, T1, T2, T3)> callback)
+inline void IOCPServerSocket<ProtocolType, Types...>::BindCallback(ProtocolType protocol, std::function<void(Util::Socket::StateObject&, Types...)> callback)
 {
-
+	if (_funcMaps.find(protocol) == _funcMaps.end())
+		_funcMaps.insert(std::pair<ProtocolType, Util::Common::MulticastDelegate<void, Util::Socket::StateObject&, Types...>>(protocol, std::move(callback)));
+	else
+		throw std::exception("An item with the same key has already been Added");
 }
+template<typename ProtocolType, typename ...Types>
+inline void IOCPServerSocket<ProtocolType, Types...>::RunCallback(ProtocolType protocol, Util::Socket::StateObject& stateObject, Types... params)
+{
+	try
+	{
+		auto it = _funcMaps.find(protocol);
+		if (it != _funcMaps.end())
+		{
+			it->second(std::forward<Util::Socket::StateObject>(stateObject), std::forward<Types>(params)...);
+		}
+	}
+	catch (std::exception ex)
+	{
+		ex.what();
+	}
+	catch (...)
+	{
+	}
+}
+
 NS_SOCKET_END
-
-

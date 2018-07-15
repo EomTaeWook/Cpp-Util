@@ -5,7 +5,7 @@
 #include "IPacket.h"
 NS_SOCKET_BEGIN
 #pragma pack(1)
-class DefaultPacket : IPacket
+class DefaultPacket
 {
 private:
 	std::vector<char> _buff;
@@ -16,7 +16,7 @@ public:
 	const std::vector<char>& GetData();
 public:
 	// IPacket을(를) 통해 상속됨
-	virtual char * GetBytes(OUT ULONG * size) override;
+	virtual char * GetBytes(OUT ULONG * size);
 };
 inline DefaultPacket::DefaultPacket()
 {	
@@ -32,9 +32,5 @@ inline char* DefaultPacket::GetBytes(OUT ULONG* size)
 inline const std::vector<char>& DefaultPacket::GetData()
 {
 	return _buff;
-}
-char * DefaultPacket::GetBytes(OUT ULONG * size)
-{
-	return NULL;
 }
 NS_SOCKET_END

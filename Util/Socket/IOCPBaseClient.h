@@ -6,8 +6,8 @@
 #include <vector>
 #include <memory>
 #include "..\Threading\Thread.h"
-#include "StateObject.h"
 #include "IPacket.h"
+#include "StateObject.h"
 #pragma comment(lib, "Ws2_32.lib")
 
 NS_SOCKET_BEGIN

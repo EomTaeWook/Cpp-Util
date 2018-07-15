@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include <functional>
 #include "..\Threading\Thread.h"
 #include "SyncCount.h"
 #include "IPacket.h"

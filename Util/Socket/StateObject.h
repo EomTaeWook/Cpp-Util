@@ -2,7 +2,7 @@
 #include "NS.h"
 #include <WinSock2.h>
 #include <memory>
-#include "Packet.h"
+#include "DefaultPacket.h"
 #include "..\Collections\SyncQueue.h"
 #include "Overlapped.h"
 
@@ -23,7 +23,7 @@ private:
 	char _buffer[BUFF_SIZE];
 	unsigned long _handle;
 	Util::Collections::SyncQueue<char> _receiveBuffer;
-	Util::Collections::SyncQueue<Util::Socket::Packet> _receivePacketBuffer;
+	Util::Collections::SyncQueue<Util::Socket::DefaultPacket> _receivePacketBuffer;
 public:
 	SOCKET & Socket();
 	SOCKADDR_IN& SocketAddr();
@@ -31,10 +31,10 @@ public:
 	WSABUF& WSABuff();
 	unsigned long& Handle();
 	Util::Collections::SyncQueue<char>& ReceiveBuffer();
-	Util::Collections::SyncQueue<Util::Socket::Packet>& ReceivePacketBuffer();
+	Util::Collections::SyncQueue<Util::Socket::DefaultPacket>& ReceivePacketBuffer();
 public:
 	void Close();
-	void Send(Util::Socket::Packet& packet);
+	void Send(Util::Socket::IPacket& packet);
 };
 
 inline StateObject::StateObject()
@@ -53,7 +53,7 @@ inline StateObject::~StateObject()
 	Close();
 }
 
-inline Util::Collections::SyncQueue<Util::Socket::Packet>& StateObject::ReceivePacketBuffer()
+inline Util::Collections::SyncQueue<Util::Socket::DefaultPacket>& StateObject::ReceivePacketBuffer()
 {
 	return _receivePacketBuffer;
 }
@@ -61,7 +61,7 @@ inline Util::Collections::SyncQueue<char>& StateObject::ReceiveBuffer()
 {
 	return _receiveBuffer;
 }
-inline void StateObject::Send(Util::Socket::Packet& packet)
+inline void StateObject::Send(Util::Socket::IPacket& packet)
 {
 	WSABUF wsaBuf;
 	ULONG size = 0;
