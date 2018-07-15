@@ -4,4 +4,10 @@
 #define NS_SOCKET_BEGIN namespace Util { namespace Socket {
 #define NS_SOCKET_END } }
 #define USING_SOCKET using namespace Util::Socket;
+
+#ifndef OUT
+#define OUT
+typedef unsigned long ULONG;
+#endif
+
 #endif

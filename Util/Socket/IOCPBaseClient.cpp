@@ -112,7 +112,7 @@ void IOCPBaseClient::Stop()
 	_completionPort = NULL;
 	_hWorkerThread.clear();
 }
-void IOCPBaseClient::Send(Util::Socket::Packet& packet)
+void IOCPBaseClient::Send(Util::Socket::IPacket& packet)
 {
 	_stateObject.Send(packet);
 }

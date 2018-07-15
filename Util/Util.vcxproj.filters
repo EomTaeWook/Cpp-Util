@@ -102,9 +102,6 @@
     <ClInclude Include="Socket\StateObject.h">
       <Filter>Socket</Filter>
     </ClInclude>
-    <ClInclude Include="Socket\Packet.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
     <ClInclude Include="Common\MulticastDelegate.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -161,6 +158,12 @@
     </ClInclude>
     <ClInclude Include="Socket\IOCPServerSocket.h">
       <Filter>Socket\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\DefaultPacket.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\IPacket.h">
+      <Filter>Socket</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

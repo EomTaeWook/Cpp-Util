@@ -176,11 +176,12 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <ClInclude Include="Socket\IOCPBaseServer.h" />
     <ClInclude Include="Socket\IOCPSocketClient.h" />
     <ClInclude Include="Socket\IOCPServerSocket.h" />
+    <ClInclude Include="Socket\IPacket.h" />
     <ClInclude Include="Socket\Overlapped.h" />
     <ClInclude Include="Socket\SocketEnum.h" />
     <ClInclude Include="Socket\SyncCount.h" />
     <ClInclude Include="Socket\NS.h" />
-    <ClInclude Include="Socket\Packet.h" />
+    <ClInclude Include="Socket\DefaultPacket.h" />
     <ClInclude Include="Socket\StateObject.h" />
     <ClInclude Include="Collections\SyncQueue.h" />
     <ClInclude Include="System\Message\Message.h" />

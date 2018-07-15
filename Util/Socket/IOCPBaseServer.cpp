@@ -1,5 +1,4 @@
 #include "IOCPBaseServer.h"
-#include "Packet.h"
 #include "..\Common\Finally.h"
 #include <iostream>
 
@@ -208,8 +207,9 @@ void IOCPBaseServer::ClosePeer(StateObject* pStateObject)
 		}
 	}
 }
-void IOCPBaseServer::BroadCast(Util::Socket::Packet packet, StateObject state)
+void IOCPBaseServer::BroadCast(Util::Socket::IPacket& packet, StateObject state)
 {
+	
 }
 unsigned int __stdcall IOCPBaseServer::Run(void* obj)
 {

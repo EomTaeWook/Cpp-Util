@@ -7,7 +7,7 @@
 #include <memory>
 #include "..\Threading\Thread.h"
 #include "StateObject.h"
-#include "Packet.h"
+#include "IPacket.h"
 #pragma comment(lib, "Ws2_32.lib")
 
 NS_SOCKET_BEGIN
@@ -35,7 +35,7 @@ private:
 	int Invoke();
 	void Stop();
 public:
-	void Send(Util::Socket::Packet& packet);
+	void Send(Util::Socket::IPacket& packet);
 protected:
 	//abstract Method
 	virtual void OnDisconnected() = 0;

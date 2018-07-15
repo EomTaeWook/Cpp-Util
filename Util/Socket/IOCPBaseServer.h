@@ -9,7 +9,7 @@
 #include <functional>
 #include "..\Threading\Thread.h"
 #include "SyncCount.h"
-#include "Packet.h"
+#include "IPacket.h"
 #include "..\Common\Type\Object.h"
 #include <map>
 #pragma comment(lib, "Ws2_32.lib")
@@ -52,7 +52,7 @@ protected:
 	virtual void OnDisconnected(unsigned long handle) = 0;
 	virtual void OnRecieved(Util::Socket::StateObject& stateObject) = 0;
 	//virtual
-	virtual void BroadCast(Util::Socket::Packet packet, StateObject state);
+	virtual void BroadCast(Util::Socket::IPacket& packet, StateObject state);
 private:
 	static unsigned int __stdcall Run(void*);
 };
