@@ -11,7 +11,7 @@ class WaitCallback : public MulticastDelegate<void, void*>
 private:
 	void* _state;
 private:
-	void Run();
+	void Invoke();
 public:
 	WaitCallback(std::function<void(void*)> callback, void* state = NULL);
 	virtual ~WaitCallback() {}
@@ -22,7 +22,7 @@ inline WaitCallback::WaitCallback(std::function<void(void*)> callback, void* sta
 	MulticastDelegate<void, void*>::operator=(callback);
 	_state = state;
 }
-inline void WaitCallback::Run()
+inline void WaitCallback::Invoke()
 {
 	this->operator()(this->_state);
 }

@@ -90,7 +90,7 @@ int IOCPThreadPool::Invoke()
 		WaitCallback* pCallback = reinterpret_cast<WaitCallback*>(callback);
 		if (pCallback != NULL)
 		{
-			pCallback->Run();
+			pCallback->Invoke();
 			DeleteItem(pCallback);
 		}
 	}
