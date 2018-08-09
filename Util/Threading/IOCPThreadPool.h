@@ -5,7 +5,7 @@
 #include <memory>
 #include "WaitCallback.h"
 #include "NS.h"
-#include "..\DesignPattern\Singleton.h"
+#include "../DesignPattern/Singleton.h"
 
 NS_THREADING_BEGIN
 USING_DESIGN_PATTERN

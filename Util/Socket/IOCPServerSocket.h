@@ -1,7 +1,6 @@
 #pragma once
 #include "NS.h"
 #include "IOCPBaseServer.h"
-#include <tuple>
 
 NS_SOCKET_BEGIN
 template<typename ProtocolType, typename ...Types>

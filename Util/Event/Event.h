@@ -1,5 +1,5 @@
 #pragma once
-#include "..\Common\MulticastDelegate.h"
+#include "../Common/MulticastDelegate.h"
 #include <vector>
 #include <memory>
 #include "NS.h"

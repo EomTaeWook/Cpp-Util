@@ -2,8 +2,8 @@
 #include "NS.h"
 #include <queue>
 #include <vector>
-#include "..\Threading\CriticalSection.h"
-#include "..\Common\Finally.h"
+#include "../Threading/CriticalSection.h"
+#include "../Common/Finally.h"
 NS_COLLECTIONS_BEGIN
 template<typename T>
 class SyncQueue

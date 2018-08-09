@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "..\Threading\Thread.h"
+#include "../Threading/Thread.h"
 #include "IPacket.h"
 #include "StateObject.h"
 #pragma comment(lib, "Ws2_32.lib")

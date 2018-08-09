@@ -1,6 +1,6 @@
 #pragma once
 #include "NS.h"
-#include "..\Threading\CriticalSection.h"
+#include "../Threading/CriticalSection.h"
 
 NS_DESIGN_PATTERN_BEGIN
 USING_THREADING

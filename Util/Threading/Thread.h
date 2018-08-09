@@ -2,7 +2,7 @@
 #include "NS.h"
 #include <functional>
 #include <process.h>
-#include "..\Common\MulticastDelegate.h"
+#include "../Common/MulticastDelegate.h"
 #include <Windows.h>
 
 NS_THREADING_BEGIN
@@ -61,9 +61,7 @@ inline void Thread::Start()
 inline void Thread::Invoke()
 {
 	if (_delegate != NULL)
-	{
 		_delegate(_obj);
-	}
 	CloseHandle(_handle);
 	_handle = NULL;
 }

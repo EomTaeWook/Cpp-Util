@@ -6,10 +6,9 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "..\Threading\Thread.h"
+#include "../Threading/Thread.h"
 #include "SyncCount.h"
 #include "IPacket.h"
-#include "..\Common\Type\Object.h"
 #include <map>
 #pragma comment(lib, "Ws2_32.lib")
 

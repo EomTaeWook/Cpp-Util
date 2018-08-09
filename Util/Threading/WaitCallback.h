@@ -1,7 +1,7 @@
 #pragma once
 #include <functional>
 #include "NS.h"
-#include "..\Common\MulticastDelegate.h"
+#include "../Common/MulticastDelegate.h"
 
 NS_THREADING_BEGIN
 USING_COMMON
