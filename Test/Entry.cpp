@@ -2,6 +2,11 @@
 #pragma comment(lib, "Util_d.lib")
 #include<string>
 #include <Socket\IOCPServerSocket.h>
+
+#define START_NAMESPACE namespace MyProject {
+
+START_NAMESPACE
+}
 struct Header
 {
 	UINT32 dataSize;
