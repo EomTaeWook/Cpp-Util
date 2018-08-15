@@ -132,8 +132,9 @@ void IOCPBaseServer::BeginReceive(Socket::StateObject* pStateObject)
 		int error = WSAGetLastError();
 		if (error != WSA_IO_PENDING)
 		{
-			OnDisconnected(pStateObject->Handle());
+			auto handle = pStateObject->Handle();
 			pStateObject->Close();
+			OnDisconnected(handle);
 		}
 	}
 }
