@@ -16,9 +16,6 @@
     <Filter Include="Common">
       <UniqueIdentifier>{ee418441-c468-483f-9d70-bdbe525a337b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="DesignPattern">
-      <UniqueIdentifier>{b25b045c-9b32-4d50-a859-8ae497ba17f6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Threading\Synchronization">
       <UniqueIdentifier>{a31d2f2c-805e-4df8-b6fb-895eeca50ebb}</UniqueIdentifier>
     </Filter>
@@ -83,12 +80,6 @@
     </ClInclude>
     <ClInclude Include="Threading\NS.h">
       <Filter>Threading</Filter>
-    </ClInclude>
-    <ClInclude Include="DesignPattern\NS.h">
-      <Filter>DesignPattern</Filter>
-    </ClInclude>
-    <ClInclude Include="DesignPattern\Singleton.h">
-      <Filter>DesignPattern</Filter>
     </ClInclude>
     <ClInclude Include="Threading\CriticalSection.h">
       <Filter>Threading\Synchronization</Filter>
@@ -165,6 +156,9 @@
     <ClInclude Include="Socket\IPacket.h">
       <Filter>Socket</Filter>
     </ClInclude>
+    <ClInclude Include="Common\Singleton.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Threading\IOCPThreadPool.cpp">
@@ -191,5 +185,31 @@
     <ClCompile Include="Socket\IOCPBaseClient.cpp">
       <Filter>Socket\Client</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Collections\cpp.hint">
+      <Filter>Collections</Filter>
+    </None>
+    <None Include="Common\cpp.hint">
+      <Filter>Common</Filter>
+    </None>
+    <None Include="Cryptography\cpp.hint">
+      <Filter>Cryptography</Filter>
+    </None>
+    <None Include="Threading\cpp.hint">
+      <Filter>Threading</Filter>
+    </None>
+    <None Include="Event\cpp.hint">
+      <Filter>Event</Filter>
+    </None>
+    <None Include="Socket\cpp.hint">
+      <Filter>Socket</Filter>
+    </None>
+    <None Include="System\Message\cpp.hint">
+      <Filter>System\Message\MSMQ</Filter>
+    </None>
+    <None Include="Web\cpp.hint">
+      <Filter>Web</Filter>
+    </None>
   </ItemGroup>
 </Project>

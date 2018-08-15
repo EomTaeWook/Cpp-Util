@@ -6,11 +6,10 @@
 #include <Windows.h>
 
 NS_THREADING_BEGIN
-USING_COMMON
 class Thread
 {
 private:
-	MulticastDelegate<void, void*> _delegate;
+	Common::MulticastDelegate<void, void*> _delegate;
 	HANDLE _handle;
 	void* _obj;
 public:

@@ -166,8 +166,7 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <ClInclude Include="Common\NS.h" />
     <ClInclude Include="Common\StringFormat.h" />
     <ClInclude Include="Cryptography\SHA1.h" />
-    <ClInclude Include="DesignPattern\NS.h" />
-    <ClInclude Include="DesignPattern\Singleton.h" />
+    <ClInclude Include="Common\Singleton.h" />
     <ClInclude Include="Event\Event.h" />
     <ClInclude Include="Common\Delegate.h" />
     <ClInclude Include="Common\Finally.h" />
@@ -207,6 +206,16 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <ClCompile Include="System\Message\MessageQueue.cpp" />
     <ClCompile Include="Threading\IOCPThreadPool.cpp" />
     <ClCompile Include="Web\HttpClient.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Collections\cpp.hint" />
+    <None Include="Common\cpp.hint" />
+    <None Include="Cryptography\cpp.hint" />
+    <None Include="Event\cpp.hint" />
+    <None Include="Socket\cpp.hint" />
+    <None Include="System\Message\cpp.hint" />
+    <None Include="Threading\cpp.hint" />
+    <None Include="Web\cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

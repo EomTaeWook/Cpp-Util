@@ -2,6 +2,7 @@
 #include "NS.h"
 #include "../Threading/CriticalSection.h"
 #include "../Common/Finally.h"
+
 NS_SOCKET_BEGIN
 class SyncCount
 {

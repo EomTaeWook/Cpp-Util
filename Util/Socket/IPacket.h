@@ -1,14 +1,15 @@
 #pragma once
 #include "NS.h"
+
 NS_SOCKET_BEGIN
 class IPacket
 {
 protected:
-	IPacket::IPacket();
+	IPacket();
 public:
-	virtual IPacket::~IPacket();
+	virtual ~IPacket();
 public:
-	virtual char* GetBytes(OUT ULONG* size) = 0;
+	virtual void GetBytes(OUT char *buffer, OUT ULONG* size) = 0;
 };
 inline IPacket::IPacket()
 {

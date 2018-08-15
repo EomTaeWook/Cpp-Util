@@ -5,7 +5,6 @@
 #include "NS.h"
 
 NS_EVENT_BEGIN
-USING_COMMON
 template<typename T>
 class Event
 {

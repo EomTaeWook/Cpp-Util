@@ -1,5 +1,6 @@
 #pragma once
 #include "NS.h"
+
 NS_SOCKET_BEGIN
 enum class Mode
 {

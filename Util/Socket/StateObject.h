@@ -65,13 +65,18 @@ inline void StateObject::Send(Util::Socket::IPacket& packet)
 {
 	WSABUF wsaBuf;
 	ULONG size = 0;
-	wsaBuf.buf = packet.GetBytes(&size);
-	wsaBuf.len = size;
-	DWORD sendBytes;
-	if (WSASend(_sock, &wsaBuf, 1, &sendBytes, 0, (LPWSAOVERLAPPED)&_sendOverlapped, NULL) == SOCKET_ERROR)
+	char* buffer = nullptr;
+	packet.GetBytes(buffer, &size);
+	if (buffer != nullptr)
 	{
-		if (WSAGetLastError() != WSA_IO_PENDING)
-			Close();
+		std::unique_ptr<char[]> pBuffer = std::unique_ptr<char[]>(buffer);
+		wsaBuf.buf = pBuffer.get();
+		wsaBuf.len = size;
+		if (WSASend(_sock, &wsaBuf, 1, NULL, 0, (LPWSAOVERLAPPED)&_sendOverlapped, NULL) == SOCKET_ERROR)
+		{
+			if (WSAGetLastError() != WSA_IO_PENDING)
+				Close();
+		}
 	}
 }
 inline void StateObject::Close()

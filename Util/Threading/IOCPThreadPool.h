@@ -5,11 +5,11 @@
 #include <memory>
 #include "WaitCallback.h"
 #include "NS.h"
-#include "../DesignPattern/Singleton.h"
+#include "../Common/Singleton.h"
 
 NS_THREADING_BEGIN
-USING_DESIGN_PATTERN
-class IOCPThreadPool : public Singleton<IOCPThreadPool>
+
+class IOCPThreadPool : public Common::Singleton<IOCPThreadPool>
 {
 private:
 	static const LONG_PTR _CLOSE_THREAD = -1;

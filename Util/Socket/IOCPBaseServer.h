@@ -38,6 +38,7 @@ public:
 	void Start(std::string ip, int port);
 	void Stop();
 private:
+	void BeginReceive(StateObject* pStateObject);
 	int Invoke();
 	void StartListening(void* pObj = nullptr);
 	void AddPeer(StateObject* pStateObject);

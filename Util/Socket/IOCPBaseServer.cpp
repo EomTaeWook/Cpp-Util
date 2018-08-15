@@ -3,7 +3,6 @@
 #include <iostream>
 
 NS_SOCKET_BEGIN
-USING_THREADING
 void IOCPBaseServer::Stop()
 {
 	_isStart = false;
@@ -121,16 +120,28 @@ void IOCPBaseServer::StartListening(void* pObj)
 		AddPeer(stateObject);
 		OnAccepted(*stateObject);
 
-		CreateIoCompletionPort((HANDLE)stateObject->Socket(), _completionPort, (unsigned long long)stateObject, 0);
-		unsigned long flag = 0;
-		WSARecv(stateObject->Socket(), &stateObject->WSABuff(), 1, 0, &flag, (LPWSAOVERLAPPED)(&stateObject->ReceiveOverlapped()), NULL);
+		CreateIoCompletionPort((HANDLE)stateObject->Socket(), _completionPort, (unsigned long long)stateObject, 0);		
+		BeginReceive(stateObject);
+	}
+}
+void IOCPBaseServer::BeginReceive(Socket::StateObject* pStateObject)
+{
+	DWORD flags = 0;
+	if (WSARecv(pStateObject->Socket(), &pStateObject->WSABuff(), 1, 0, &flags, (LPWSAOVERLAPPED)(&pStateObject->ReceiveOverlapped()), NULL) == SOCKET_ERROR)
+	{
+		int error = WSAGetLastError();
+		if (error != WSA_IO_PENDING)
+		{
+			OnDisconnected(pStateObject->Handle());
+			pStateObject->Close();
+		}
 	}
 }
 int IOCPBaseServer::Invoke()
 {
 	unsigned long bytesTrans = 0;
 	ULONG_PTR stateObject = 0;
-	Util::Socket::Overlapped* overlapped;
+	Socket::Overlapped* overlapped;
 	while (true)
 	{
 		if (!GetQueuedCompletionStatus(_completionPort, &bytesTrans, &stateObject, (LPOVERLAPPED *)&overlapped, INFINITE))
@@ -156,13 +167,14 @@ int IOCPBaseServer::Invoke()
 			{
 				ex.what();
 			}
+			BeginReceive(pHandler);
 		}
 	}
 	return 0;
 }
 void IOCPBaseServer::AddPeer(StateObject* pStateObject)
 {
-	auto finally = Util::Common::Finally(std::bind(&CriticalSection::LeaveCriticalSection, &_read));
+	auto finally = Common::Finally(std::bind(&Threading::CriticalSection::LeaveCriticalSection, &_read));
 	try
 	{
 		_read.EnterCriticalSection();
@@ -183,7 +195,7 @@ void IOCPBaseServer::AddPeer(StateObject* pStateObject)
 void IOCPBaseServer::ClosePeer(StateObject* pStateObject)
 {
 	{
-		auto finally = Util::Common::Finally(std::bind(&CriticalSection::LeaveCriticalSection, &_remove));
+		auto finally = Common::Finally(std::bind(&Threading::CriticalSection::LeaveCriticalSection, &_remove));
 		try
 		{
 			_remove.EnterCriticalSection();
@@ -209,7 +221,6 @@ void IOCPBaseServer::ClosePeer(StateObject* pStateObject)
 }
 void IOCPBaseServer::BroadCast(Util::Socket::IPacket& packet, StateObject state)
 {
-	
 }
 unsigned int __stdcall IOCPBaseServer::Run(void* obj)
 {

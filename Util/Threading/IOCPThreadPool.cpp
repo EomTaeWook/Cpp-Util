@@ -3,8 +3,6 @@
 #include <memory>
 
 NS_THREADING_BEGIN
-USING_COMMON
-USING_THREADING
 bool IOCPThreadPool::Init(UINT threadMaxSize)
 {
 	try

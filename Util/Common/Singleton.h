@@ -2,34 +2,42 @@
 #include "NS.h"
 #include "../Threading/CriticalSection.h"
 
-NS_DESIGN_PATTERN_BEGIN
-USING_THREADING
+NS_COMMON_BEGIN
 template <typename T>
 class Singleton
 {
 public:
-	Singleton() { }
-	~Singleton() { }
+	Singleton();
+	~Singleton();
 	static std::shared_ptr<T> Instance();
 private:
 	static std::shared_ptr<T> _instance;
-	static CriticalSection _createMutex;
+	static Threading::CriticalSection _cs;
 };
+
+template <typename T>
+inline Singleton<T>::Singleton()
+{
+}
+template <typename T>
+inline Singleton<T>::~Singleton()
+{
+}
 
 template <typename T>
 std::shared_ptr<T> Singleton<T>::Instance()
 {
-	_createMutex.EnterCriticalSection();
+	_cs.EnterCriticalSection();
 	if (_instance.get() == 0)
 	{
 		_instance = std::make_shared<T>();
 	}
-	_createMutex.LeaveCriticalSection();
+	_cs.LeaveCriticalSection();
 	return _instance;
 }
 template <typename T>
-CriticalSection Singleton<T>::_createMutex;
+Threading::CriticalSection Singleton<T>::_cs;
 
 template <typename T>
 std::shared_ptr<T> Singleton<T>::_instance = NULL;
-NS_DESIGN_PATTERN_END
+NS_COMMON_END
