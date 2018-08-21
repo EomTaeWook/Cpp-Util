@@ -125,7 +125,8 @@ int IOCPBaseClient::Invoke()
 	{
 		if (!GetQueuedCompletionStatus(_completionPort, &bytesTrans, &stateObject, (LPOVERLAPPED  *)&overlapped, INFINITE))
 		{
-			break;
+			if (WSAGetLastError() != ERROR_NETNAME_DELETED)
+				break;
 		}
 		if ((LONG_PTR)stateObject == _CLOSE_THREAD && bytesTrans == 0)
 			break;

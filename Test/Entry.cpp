@@ -23,9 +23,11 @@ public:
 	// IOCPServerSocket을(를) 통해 상속됨
 	virtual void OnAccepted(Util::Socket::StateObject & stateObject) override
 	{
+		printf("Connect Handle : %d \n", stateObject.Handle());
 	}
 	virtual void OnDisconnected(unsigned long handle) override
 	{
+		printf("DisConnect Handle : %d \n", handle);
 	}
 	virtual void OnRecieved(Util::Socket::StateObject & stateObject) override
 	{
@@ -35,7 +37,7 @@ public:
 		std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
 		std::time_t time = std::chrono::system_clock::to_time_t(now);
 		str.assign(receive.begin(), receive.end());
-		printf("[ %d ] Handle %d Recieved : %s\n", time, stateObject.Handle(), str.c_str());
+		//printf("[ %d ] Handle %d Recieved : %s\n", time, stateObject.Handle(), str.c_str());
 		Packet packet;
 		packet.Data = receive;
 		stateObject.Send(packet);

@@ -23,7 +23,7 @@ private:
 	char _buffer[BUFF_SIZE];
 	unsigned long _handle;
 	Util::Collections::SyncQueue<char> _receiveBuffer;
-	Util::Collections::SyncQueue<Util::Socket::DefaultPacket> _receivePacketBuffer;
+	Util::Collections::SyncQueue<Util::Socket::IPacket*> _receivePacketBuffer;
 public:
 	SOCKET & Socket();
 	SOCKADDR_IN& SocketAddr();
@@ -31,7 +31,7 @@ public:
 	WSABUF& WSABuff();
 	unsigned long& Handle();
 	Util::Collections::SyncQueue<char>& ReceiveBuffer();
-	Util::Collections::SyncQueue<Util::Socket::DefaultPacket>& ReceivePacketBuffer();
+	Util::Collections::SyncQueue<Util::Socket::IPacket*>& ReceivePacketBuffer();
 public:
 	void Close();
 	void Send(Util::Socket::IPacket& packet);
@@ -53,7 +53,7 @@ inline StateObject::~StateObject()
 	Close();
 }
 
-inline Util::Collections::SyncQueue<Util::Socket::DefaultPacket>& StateObject::ReceivePacketBuffer()
+inline Util::Collections::SyncQueue<Util::Socket::IPacket*>& StateObject::ReceivePacketBuffer()
 {
 	return _receivePacketBuffer;
 }

@@ -110,17 +110,14 @@ void IOCPBaseServer::StartListening(void* pObj)
 		memset(&clientAddr, 0, size);
 		SOCKET handler = accept(_listener, (SOCKADDR*)&clientAddr, &size);
 		if (handler == INVALID_SOCKET)
-		{
 			continue;
-		}
 		auto stateObject = new StateObject();
 		stateObject->Socket() = handler;
 		std::memcpy(&stateObject->SocketAddr(), &clientAddr, size);
 		stateObject->Handle() = _handleCount.Add();
 		AddPeer(stateObject);
 		OnAccepted(*stateObject);
-
-		CreateIoCompletionPort((HANDLE)stateObject->Socket(), _completionPort, (unsigned long long)stateObject, 0);		
+		CreateIoCompletionPort((HANDLE)stateObject->Socket(), _completionPort, (ULONG_PTR)stateObject, 0);		
 		BeginReceive(stateObject);
 	}
 }
@@ -131,11 +128,7 @@ void IOCPBaseServer::BeginReceive(Socket::StateObject* pStateObject)
 	{
 		int error = WSAGetLastError();
 		if (error != WSA_IO_PENDING)
-		{
-			auto handle = pStateObject->Handle();
-			pStateObject->Close();
-			OnDisconnected(handle);
-		}
+			ClosePeer(pStateObject);
 	}
 }
 int IOCPBaseServer::Invoke()
@@ -147,7 +140,8 @@ int IOCPBaseServer::Invoke()
 	{
 		if (!GetQueuedCompletionStatus(_completionPort, &bytesTrans, &stateObject, (LPOVERLAPPED *)&overlapped, INFINITE))
 		{
-			break;
+			if (WSAGetLastError() != ERROR_NETNAME_DELETED)
+				break;
 		}
 		if ((LONG_PTR)stateObject == _CLOSE_THREAD && bytesTrans == 0)
 			break;
@@ -195,29 +189,27 @@ void IOCPBaseServer::AddPeer(StateObject* pStateObject)
 }
 void IOCPBaseServer::ClosePeer(StateObject* pStateObject)
 {
+	auto finally = Common::Finally(std::bind(&Threading::CriticalSection::LeaveCriticalSection, &_remove));
+	try
 	{
-		auto finally = Common::Finally(std::bind(&Threading::CriticalSection::LeaveCriticalSection, &_remove));
-		try
+		_remove.EnterCriticalSection();
+		auto handle = pStateObject->Handle();
+		auto it = _clients.find(handle);
+		if (it != _clients.end())
 		{
-			_remove.EnterCriticalSection();
-			auto handle = pStateObject->Handle();
-			auto it = _clients.find(handle);
-			if (it != _clients.end())
-			{
-				it->second.get()->Close();
-				it->second.reset();
-				_clients.erase(it);
-			}
-			else
-			{
-				pStateObject->Close();
-				delete pStateObject;
-			}
-			OnDisconnected(handle);
+			it->second.get()->Close();
+			it->second.reset();
+			_clients.erase(it);
 		}
-		catch (...)
+		else
 		{
+			pStateObject->Close();
+			delete pStateObject;
 		}
+		OnDisconnected(handle);
+	}
+	catch (...)
+	{
 	}
 }
 void IOCPBaseServer::BroadCast(Util::Socket::IPacket& packet, StateObject state)
