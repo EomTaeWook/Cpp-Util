@@ -1,21 +1,18 @@
 #include <Socket\IOCPSocketClient.h>
-#pragma comment(lib, "Util_d.lib")
 #include<string>
 #include <Socket\IOCPServerSocket.h>
+#include <chrono>
+#include <ctime>
 
-#define START_NAMESPACE namespace MyProject {
-
-START_NAMESPACE
-}
-struct Header
+struct Packet : Util::Socket::IPacket
 {
-	UINT32 dataSize;
-	USHORT protocol;
-};
-struct Packet : Util::Socket::DefaultPacket
-{
-	Header Header;
 	std::vector<char> Data;
+	// IPacket¿ª(∏¶) ≈Î«ÿ ªÛº”µ 
+	virtual void GetBytes(OUT char ** buffer, OUT ULONG * size) override
+	{
+		*buffer = &Data.front();
+		*size = (ULONG)Data.size();
+	}
 };
 
 class TestServer :public Util::Socket::IOCPServerSocket<USHORT, Packet>
@@ -32,6 +29,16 @@ public:
 	}
 	virtual void OnRecieved(Util::Socket::StateObject & stateObject) override
 	{
+		auto size = stateObject.ReceiveBuffer().Count();
+		auto receive = stateObject.ReceiveBuffer().Read(size);
+		std::string str;
+		std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+		std::time_t time = std::chrono::system_clock::to_time_t(now);
+		str.assign(receive.begin(), receive.end());
+		printf("[ %d ] Handle %d Recieved : %s\n", time, stateObject.Handle(), str.c_str());
+		Packet packet;
+		packet.Data = receive;
+		stateObject.Send(packet);
 	}
 };
 void TestServer::TESTFUNCTION(Util::Socket::StateObject s, Packet packet)
@@ -39,11 +46,11 @@ void TestServer::TESTFUNCTION(Util::Socket::StateObject s, Packet packet)
 
 }
 
-class TEST : public Util::Socket::IOCPSocketClient<USHORT, Packet>
+class TESTClient : public Util::Socket::IOCPSocketClient<USHORT, Packet>
 {
 public:
-	TEST() {}
-	virtual ~TEST() {}
+	TESTClient() {}
+	virtual ~TESTClient() {}
 
 public:
 	void TESTFUNCTION(Packet packet);
@@ -57,38 +64,41 @@ public:
 	}
 	virtual void OnRecieved(Util::Socket::StateObject & stateObject) override
 	{
-		if (stateObject.ReceiveBuffer().Count() >= 6)
-		{
-			Header header;
-			memcpy(&header, &stateObject.ReceiveBuffer().Read(sizeof(Header)).front(), sizeof(Header));
-			Packet packet;
-			packet.Header = header;
-			packet.Data.assign(header.dataSize - sizeof(Header), '\n');
-			memcpy(&packet.Data.front(), &stateObject.ReceiveBuffer().Read(header.dataSize - sizeof(Header)).front(), header.dataSize - sizeof(Header));
-			RunCallback(packet.Header.protocol, packet);
-		}
+		auto size = stateObject.ReceiveBuffer().Count();
+		auto receive = stateObject.ReceiveBuffer().Read(size);
+		std::string str;
+		std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+		std::time_t time = std::chrono::system_clock::to_time_t(now);
+		str.assign(receive.begin(), receive.end());
+		printf("[ %d ] Recieved : %s\n", time, str.c_str());
 	}
 };
-void TEST::TESTFUNCTION(Packet packet)
+void TESTClient::TESTFUNCTION(Packet packet)
 {
 	//Callback ∂≥æÓ¡¸
 }
 
 int main()
 {
-	TEST t;
-	t.BindCallback(1234, std::bind(&TEST::TESTFUNCTION, &t, std::placeholders::_1));
+	
+	//t.BindCallback(1234, std::bind(&TEST::TESTFUNCTION, &t, std::placeholders::_1));
 
 	TestServer ts;
-	ts.BindCallback(123, std::bind(&TestServer::TESTFUNCTION, &ts, std::placeholders::_1, std::placeholders::_2));
-	Util::Socket::StateObject so;
+	ts.Init();
+	ts.Start("127.0.0.1", 10000);
+	//ts.BindCallback(123, std::bind(&TestServer::TESTFUNCTION, &ts, std::placeholders::_1, std::placeholders::_2));
+	//Util::Socket::StateObject so;
+	//Packet packet;
+	//ts.RunCallback(123, so, packet);
+
+	/*TESTClient tc;
+	tc.Connect("127.0.0.1", 10000);
 	Packet packet;
-	ts.RunCallback(123, so, packet);
-
-
-	t.Connect("127.0.0.1", 10000);
+	std::string send = "When one thinks of the labors which the the English have devoted to digging the tunnel under the Thames, the tremendous expenditure of energy involved, and then how a little accident may for a long time obstruct the entire enterprise, one will be able to form a fitting conception of this critical undertaking as a whole.";
+	packet.Data.assign(send.begin(), send.end());*/
 	while (true)
 	{
+		/*tc.Send(packet);*/
 		Sleep(1000);
 	}
 	return 0;

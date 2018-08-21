@@ -66,11 +66,10 @@ inline void StateObject::Send(Util::Socket::IPacket& packet)
 	WSABUF wsaBuf;
 	ULONG size = 0;
 	char* buffer = nullptr;
-	packet.GetBytes(buffer, &size);
+	packet.GetBytes(&buffer, &size);
 	if (buffer != nullptr)
 	{
-		std::unique_ptr<char[]> pBuffer = std::unique_ptr<char[]>(buffer);
-		wsaBuf.buf = pBuffer.get();
+		wsaBuf.buf = buffer;
 		wsaBuf.len = size;
 		if (WSASend(_sock, &wsaBuf, 1, NULL, 0, (LPWSAOVERLAPPED)&_sendOverlapped, NULL) == SOCKET_ERROR)
 		{

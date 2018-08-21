@@ -159,7 +159,7 @@ int IOCPBaseServer::Invoke()
 		}
 		if (overlapped->mode == Util::Socket::Mode::Receive)
 		{
-			pHandler->ReceiveBuffer().Append(pHandler->WSABuff().buf, pHandler->WSABuff().len);
+			pHandler->ReceiveBuffer().Append(pHandler->WSABuff().buf, bytesTrans);
 			try
 			{
 				OnRecieved(*pHandler);

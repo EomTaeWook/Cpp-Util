@@ -12,10 +12,10 @@ public:
 	DefaultPacket();
 	virtual ~DefaultPacket();
 public:
-	const std::vector<char>& GetData();
+	std::vector<char>& GetData();
 public:
 	// IPacket을(를) 통해 상속됨
-	virtual void GetBytes(OUT char *buffer, OUT ULONG * size);
+	virtual void GetBytes(OUT char** buffer, OUT ULONG * size) override;
 };
 inline DefaultPacket::DefaultPacket()
 {	
@@ -23,12 +23,12 @@ inline DefaultPacket::DefaultPacket()
 inline DefaultPacket::~DefaultPacket()
 {
 }
-inline void DefaultPacket::GetBytes(OUT char *buffer, OUT ULONG* size)
+inline void DefaultPacket::GetBytes(OUT char** buffer, OUT ULONG* size)
 {
 	*size = (ULONG)_buff.size();
-	buffer = &_buff.front();
+	*buffer = &_buff.front();
 }
-inline const std::vector<char>& DefaultPacket::GetData()
+inline std::vector<char>& DefaultPacket::GetData()
 {
 	return _buff;
 }

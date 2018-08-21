@@ -112,7 +112,7 @@ void IOCPBaseClient::Stop()
 	_completionPort = NULL;
 	_hWorkerThread.clear();
 }
-void IOCPBaseClient::Send(Util::Socket::IPacket& packet)
+void IOCPBaseClient::Send(Socket::IPacket& packet)
 {
 	_stateObject.Send(packet);
 }
@@ -120,7 +120,7 @@ int IOCPBaseClient::Invoke()
 {
 	unsigned long bytesTrans = 0;
 	ULONG_PTR stateObject = 0;
-	Util::Socket::Overlapped* overlapped = nullptr;
+	Socket::Overlapped* overlapped = nullptr;
 	while (true)
 	{
 		if (!GetQueuedCompletionStatus(_completionPort, &bytesTrans, &stateObject, (LPOVERLAPPED  *)&overlapped, INFINITE))
@@ -135,7 +135,7 @@ int IOCPBaseClient::Invoke()
 			pHandler->Close();
 			continue;
 		}
-		if (overlapped->mode == Util::Socket::Mode::Receive)
+		if (overlapped->mode == Socket::Mode::Receive)
 		{
 			try
 			{
@@ -156,9 +156,7 @@ unsigned int __stdcall IOCPBaseClient::Run(void* obj)
 {
 	auto client = reinterpret_cast<IOCPBaseClient*>(obj);
 	if (client != NULL)
-	{
 		return client->Invoke();
-	}
 	return 0;
 }
 NS_SOCKET_END
