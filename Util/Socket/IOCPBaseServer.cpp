@@ -60,49 +60,49 @@ void IOCPBaseServer::Start(std::string ip, int port)
 			throw std::exception();
 		if (_thread.get() == NULL)
 		{
+			_isStart = true;
 			memset(&_iPEndPoint, 0, sizeof(_iPEndPoint));
 			if (inet_pton(PF_INET, ip.c_str(), &_iPEndPoint) != 1)
 			{
 				throw std::exception();
 			}
-			_iPEndPoint.sin_family = PF_INET;
-			_iPEndPoint.sin_port = htons(port);
-			_thread = std::make_unique<Util::Threading::Thread>(std::bind(&IOCPBaseServer::StartListening, this, nullptr));
+			_iPEndPoint.sin_family = PF_INET;			_iPEndPoint.sin_port = htons(port);
+			_listener = WSASocketW(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
+			if (_listener == INVALID_SOCKET)
+			{
+				auto error = GetLastError();
+				Stop();
+				throw std::exception("Listener Create Error : " + error);
+			}
+			//accept½Ã NonBlock
+			//unsigned long mode = 1;
+			//ioctlsocket(_listener, FIONBIO, &mode);
+			int option = 1;
+			setsockopt(_listener, SOL_SOCKET, SO_REUSEADDR, (char*)&option, sizeof(option));
+			if (::bind(_listener, (SOCKADDR*)&_iPEndPoint, sizeof(_iPEndPoint)) == SOCKET_ERROR)
+			{
+				auto error = GetLastError();
+				Stop();
+				throw std::exception("BindException : " + error);
+			}
+			if (listen(_listener, 100) == SOCKET_ERROR)
+			{
+				auto error = GetLastError();
+				Stop();
+				throw std::exception("ListenExcption : " + error);
+			}
+			_thread = std::make_unique<Threading::Thread>(std::bind(&IOCPBaseServer::StartListening, this, nullptr));
 			_thread->Start();
 		}
 	}
 	catch (...)
 	{
+		_isStart = false;
 		throw std::exception("Server Start Fail");
 	}
-}
+}
 void IOCPBaseServer::StartListening(void* pObj)
 {
-	_isStart = true;
-	_listener = WSASocketW(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
-	if (_listener == INVALID_SOCKET)
-	{
-		auto error = GetLastError();
-		Stop();
-		throw std::exception("Listener Create Error : " + error);
-	}
-	//accept½Ã NonBlock
-	//unsigned long mode = 1;
-	//ioctlsocket(_listener, FIONBIO, &mode);
-	int option = 1;
-	setsockopt(_listener, SOL_SOCKET, SO_REUSEADDR, (char*)&option, sizeof(option));
-	if (bind(_listener, (SOCKADDR*)&_iPEndPoint, sizeof(_iPEndPoint)) == SOCKET_ERROR)
-	{
-		auto error = GetLastError();
-		Stop();
-		throw std::exception("BindException : " + error);
-	}
-	if (listen(_listener, 100) == SOCKET_ERROR)
-	{
-		auto error = GetLastError();
-		Stop();
-		throw std::exception("ListenExcption : " + error);
-	}
 	while (_isStart)
 	{
 		SOCKADDR_IN clientAddr;
@@ -117,7 +117,7 @@ void IOCPBaseServer::StartListening(void* pObj)
 		stateObject->Handle() = _handleCount.Add();
 		AddPeer(stateObject);
 		OnAccepted(*stateObject);
-		CreateIoCompletionPort((HANDLE)stateObject->Socket(), _completionPort, (ULONG_PTR)stateObject, 0);		
+		CreateIoCompletionPort((HANDLE)stateObject->Socket(), _completionPort, (ULONG_PTR)stateObject, 0);
 		BeginReceive(stateObject);
 	}
 }

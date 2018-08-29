@@ -7,8 +7,8 @@ NS_SOCKET_BEGIN
 class SyncCount
 {
 public:
-	SyncCount() {}
-	virtual ~SyncCount() {}
+	SyncCount();
+	virtual ~SyncCount();
 private:
 	unsigned long _count;
 	Util::Threading::CriticalSection _cs;
@@ -16,6 +16,12 @@ public:
 	unsigned long Add();
 	unsigned long Read();
 };
+inline SyncCount::SyncCount() :_count(0)
+{
+}
+inline SyncCount::~SyncCount()
+{
+}
 inline unsigned long SyncCount::Add()
 {
 	auto finally = Util::Common::Finally(std::bind(&Util::Threading::CriticalSection::LeaveCriticalSection, &_cs));
