@@ -1,6 +1,8 @@
 #pragma once
 #include "Iterator.h"
 #include <vector>
+#include"NS.h"
+NS_COLLECTIONS_BEGIN
 template<typename T>
 class  Queue
 {
@@ -8,6 +10,7 @@ public:
 	Queue();
 	virtual ~Queue();
 private:
+	Iterator<T> _pAlloc;
 	std::allocator<T> _alloc;
 private:
 	Iterator<T> _begin;
@@ -70,10 +73,7 @@ size_t Queue<T>::Capacity() const
 template<typename T>
 inline void Queue<T>::Clear()
 {
-	for (auto it = Begin(); it != End(); ++it)
-		_alloc.destroy(&*it);
-	_alloc.deallocate(&*Begin(), Capacity());
-	_end = _endPoint = _begin;
+	DestroyAndDeallocateAll();
 }
 
 template<typename T>
@@ -188,7 +188,7 @@ inline void Queue<T>::ReAllocateAndCopy(Iterator<T> position, const Iterator<T> 
 
 	DestroyAndDeallocateAll();
 
-	_begin = begin;
+	_pAlloc = _begin = begin;
 	_end = end;
 	_endPoint = endPoint;
 }
@@ -211,17 +211,19 @@ inline void Queue<T>::ReAllocateAndCopy(Iterator<T> position, size_t size, const
 
 	DestroyAndDeallocateAll();
 
-	_begin = begin;
+	_pAlloc = _begin = begin;
 	_end = end;
 	_endPoint = endPoint;
 }
 template<typename T>
 inline void Queue<T>::DestroyAndDeallocateAll()
 {
-	if (Capacity() != 0)
+	if (_endPoint - _pAlloc != 0)
 	{
+		auto t = _endPoint - _pAlloc;
 		for (auto it = Begin(); it != End(); it++)
 			_alloc.destroy(&*it);
-		_alloc.deallocate(&*Begin(), Capacity());
+		_alloc.deallocate(&*_pAlloc, _endPoint - _pAlloc);
 	}
 }
+NS_COLLECTIONS_END

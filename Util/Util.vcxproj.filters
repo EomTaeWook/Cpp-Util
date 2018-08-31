@@ -162,7 +162,9 @@
     <ClInclude Include="Collections\Iterator.h">
       <Filter>Collections</Filter>
     </ClInclude>
-    <ClInclude Include="Collections\Queue.h" />
+    <ClInclude Include="Collections\Queue.h">
+      <Filter>Collections</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Threading\IOCPThreadPool.cpp">
