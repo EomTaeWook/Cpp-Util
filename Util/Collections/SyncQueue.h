@@ -1,6 +1,5 @@
 #pragma once
 #include "NS.h"
-#include <vector>
 #include "../Threading/CriticalSection.h"
 #include "../Common/Finally.h"
 #include "Queue.h"
@@ -24,6 +23,9 @@ public:
 	void Clear();
 	T Peek();
 	size_t Count();
+public:
+	Iterator<T> Begin();
+	Iterator<T> End();
 };
 template<typename T>
 SyncQueue<T>::SyncQueue()
@@ -74,9 +76,9 @@ inline T SyncQueue<T>::Read()
 	try
 	{
 		_read.EnterCriticalSection();
-		if (_items.size() == 0)
+		if (_items.Count() == 0)
 			throw std::exception("IndexOutOfRangeException");
-		item = _items.Front();
+		item = _items.F ront();
 		_items.Pop();
 	}
 	catch (...)
@@ -93,7 +95,7 @@ inline std::vector<T> SyncQueue<T>::Read(size_t length)
 	try
 	{
 		_read.EnterCriticalSection();
-		if (length > _items.size())
+		if (length > _items.Count())
 			throw std::exception("IndexOutOfRangeException");
 
 		for (size_t i = 0; i < length; i++)
@@ -115,7 +117,7 @@ inline std::vector<T> SyncQueue<T>::Peek(size_t offset, size_t length)
 	try
 	{
 		_read.EnterCriticalSection();
-		if (offset + length > _items.size())
+		if (offset + length > _items.Count())
 			throw std::exception("IndexOutOfRangeException");
 		return _items.Peek(offset, length);
 	}
@@ -147,7 +149,7 @@ inline T SyncQueue<T>::Peek()
 	try
 	{
 		_read.EnterCriticalSection();
-		if (_items.size() == 0)
+		if (_items.Count() == 0)
 			throw std::exception("IndexOutOfRangeException");
 		return _items.Peek();
 	}
@@ -162,6 +164,18 @@ template<typename T>
 inline size_t SyncQueue<T>::Count()
 {
 	return _items.Count();
+}
+
+template<typename T>
+inline Iterator<T> SyncQueue<T>::Begin()
+{
+	return _items.Begin();
+}
+
+template<typename T>
+inline Iterator<T> SyncQueue<T>::End()
+{
+	return _items.End();
 }
 
 NS_COLLECTIONS_END

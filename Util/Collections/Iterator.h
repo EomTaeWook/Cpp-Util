@@ -1,17 +1,25 @@
 #pragma once
 #include "NS.h"
+#include <iterator>
 NS_COLLECTIONS_BEGIN
 template<typename T>
 class Iterator
 {
+public:
+	typedef Iterator self_type;
+	typedef T value_type;
+	typedef T& reference;
+	typedef T* pointer;
+	typedef std::forward_iterator_tag iterator_category;
+	typedef int difference_type;
 public:
 	Iterator();
 	Iterator(T* ptr);
 	Iterator(const Iterator<T> & iter);
 	virtual ~Iterator();
 public:
-	T& operator *();
-	T* operator ->() const;
+	T & operator *();
+	T* operator ->();
 	Iterator<T>& operator=(const Iterator<T> & other);
 
 	Iterator<T>& operator ++();
@@ -25,6 +33,7 @@ public:
 	Iterator<T>  operator +(int) const;
 
 	bool operator==(const Iterator<T>& other) const;
+
 	bool operator!=(const Iterator<T>& other) const;
 
 private:
@@ -71,7 +80,7 @@ inline T & Iterator<T>::operator *()
 }
 
 template<typename T>
-inline T * Iterator<T>::operator->() const
+inline T * Iterator<T>::operator->()
 {
 	return _pIter;
 }
