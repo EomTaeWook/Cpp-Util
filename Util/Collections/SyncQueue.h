@@ -1,9 +1,9 @@
 #pragma once
 #include "NS.h"
-#include <queue>
 #include <vector>
 #include "../Threading/CriticalSection.h"
 #include "../Common/Finally.h"
+#include "Queue.h"
 NS_COLLECTIONS_BEGIN
 template<typename T>
 class SyncQueue
@@ -14,7 +14,7 @@ public:
 private:
 	Util::Threading::CriticalSection _read;
 	Util::Threading::CriticalSection _append;
-	std::queue<T> _items;
+	Queue<T> _items;
 public:
 	SyncQueue<T>& Append(T item);
 	SyncQueue<T>& Append(T* items, size_t size);
@@ -42,7 +42,7 @@ inline SyncQueue<T>& SyncQueue<T>::Append(T item)
 	try
 	{
 		_append.EnterCriticalSection();
-		_items.push(item);
+		_items.Push(item);
 	}
 	catch (...)
 	{
@@ -57,8 +57,7 @@ inline SyncQueue<T>& SyncQueue<T>::Append(T* items, size_t size)
 	try
 	{
 		_append.EnterCriticalSection();
-		for (size_t i = 0; i < size; i++)
-			_items.push(items[i]);
+		_items.Push(items, size);
 	}
 	catch (...)
 	{
@@ -77,9 +76,8 @@ inline T SyncQueue<T>::Read()
 		_read.EnterCriticalSection();
 		if (_items.size() == 0)
 			throw std::exception("IndexOutOfRangeException");
-
-		item = _items.front();
-		_items.pop();
+		item = _items.Front();
+		_items.Pop();
 	}
 	catch (...)
 	{
@@ -100,8 +98,8 @@ inline std::vector<T> SyncQueue<T>::Read(size_t length)
 
 		for (size_t i = 0; i < length; i++)
 		{
-			items.push_back(_items.front());
-			_items.pop();
+			items.push_back(_items.Front());
+			_items.Pop();
 		}
 	}
 	catch (...)
@@ -113,22 +111,19 @@ inline std::vector<T> SyncQueue<T>::Read(size_t length)
 template<typename T>
 inline std::vector<T> SyncQueue<T>::Peek(size_t offset, size_t length)
 {
-	std::vector<T> items;
 	auto finally = Util::Common::Finally(std::bind(&Util::Threading::CriticalSection::LeaveCriticalSection, &_read));
 	try
 	{
 		_read.EnterCriticalSection();
 		if (offset + length > _items.size())
 			throw std::exception("IndexOutOfRangeException");
-		items.assign(length, 0);
-
-		memcpy(&items.front(), &_items.front() + offset, length);
+		return _items.Peek(offset, length);
 	}
 	catch (...)
 	{
 		throw std::exception("ReadException");
 	}
-	return items;
+	return std::vector<T>();
 }
 template<typename T>
 inline void SyncQueue<T>::Clear()
@@ -137,8 +132,7 @@ inline void SyncQueue<T>::Clear()
 	try
 	{
 		_read.EnterCriticalSection();
-		while (!_items.empty())
-			_items.pop();
+		_items.Clear();
 	}
 	catch (...)
 	{
@@ -149,26 +143,25 @@ inline void SyncQueue<T>::Clear()
 template<typename T>
 inline T SyncQueue<T>::Peek()
 {
-	T item;
 	auto finally = Util::Common::Finally(std::bind(&Util::Threading::CriticalSection::LeaveCriticalSection, &_read));
 	try
 	{
 		_read.EnterCriticalSection();
 		if (_items.size() == 0)
 			throw std::exception("IndexOutOfRangeException");
-		item = _items.front();
+		return _items.Peek();
 	}
 	catch (...)
 	{
 		throw std::exception("PeekException");
 	}
-	return item;
+	return T();
 }
 
 template<typename T>
 inline size_t SyncQueue<T>::Count()
 {
-	return _items.size();
+	return _items.Count();
 }
 
 NS_COLLECTIONS_END

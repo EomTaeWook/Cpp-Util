@@ -159,6 +159,10 @@
     <ClInclude Include="Common\Singleton.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="Collections\Iterator.h">
+      <Filter>Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\Queue.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Threading\IOCPThreadPool.cpp">

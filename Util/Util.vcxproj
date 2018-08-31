@@ -160,7 +160,9 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Collections\Iterator.h" />
     <ClInclude Include="Collections\NS.h" />
+    <ClInclude Include="Collections\Queue.h" />
     <ClInclude Include="Common\Delegate98.h" />
     <ClInclude Include="Common\MulticastDelegate.h" />
     <ClInclude Include="Common\NS.h" />
