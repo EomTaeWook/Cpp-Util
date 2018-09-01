@@ -143,9 +143,10 @@ inline void Queue<T>::Insert(const Iterator<T> position, const Iterator<T> first
 	{
 		for (auto it = first; it != last; ++it)
 		{
-			_alloc.construct(&*end, T());
+			_alloc.construct(&*end, *it);
 			end++;
 		}
+		_end += size;
 	}
 	else
 		ReAllocateAndCopy(position, first, last);
@@ -219,6 +220,7 @@ inline void Queue<T>::DestroyAndDeallocateAll()
 		for (auto it = Begin(); it != End(); it++)
 			_alloc.destroy(&*it);
 		_alloc.deallocate(&*_pAlloc, Capacity());
+		_pAlloc = _begin = _end = _endPoint = nullptr;
 	}
 }
 

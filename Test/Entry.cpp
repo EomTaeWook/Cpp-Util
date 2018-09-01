@@ -10,7 +10,7 @@ struct Packet : Util::Socket::IPacket
 	// IPacket을(를) 통해 상속됨
 	virtual void GetBytes(OUT char ** buffer, OUT ULONG * size) override
 	{
-		*buffer = &Data.front();
+		*buffer = &Data[0];
 		*size = (ULONG)Data.size();
 	}
 };
@@ -37,7 +37,7 @@ public:
 		std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
 		std::time_t time = std::chrono::system_clock::to_time_t(now);
 		str.assign(receive.begin(), receive.end());
-		//printf("[ %d ] Handle %d Recieved : %s\n", time, stateObject.Handle(), str.c_str());
+		printf("[ %d ] Handle %d Recieved : %s\n", time, stateObject.Handle(), str.c_str());
 		Packet packet;
 		packet.Data = receive;
 		stateObject.Send(packet);
@@ -87,9 +87,9 @@ int main()
 	
 	//t.BindCallback(1234, std::bind(&TEST::TESTFUNCTION, &t, std::placeholders::_1));
 
-	//TestServer ts;
-	//ts.Init();
-	//ts.Start("127.0.0.1", 10000);
+	TestServer ts;
+	ts.Init();
+	ts.Start("127.0.0.1", 10000);
 	//ts.BindCallback(123, std::bind(&TestServer::TESTFUNCTION, &ts, std::placeholders::_1, std::placeholders::_2));
 	//Util::Socket::StateObject so;
 	//Packet packet;
@@ -101,14 +101,7 @@ int main()
 	std::string send = "When one thinks of the labors which the the English have devoted to digging the tunnel under the Thames, the tremendous expenditure of energy involved, and then how a little accident may for a long time obstruct the entire enterprise, one will be able to form a fitting conception of this critical undertaking as a whole.";
 	packet.Data.assign(send.begin(), send.end());*/
 
-	Util::Collections::SyncQueue<int> _queue;
-	std::deque<int> _test;
-	int data[100] = { 1 , 2};
-	_queue.Append(data, 100);
-	
-	_test.push_back(1);
-	_test.push_back(2);
-	_test.push_back(3);
+
 
 
 	//std::find(&_test, &_test + _test.size(), 2);

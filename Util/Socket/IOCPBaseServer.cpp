@@ -203,8 +203,12 @@ void IOCPBaseServer::ClosePeer(StateObject* pStateObject)
 		}
 		else
 		{
-			pStateObject->Close();
-			delete pStateObject;
+			if (pStateObject != nullptr)
+			{
+				pStateObject->Close();
+				delete pStateObject;
+				pStateObject = nullptr;
+			}
 		}
 		OnDisconnected(handle);
 	}
