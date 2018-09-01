@@ -3,8 +3,6 @@
 #include <vector>
 #include"NS.h"
 NS_COLLECTIONS_BEGIN
-#include "Iterator.h"
-#include <vector>
 template<typename T>
 class  Queue
 {
@@ -223,4 +221,5 @@ inline void Queue<T>::DestroyAndDeallocateAll()
 		_alloc.deallocate(&*_pAlloc, Capacity());
 	}
 }
+
 NS_COLLECTIONS_END
