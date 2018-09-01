@@ -3,6 +3,8 @@
 #include <vector>
 #include"NS.h"
 NS_COLLECTIONS_BEGIN
+#include "Iterator.h"
+#include <vector>
 template<typename T>
 class  Queue
 {
@@ -67,7 +69,7 @@ size_t Queue<T>::Count() const
 template<typename T>
 size_t Queue<T>::Capacity() const
 {
-	return _endPoint - _begin;
+	return _endPoint - _pAlloc;
 }
 
 template<typename T>
@@ -109,9 +111,7 @@ inline std::vector<T> Queue<T>::Peek(size_t offset, size_t length)
 	std::vector<T> items;
 	auto it = _begin + offset;
 	for (int i = 0; i < length; i++, ++it)
-	{
 		items.push_back(*it);
-	}
 	return items;
 }
 
@@ -139,7 +139,7 @@ template<typename T>
 inline void Queue<T>::Insert(const Iterator<T> position, const Iterator<T> first, const Iterator<T> last)
 {
 	auto size = last - first;
-	auto remainingSize = Capacity() - Count();
+	auto remainingSize = _endPoint - _end;
 	auto end = position;
 	if (remainingSize >= size)
 	{
@@ -155,13 +155,11 @@ inline void Queue<T>::Insert(const Iterator<T> position, const Iterator<T> first
 template<typename T>
 inline void Queue<T>::Insert(const Iterator<T> position, size_t size, const T& item)
 {
-	auto remainingSize = Capacity() - Count();
+	auto remainingSize = _endPoint - _end;
 	if (remainingSize >= size)
 	{
 		for (auto i = 0; i < size; i++)
-		{
 			_alloc.construct(&*(position + i), item);
-		}
 		_end += size;
 	}
 	else
@@ -172,13 +170,13 @@ template<typename T>
 inline void Queue<T>::ReAllocateAndCopy(Iterator<T> position, const Iterator<T> first, const Iterator<T> last)
 {
 	auto size = last - first;
-	size_t capacity = Count() / 2.0 + size + Capacity();
+	size_t capacity = Capacity() * 2 + size;
 	T* begin = _alloc.allocate(capacity);
 	if (begin == nullptr)
 		throw std::exception("OutOfMemory");
 	T* end = begin + (position - Begin());
 	T* endPoint = begin + capacity;
-	memcpy(begin, &*Begin(), (position - Begin()) * sizeof(T));
+	memcpy(begin, &*Begin(), (End() - Begin()) * sizeof(T));
 
 	for (auto it = first; it != last; ++it)
 	{
@@ -196,13 +194,13 @@ inline void Queue<T>::ReAllocateAndCopy(Iterator<T> position, const Iterator<T> 
 template<typename T>
 inline void Queue<T>::ReAllocateAndCopy(Iterator<T> position, size_t size, const T & item)
 {
-	size_t capacity = Count() / 2.0 + size + Capacity();
+	size_t capacity = Capacity() * 2 + size;
 	T* begin = _alloc.allocate(capacity);
 	if (begin == nullptr)
 		throw std::exception("OutOfMemory");
 	T* end = begin + (position - Begin());
 	T* endPoint = begin + capacity;
-	memcpy(begin, &*Begin(), (position - Begin()) * sizeof(T));
+	memcpy(begin, &*Begin(), (End() - Begin()) * sizeof(T));
 	for (auto i = 0; i < size; i++)
 	{
 		_alloc.construct(end, item);
@@ -218,12 +216,11 @@ inline void Queue<T>::ReAllocateAndCopy(Iterator<T> position, size_t size, const
 template<typename T>
 inline void Queue<T>::DestroyAndDeallocateAll()
 {
-	if (_endPoint - _pAlloc != 0)
+	if (Capacity() != 0)
 	{
-		auto t = _endPoint - _pAlloc;
 		for (auto it = Begin(); it != End(); it++)
 			_alloc.destroy(&*it);
-		_alloc.deallocate(&*_pAlloc, _endPoint - _pAlloc);
+		_alloc.deallocate(&*_pAlloc, Capacity());
 	}
 }
 NS_COLLECTIONS_END
