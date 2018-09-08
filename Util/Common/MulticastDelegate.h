@@ -1,134 +1,149 @@
 #pragma once
 #include "NS.h"
-#if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900)
 #include "Delegate.h"
-#else
-#include "Delegate98.h"
-#endif
 NS_COMMON_BEGIN
 template<typename R, typename T1 = void, typename T2 = void, typename T3 = void, typename T4 = void, typename T5 = void>
 class MulticastDelegate : public Delegate<R, T1, T2, T3, T4, T5>
 {
+private :
+	typedef const std::function<R(T1, T2, T3, T4, T5)> DelegateType;
 public:
 	MulticastDelegate()
 	{
 	}
-	MulticastDelegate(std::function<R(T1, T2, T3, T4, T5)> method)
+	MulticastDelegate(DelegateType& method)
 	{
 		this->operator= (method);
 	}
 	virtual ~MulticastDelegate() {}
 public:
-	void operator = (std::function<R(T1, T2, T3, T4, T5)>);
+	MulticastDelegate& operator = (DelegateType& method);
 };
 template<typename R, typename T1, typename T2, typename T3, typename T4, typename T5>
-inline void MulticastDelegate<R, T1, T2, T3, T4, T5>::operator = (std::function<R(T1, T2, T3, T4, T5)> method)
+inline MulticastDelegate<R, T1, T2, T3, T4, T5>& MulticastDelegate<R, T1, T2, T3, T4, T5>::operator = (DelegateType& method)
 {
 	Delegate<R, T1, T2, T3, T4, T5>::operator = (method);
+	return *this;
 }
 
 template<typename R, typename T1, typename T2, typename T3, typename T4>
 class MulticastDelegate<R, T1, T2, T3, T4, void> : public Delegate<R, T1, T2, T3, T4>
 {
+private:
+	typedef const std::function<R(T1, T2, T3, T4)> DelegateType;
 public:
 	MulticastDelegate()
 	{
 	}
-	MulticastDelegate(std::function<R(T1, T2, T3, T4)> method)
+	MulticastDelegate(DelegateType method)
 	{
 		this->operator= (method);
 	}
 	virtual ~MulticastDelegate() {}
 public:
-	void operator = (std::function<R(T1, T2, T3, T4)>);
+	MulticastDelegate& operator = (DelegateType& method);
 };
 template<typename R, typename T1, typename T2, typename T3, typename T4>
-inline void MulticastDelegate<R, T1, T2, T3, T4>::operator = (std::function<R(T1, T2, T3, T4)> method)
+inline MulticastDelegate<R, T1, T2, T3, T4>& MulticastDelegate<R, T1, T2, T3, T4>::operator = (DelegateType& method)
 {
 	Delegate<R, T1, T2, T3, T4>::operator = (method);
+	return *this;
 }
 
 template<typename R, typename T1, typename T2, typename T3>
 class MulticastDelegate<R, T1, T2, T3, void, void> : public Delegate<R, T1, T2, T3>
 {
+private:
+	typedef const std::function<R(T1, T2, T3)> DelegateType;
 public:
 	MulticastDelegate()
 	{
 	}
-	MulticastDelegate(std::function<R(T1, T2, T3)> method)
+	MulticastDelegate(DelegateType& method)
 	{
 		this->operator= (method);
 	}
 	virtual ~MulticastDelegate() {}
 public:
-	void operator = (std::function<R(T1, T2, T3)>);
+	MulticastDelegate& operator = (DelegateType& method);
 };
 template<typename R, typename T1, typename T2, typename T3>
-inline void MulticastDelegate<R, T1, T2, T3>::operator = (std::function<R(T1, T2, T3)> method)
+inline MulticastDelegate<R, T1, T2, T3>& MulticastDelegate<R, T1, T2, T3>::operator = (DelegateType& method)
 {
 	Delegate<R, T1, T2, T3>::operator = (method);
+	return *this;
 }
 
 template<typename R, typename T1, typename T2>
 class MulticastDelegate<R, T1, T2, void, void, void> : public Delegate<R, T1, T2>
 {
+private:
+	typedef const std::function<R(T1, T2)> DelegateType;
 public:
 	MulticastDelegate()
 	{
 	}
-	MulticastDelegate(std::function<R(T1, T2)> method)
+	MulticastDelegate(DelegateType& method)
 	{
 		this->operator= (method);
 	}
 	virtual ~MulticastDelegate() {}
 public:
-	void operator = (std::function<R(T1, T2)>);
+	MulticastDelegate& operator = (DelegateType& method);
 };
 template<typename R, typename T1, typename T2>
-inline void MulticastDelegate<R, T1, T2>::operator = (std::function<R(T1, T2)> method)
+inline MulticastDelegate<R, T1, T2>& MulticastDelegate<R, T1, T2>::operator = (DelegateType& method)
 {
 	Delegate<R, T1, T2>::operator = (method);
+	return this*;
 }
 
 template<typename R, typename T>
 class MulticastDelegate<R, T, void, void, void, void> : public Delegate<R, T>
 {
+private:
+	typedef const std::function<R(T)> DelegateType;
 public:
 	MulticastDelegate()
 	{
 	}
-	MulticastDelegate(std::function<R(T)> method)
+	MulticastDelegate(DelegateType& method)
 	{
 		this->operator= (method);
 	}
 	virtual ~MulticastDelegate() {}
 public:
-	void operator = (std::function<R(T)>);
+	MulticastDelegate& operator = (DelegateType&);
 };
 template<typename R, typename T>
-inline void MulticastDelegate<R, T>::operator = (std::function<R(T)> method)
+inline MulticastDelegate<R, T>& MulticastDelegate<R, T>::operator = (DelegateType& method)
 {
 	Delegate<R, T>::operator = (method);
+	return *this;
 }
 
 template<typename R>
 class MulticastDelegate<R, void, void, void, void, void> : public Delegate<R>
 {
+private:
+	typedef const std::function<R()> DelegateType;
 public:
 	MulticastDelegate()
 	{
 	}
-	MulticastDelegate(std::function<R()> method)
+	MulticastDelegate(DelegateType& method)
 	{
 		this->operator= (method);
 	}
 	virtual ~MulticastDelegate() {}
 public:
-	void operator = (std::function<R()> func);
+	MulticastDelegate& operator = (DelegateType& method);
 };
+
 template<typename R>
-inline void MulticastDelegate<R>::operator = (std::function<R()> method)
+inline MulticastDelegate<R>& MulticastDelegate<R>::operator = (DelegateType& method)
 {
 	Delegate<R>::operator = (method);
+	return *this;
 }
 NS_COMMON_END

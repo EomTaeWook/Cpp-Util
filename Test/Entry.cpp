@@ -37,7 +37,7 @@ public:
 		std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
 		std::time_t time = std::chrono::system_clock::to_time_t(now);
 		str.assign(receive.begin(), receive.end());
-		printf("[ %d ] Handle %d Recieved : %s\n", time, stateObject.Handle(), str.c_str());
+		printf("[ %d ] Handle %d Recieved size : %d\n", time, stateObject.Handle(), size);
 		Packet packet;
 		packet.Data = receive;
 		stateObject.Send(packet);
@@ -80,11 +80,69 @@ void TESTClient::TESTFUNCTION(Packet packet)
 	//Callback ¶³¾îÁü
 }
 
+class TEMP
+{
+public:
+	TEMP()
+	{
+		//printf("create\n");
+	}
+	~TEMP()
+	{
+		//printf("destroy\n");
+	}
+};
+
 #include <algorithm>
-#include <deque>
+#include <queue>
 int main()
 {
+
+	std::queue<TEMP> q;
+	std::chrono::duration<double> stlQueueSec;
+
+	Util::Collections::Queue<TEMP> uq;
+	std::chrono::duration<double> utilQueueSec;
+	{
+		std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
+		for (int i = 0; i < 1000000; i++)
+			q.push(TEMP());
+		while (!q.empty())
+		{
+			q.pop();
+		}
+		for (int i = 0; i < 1000000; i++)
+			q.push(TEMP());
+		while (!q.empty())
+		{
+			q.pop();
+		}
+		std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
+		stlQueueSec = end - start;
+	}
 	
+	{
+		std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
+		for (int i = 0; i < 1000000; i++)
+			uq.Push(TEMP());
+		while (!uq.Empty())
+		{
+			uq.Pop();
+		}
+		for (int i = 0; i < 1000000; i++)
+			uq.Push(TEMP());
+		while (!uq.Empty())
+		{
+			uq.Pop();
+		}
+		std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
+		utilQueueSec = end - start;
+	}
+	
+	
+	
+	getchar();
+
 	//t.BindCallback(1234, std::bind(&TEST::TESTFUNCTION, &t, std::placeholders::_1));
 
 	TestServer ts;

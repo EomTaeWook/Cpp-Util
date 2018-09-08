@@ -118,6 +118,8 @@ inline void Queue<T>::Pop()
 {
 	_alloc.destroy(&*_begin);
 	_begin++;
+	if (Empty())
+		_begin = _pAlloc;
 }
 
 template<typename T>

@@ -59,7 +59,7 @@ inline SyncQueue<T>& SyncQueue<T>::Append(T* items, size_t size)
 	try
 	{
 		_append.EnterCriticalSection();
-		_items.Push(items, size);
+		_items.Push(items, size);		
 	}
 	catch (...)
 	{
@@ -78,7 +78,7 @@ inline T SyncQueue<T>::Read()
 		_read.EnterCriticalSection();
 		if (_items.Count() == 0)
 			throw std::exception("IndexOutOfRangeException");
-		item = _items.F ront();
+		item = _items.Front();
 		_items.Pop();
 	}
 	catch (...)

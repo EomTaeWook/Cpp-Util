@@ -53,7 +53,7 @@ inline unsigned int __stdcall Thread::Run(void* p_obj)
 inline void Thread::Start()
 {
 	if (_handle != NULL) return;
-	_handle = (HANDLE)_beginthreadex(NULL, 0, &Thread::Run, this, 0, NULL);
+	_handle = (HANDLE)_beginthreadex(0, 0, &Thread::Run, this, 0, NULL);
 	if (_handle == NULL)
 		std::exception("ThreadCreateExcetion : " + GetLastError());
 }

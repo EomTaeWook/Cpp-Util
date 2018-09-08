@@ -24,12 +24,12 @@ public:
 	bool operator != (nullptr_t) const;
 	bool operator == (const Delegate& d) const;
 	bool operator == (nullptr_t) const;
-	void operator = (nullptr_t);
-	void operator = (std::function<R(Types...)>);
-	Delegate& operator += (std::function<R(Types...)>);
+	Delegate& operator = (const nullptr_t);
+	Delegate& operator = (const std::function<R(Types...)>&);
+	Delegate& operator += (const std::function<R(Types...)>&);
 public:
-	virtual Delegate& Combine(Delegate);
-	virtual Delegate& operator + (Delegate);
+	virtual Delegate& Combine(const Delegate&);
+	virtual Delegate& operator + (const Delegate&);
 };
 template<typename R, typename ...Types>
 inline Delegate<R, Types...>::Delegate()
@@ -43,32 +43,35 @@ inline Delegate<R, Types...>::~Delegate()
 }
 
 template<typename R, typename ...Types>
-inline Delegate<R, Types...>& Delegate<R, Types...>::Combine(Delegate<R, Types...> del)
+inline Delegate<R, Types...>& Delegate<R, Types...>::Combine(const Delegate<R, Types...>& other)
 {
-	for (auto m : del._methods)
+	for (auto m : other._methods)
 	{
 		_methods.push_back(m);
 	}
 	return *this;
 }
 template<typename R, typename ...Types>
-inline Delegate<R, Types...>& Delegate<R, Types...>::operator += (std::function<R(Types...)> method)
+inline Delegate<R, Types...>& Delegate<R, Types...>::operator += (const std::function<R(Types...)>& method)
 {
-	if (method == NULL) return;
+	if (method == nullptr)
+		return;
 	_methods.push_back(method);
 	return *this;
 }
 template<typename R, typename ...Types>
-inline Delegate<R, Types...>& Delegate<R, Types...>::operator + (Delegate<R, Types...> del)
+inline Delegate<R, Types...>& Delegate<R, Types...>::operator + (const Delegate<R, Types...>& other)
 {
-	return Combine(del);
+	return Combine(other);
 }
 template<typename R, typename ...Types>
-void Delegate<R, Types...>::operator = (std::function<R(Types...)> method)
+inline Delegate<R, Types...>& Delegate<R, Types...>::operator = (const std::function<R(Types...)>& method)
 {
-	if (method == NULL) return;
+	if (method == nullptr)
+		return *this;
 	_methods.clear();
 	_methods.push_back(method);
+	return *this;
 }
 
 template<>
@@ -89,33 +92,34 @@ inline R Delegate<R, Types...>::operator() (Types... params)
 	return _methods.back()(std::forward<Types>(params)...);
 }
 template<typename R, typename ...Types>
-bool Delegate<R, Types...>::operator != (nullptr_t) const
+inline bool Delegate<R, Types...>::operator != (nullptr_t) const
 {
 	return _methods.size() != 0;
 }
 
 template<typename R, typename ...Types>
-bool Delegate<R, Types...>::operator != (const Delegate<R, Types...>& del) const
+inline bool Delegate<R, Types...>::operator != (const Delegate<R, Types...>& del) const
 {
 	return this != &del;
 }
 
 template<typename R, typename ...Types>
-bool Delegate<R, Types...>::operator == (nullptr_t) const
+inline bool Delegate<R, Types...>::operator == (nullptr_t) const
 {
 	return _methods.size() == 0;
 }
 
 template<typename R, typename ...Types>
-bool Delegate<R, Types...>::operator == (const Delegate<R, Types...>& del) const
+inline bool Delegate<R, Types...>::operator == (const Delegate<R, Types...>& del) const
 {
 	return this == &del;
 }
 
 template<typename R, typename ...Types>
-void Delegate<R, Types...>::operator = (nullptr_t)
+inline Delegate<R, Types...>& Delegate<R, Types...>::operator = (const nullptr_t)
 {
 	_methods.clear();
+	return *this;
 }
 
 NS_COMMON_END

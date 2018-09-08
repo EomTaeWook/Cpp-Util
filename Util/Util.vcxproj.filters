@@ -96,9 +96,6 @@
     <ClInclude Include="Common\MulticastDelegate.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Common\Delegate98.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="System\Message\MSMQEnum.h">
       <Filter>System\Message\MSMQ</Filter>
     </ClInclude>

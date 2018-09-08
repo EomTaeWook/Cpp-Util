@@ -140,11 +140,17 @@ int IOCPBaseServer::Invoke()
 	{
 		if (!GetQueuedCompletionStatus(_completionPort, &bytesTrans, &stateObject, (LPOVERLAPPED *)&overlapped, INFINITE))
 		{
-			if (WSAGetLastError() != ERROR_NETNAME_DELETED)
+			int error = WSAGetLastError();
+			if (error != ERROR_NETNAME_DELETED)
+			{
+				printf("Error : %d", error);
 				break;
+			}
+				
 		}
 		if ((LONG_PTR)stateObject == _CLOSE_THREAD && bytesTrans == 0)
 			break;
+			
 		auto pHandler = reinterpret_cast<StateObject*>(stateObject);
 		if (bytesTrans == 0)
 		{
@@ -160,7 +166,7 @@ int IOCPBaseServer::Invoke()
 			}
 			catch (std::exception ex)
 			{
-				ex.what();
+				printf("%s", ex.what());
 			}
 			BeginReceive(pHandler);
 		}
@@ -200,17 +206,17 @@ void IOCPBaseServer::ClosePeer(StateObject* pStateObject)
 			it->second.get()->Close();
 			it->second.reset();
 			_clients.erase(it);
+			OnDisconnected(handle);
 		}
 		else
 		{
-			if (pStateObject != nullptr)
+			if (pStateObject->Socket() != NULL)
 			{
 				pStateObject->Close();
 				delete pStateObject;
 				pStateObject = nullptr;
 			}
 		}
-		OnDisconnected(handle);
 	}
 	catch (...)
 	{
