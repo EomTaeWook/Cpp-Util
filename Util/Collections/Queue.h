@@ -226,5 +226,4 @@ inline void Queue<T>::DestroyAndDeallocateAll()
 		_pAlloc = _begin = _end = _endPoint = nullptr;
 	}
 }
-
 NS_COLLECTIONS_END

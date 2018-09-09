@@ -35,7 +35,6 @@ public:
 	bool operator==(const Iterator<T>& other) const;
 
 	bool operator!=(const Iterator<T>& other) const;
-
 private:
 	T * _pIter;
 };

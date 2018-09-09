@@ -77,6 +77,12 @@
     <IncludePath>C:\Users\Eomtw\Documents\Visual Studio 2017\Projects\Util\Debug\x64\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Eomtw\Documents\Visual Studio 2017\Projects\Util\Debug\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(SolutionDir)Util;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(SolutionDir)Util;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
