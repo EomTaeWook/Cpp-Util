@@ -13,7 +13,7 @@ public:
 	StateObject();
 	virtual ~StateObject();
 private:
-	static const int BUFF_SIZE = 2048;
+	static const int BUFF_SIZE = 4096;
 private:
 	SOCKET _sock;
 	SOCKADDR_IN _addr;

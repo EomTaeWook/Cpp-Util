@@ -48,6 +48,7 @@ inline Queue<T>::Queue()
 template<typename T>
 inline Queue<T>::~Queue()
 {
+	Clear();
 }
 template<typename T>
 inline Iterator<T> Queue<T>::Begin()
@@ -119,7 +120,7 @@ inline void Queue<T>::Pop()
 	_alloc.destroy(&*_begin);
 	_begin++;
 	if (Empty())
-		_begin = _pAlloc;
+		_end =_begin = _pAlloc;
 }
 
 template<typename T>

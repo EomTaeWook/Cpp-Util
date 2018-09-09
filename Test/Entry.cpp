@@ -98,50 +98,39 @@ public:
 int main()
 {
 
-	std::queue<TEMP> q;
-	std::chrono::duration<double> stlQueueSec;
+	//std::queue<TEMP> q;
+	//std::chrono::duration<double> stlQueueSec;
 
-	Util::Collections::Queue<TEMP> uq;
-	std::chrono::duration<double> utilQueueSec;
-	{
-		std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-		for (int i = 0; i < 1000000; i++)
-			q.push(TEMP());
-		while (!q.empty())
-		{
-			q.pop();
-		}
-		for (int i = 0; i < 1000000; i++)
-			q.push(TEMP());
-		while (!q.empty())
-		{
-			q.pop();
-		}
-		std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
-		stlQueueSec = end - start;
-	}
-	
-	{
-		std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-		for (int i = 0; i < 1000000; i++)
-			uq.Push(TEMP());
-		while (!uq.Empty())
-		{
-			uq.Pop();
-		}
-		for (int i = 0; i < 1000000; i++)
-			uq.Push(TEMP());
-		while (!uq.Empty())
-		{
-			uq.Pop();
-		}
-		std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
-		utilQueueSec = end - start;
-	}
-	
-	
-	
-	getchar();
+	//Util::Collections::Queue<TEMP> uq;
+	//std::chrono::duration<double> utilQueueSec;
+	//{
+	//	std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
+	//	for (int i = 0; i < 1000000; i++)
+	//		uq.Push(TEMP());
+	//	while (!uq.Empty())
+	//		uq.Pop();
+	//	for (int i = 0; i < 2000000; i++)
+	//		uq.Push(TEMP());
+	//	while (!uq.Empty())
+	//		uq.Pop();
+	//	std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
+	//	utilQueueSec = end - start;
+	//}
+
+	//{
+	//	std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
+	//	for (int i = 0; i < 1000000; i++)
+	//		q.push(TEMP());
+	//	while (!q.empty())
+	//		q.pop();
+	//	for (int i = 0; i < 2000000; i++)
+	//		q.push(TEMP());
+	//	while (!q.empty())
+	//		q.pop();
+	//	std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
+	//	stlQueueSec = end - start;
+	//}
+	//getchar();
 
 	//t.BindCallback(1234, std::bind(&TEST::TESTFUNCTION, &t, std::placeholders::_1));
 
