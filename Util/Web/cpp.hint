@@ -1,4 +1,3 @@
-#pragma once
 #define NS_WEB_HTTP_BEGIN namespace Util { namespace Web { namespace Http {
 #define NS_WEB_HTTP_END } } } 
 

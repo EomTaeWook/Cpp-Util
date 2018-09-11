@@ -1,3 +1,2 @@
-#pragma once
 #define NS_COMMON_BEGIN namespace Util { namespace Common {
 #define NS_COMMON_END } }

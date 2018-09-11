@@ -14,7 +14,7 @@ protected:
 	std::map<ProtocolType, Util::Common::MulticastDelegate<void, Util::Socket::StateObject&, Types...>> _funcMaps;
 public:
 	void BindCallback(ProtocolType protocol, std::function<void(Util::Socket::StateObject&, Types...)> callback);
-	void RunCallback(ProtocolType protocol, Util::Socket::StateObject& stateObject, Types...);
+	void OnCallback(ProtocolType protocol, Util::Socket::StateObject& stateObject, Types...);
 };
 template<typename ProtocolType, typename ...Types>
 IOCPServerSocket<ProtocolType, Types...>::IOCPServerSocket()
@@ -33,7 +33,7 @@ inline void IOCPServerSocket<ProtocolType, Types...>::BindCallback(ProtocolType 
 		throw std::exception("An item with the same key has already been Added");
 }
 template<typename ProtocolType, typename ...Types>
-inline void IOCPServerSocket<ProtocolType, Types...>::RunCallback(ProtocolType protocol, Util::Socket::StateObject& stateObject, Types... params)
+inline void IOCPServerSocket<ProtocolType, Types...>::OnCallback(ProtocolType protocol, Util::Socket::StateObject& stateObject, Types... params)
 {
 	try
 	{
@@ -51,5 +51,4 @@ inline void IOCPServerSocket<ProtocolType, Types...>::RunCallback(ProtocolType p
 	{
 	}
 }
-
 NS_SOCKET_END

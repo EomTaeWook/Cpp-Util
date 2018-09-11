@@ -1,3 +1,2 @@
-#pragma once
 #define NS_CRYPTOGRAPHY_BEGIN namespace Util { namespace Cryptography {
 #define NS_CRYPTOGRAPHY_END } }

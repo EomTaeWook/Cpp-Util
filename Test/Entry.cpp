@@ -149,7 +149,7 @@ public:
 #include <vector>
 int main()
 {
-
+	
 	//std::vector<char> v;
 	//v.push_back('a');
 	//v.push_back('b');
@@ -163,46 +163,43 @@ int main()
 
 
 
-	//auto ptr = new char[4];
 
-	//delete[] ptr;
-	//std::queue<TEMP> q;
-	//q.push(TEMP());
-	//std::chrono::duration<double> stlQueueSec;
+	std::queue<TEMP> q;
+	q.push(TEMP());
+	std::chrono::duration<double> stlQueueSec;
+	Util::Collections::Queue<TEMP> uq;
+	uq.Push(TEMP());
+	std::chrono::duration<double> utilqueuesec;
+	{
+		std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
+		for (int i = 0; i < 2000000; i++)
+			uq.Push(TEMP());
+		while (!uq.Empty())
+			uq.Pop();
+		/*for (int i = 0; i < 2000000; i++)
+			uq.Push(TEMP());
+		while (!uq.Empty())
+			uq.Pop();*/
+		std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
+		utilqueuesec = end - start;
+	}
 
-	//Util::Collections::Queue<TEMP> uq;
-	//uq.Push(TEMP());
-	//std::chrono::duration<double> utilqueuesec;
-	//{
-	//	std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-	//	for (int i = 0; i < 10000000; i++)
-	//		uq.Push(TEMP());
-	//	while (!uq.Empty())
-	//		uq.Pop();
-	//	for (int i = 0; i < 20000000; i++)
-	//		uq.Push(TEMP());
-	//	while (!uq.Empty())
-	//		uq.Pop();
-	//	std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
-	//	utilqueuesec = end - start;
-	//}
-
-	//{
-	//	std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-	//	for (int i = 0; i < 10000000; i++)
-	//		q.push(TEMP());
-	//	while (!q.empty())
-	//		q.pop();
-	//	for (int i = 0; i < 20000000; i++)
-	//		q.push(TEMP());
-	//	while (!q.empty())
-	//		q.pop();
-	//	std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
-	//	stlQueueSec = end - start;
-	//}
-	//printf("util %lf\n", utilqueuesec);
-	//printf("stl %lf\n", stlQueueSec);
-	//getchar();
+	{
+		std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
+		for (int i = 0; i < 2000000; i++)
+			q.push(TEMP());
+		while (!q.empty())
+			q.pop();
+		/*for (int i = 0; i < 2000000; i++)
+			q.push(TEMP());
+		while (!q.empty())
+			q.pop();*/
+		std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
+		stlQueueSec = end - start;
+	}
+	printf("util %lf\n", utilqueuesec);
+	printf("stl %lf\n", stlQueueSec);
+	getchar();
 
 	//t.BindCallback(1234, std::bind(&TEST::TESTFUNCTION, &t, std::placeholders::_1));
 

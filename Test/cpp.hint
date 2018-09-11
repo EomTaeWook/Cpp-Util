@@ -1,2 +1,1 @@
-#pragma once
 #define START_NAMESPACE namespace test {

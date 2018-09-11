@@ -24,7 +24,7 @@ public:
 public:
 
 	bool Init(UINT threadSize = 0);
-	bool InsertQueueItem(std::function<void(void*)> callback, void* args);
+	bool InsertQueueItem(const std::function<void(void*)>& callback, void* args);
 public:
 	IOCPThreadPool & operator=(const IOCPThreadPool&) = delete;
 private:

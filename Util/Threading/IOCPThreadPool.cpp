@@ -54,17 +54,19 @@ bool IOCPThreadPool::Stop()
 	}
 	return true;
 }
-bool IOCPThreadPool::InsertQueueItem(std::function<void(void*)> callback, void* args)
+bool IOCPThreadPool::InsertQueueItem(const std::function<void(void*)>& callback, void* args)
 {
-	if (_completionPort == NULL) return false;
+	if (_completionPort == NULL) 
+		return false;
 
 	auto finally = Util::Common::Finally(std::bind(&CriticalSection::LeaveCriticalSection, &_cs));
 	try
 	{
 		_cs.EnterCriticalSection();
-		WaitCallback* p_waitCallback = new WaitCallback(callback, args);
-		if (p_waitCallback == NULL) return false;
-		return PostQueuedCompletionStatus(_completionPort, 0, (ULONG_PTR)p_waitCallback, NULL);
+		WaitCallback* pWaitCallback = new WaitCallback(callback, args);
+		if (pWaitCallback == NULL)
+			return false;
+		return PostQueuedCompletionStatus(_completionPort, 0, (ULONG_PTR)pWaitCallback, NULL);
 	}
 	catch (...)
 	{
