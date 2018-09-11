@@ -146,7 +146,6 @@ int IOCPBaseServer::Invoke()
 				printf("Error : %d", error);
 				break;
 			}
-				
 		}
 		if ((LONG_PTR)stateObject == _CLOSE_THREAD && bytesTrans == 0)
 			break;

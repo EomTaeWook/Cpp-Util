@@ -15,7 +15,7 @@ private:
 	Util::Threading::CriticalSection _append;
 	Queue<T> _items;
 public:
-	SyncQueue<T>& Append(T item);
+	SyncQueue<T>& Append(const T& item);
 	SyncQueue<T>& Append(T* items, size_t size);
 	T Read();
 	std::vector<T> Read(size_t length);
@@ -36,9 +36,8 @@ SyncQueue<T>::~SyncQueue()
 {
 	Clear();
 }
-
 template<typename T>
-inline SyncQueue<T>& SyncQueue<T>::Append(T item)
+inline SyncQueue<T>& SyncQueue<T>::Append(const T& item)
 {
 	auto finally = Util::Common::Finally(std::bind(&Util::Threading::CriticalSection::LeaveCriticalSection, &_append));
 	try

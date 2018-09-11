@@ -14,7 +14,7 @@ protected:
 	std::map<ProtocolType, Util::Common::MulticastDelegate<void, Types...>> _funcMaps;
 public:
 	void BindCallback(ProtocolType protocol, std::function<void(Types...)> callback);
-	void RunCallback(ProtocolType protocol, Types...);
+	void OnCallback(ProtocolType protocol, Types...);
 };
 
 template<typename ProtocolType, typename ...Types>
@@ -37,7 +37,7 @@ inline void IOCPSocketClient<ProtocolType, Types...>::BindCallback(ProtocolType 
 }
 
 template<typename ProtocolType, typename ...Types>
-inline void IOCPSocketClient<ProtocolType, Types...>::RunCallback(ProtocolType protocol, Types... params)
+inline void IOCPSocketClient<ProtocolType, Types...>::OnCallback(ProtocolType protocol, Types... params)
 {
 	try
 	{

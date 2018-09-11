@@ -40,7 +40,7 @@ inline void IOCPServerSocket<ProtocolType, Types...>::RunCallback(ProtocolType p
 		auto it = _funcMaps.find(protocol);
 		if (it != _funcMaps.end())
 		{
-			it->second(std::forward<Util::Socket::StateObject>(stateObject), std::forward<Types>(params)...);
+			it->second(std::forward<Util::Socket::StateObject&>(stateObject), std::forward<Types>(params)...);
 		}
 	}
 	catch (std::exception ex)

@@ -8,15 +8,15 @@ class Finally
 private:
 	std::function<void(void)> _func;
 public:
-	Finally(std::function<void(void)> func = nullptr);
+	Finally(const std::function<void(void)>& func = nullptr);
 	virtual ~Finally();
 };
-inline Finally::Finally(std::function<void(void)> func)
+inline Finally::Finally(const std::function<void(void)>& func) : _func(func)
 {
-	this->_func = func;
 }
 inline Finally::~Finally()
 {
-	if (_func != nullptr) _func();
+	if (_func != nullptr)
+		_func();
 }
 NS_COMMON_END

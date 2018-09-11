@@ -120,7 +120,11 @@ inline void Queue<T>::Pop()
 	_alloc.destroy(&*_begin);
 	_begin++;
 	if (Empty())
-		_end =_begin = _pAlloc;
+	{
+		memset(&*_pAlloc, 0, Capacity());
+		_end = _begin = _pAlloc;
+	}
+		
 }
 
 template<typename T>
@@ -139,7 +143,7 @@ inline Iterator<T> Queue<T>::Insert(const Iterator<T> position, const T& item)
 template<typename T>
 inline void Queue<T>::Insert(const Iterator<T> position, const Iterator<T> first, const Iterator<T> last)
 {
-	auto size = last - first;
+	int64_t size = last - first;
 	auto remainingSize = _endPoint - _end;
 	auto end = position;
 	if (remainingSize >= size)
@@ -157,7 +161,7 @@ inline void Queue<T>::Insert(const Iterator<T> position, const Iterator<T> first
 template<typename T>
 inline void Queue<T>::Insert(const Iterator<T> position, size_t size, const T& item)
 {
-	auto remainingSize = _endPoint - _end;
+	size_t remainingSize = _endPoint - _end;
 	if (remainingSize >= size)
 	{
 		for (auto i = 0; i < size; i++)

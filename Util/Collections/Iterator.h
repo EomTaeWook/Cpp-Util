@@ -27,10 +27,10 @@ public:
 	Iterator<T>& operator --();
 	Iterator<T> operator --(int);
 
-	Iterator<T>& operator +=(int);
+	Iterator<T>& operator +=(int64_t offset);
 
-	int operator -(const Iterator<T>& other) const;
-	Iterator<T>  operator +(int) const;
+	int64_t  operator -(const Iterator<T>& other) const;
+	Iterator<T>  operator +(int64_t offset) const;
 
 	bool operator==(const Iterator<T>& other) const;
 
@@ -112,20 +112,20 @@ inline Iterator<T> Iterator<T>::operator--(int)
 	return iter;
 }
 template<typename T>
-int Iterator<T>::operator -(const Iterator<T>& other) const
+int64_t  Iterator<T>::operator -(const Iterator<T>& other) const
 {
 	return _pIter - other._pIter;
 }
 template<typename T>
-Iterator<T>  Iterator<T>::operator +(int index) const
+Iterator<T>  Iterator<T>::operator +(int64_t offset) const
 {
-	Iterator<T> iter(_pIter + index);
+	Iterator<T> iter(_pIter + offset);
 	return iter;
 }
 template<typename T>
-Iterator<T>&  Iterator<T>::operator +=(int index)
+Iterator<T>&  Iterator<T>::operator +=(int64_t offset)
 {
-	_pIter += index;
+	_pIter += offset;
 	return *this;
 }
 NS_COLLECTIONS_END

@@ -95,7 +95,7 @@ template<typename R, typename T1, typename T2>
 inline MulticastDelegate<R, T1, T2>& MulticastDelegate<R, T1, T2>::operator = (DelegateType& method)
 {
 	Delegate<R, T1, T2>::operator = (method);
-	return this*;
+	return *this;
 }
 
 template<typename R, typename T>
