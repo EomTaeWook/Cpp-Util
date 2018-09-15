@@ -1,4 +1,5 @@
 #include "HttpClient.h"
+#pragma comment(lib ,"winhttp.lib")
 NS_WEB_HTTP_BEGIN
 void HttpClient::Init(std::string url)
 {

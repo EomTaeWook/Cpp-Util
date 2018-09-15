@@ -1,7 +1,6 @@
 #pragma once
 #include "NS.h"
 #include "SocketEnum.h"
-#include <Windows.h>
 NS_SOCKET_BEGIN
 class Overlapped : OVERLAPPED
 {

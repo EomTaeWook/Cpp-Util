@@ -73,6 +73,7 @@ inline Delegate<R, Types...>& Delegate<R, Types...>::operator = (const std::func
 	_methods.push_back(method);
 	return *this;
 }
+
 template<>
 inline void Delegate<void>::operator() ()
 {
@@ -120,4 +121,5 @@ inline Delegate<R, Types...>& Delegate<R, Types...>::operator = (const nullptr_t
 	_methods.clear();
 	return *this;
 }
+
 NS_COMMON_END

@@ -16,11 +16,11 @@ private:
 };
 inline CriticalSection::CriticalSection()
 {
-	InitializeCriticalSection(&_cs);
+	::InitializeCriticalSection(&_cs);
 }
 inline CriticalSection::~CriticalSection()
 {
-	DeleteCriticalSection(&_cs);
+	::DeleteCriticalSection(&_cs);
 }
 inline bool CriticalSection::TryEnterCriticalSection()
 {

@@ -2,7 +2,6 @@
 #include <memory>
 #include <string>
 #include "NS.h"
-
 NS_MESSAGE_MSMQ_BEGIN
 class Message
 {
@@ -17,7 +16,7 @@ public:
 	Message(int bufferSize) : Message("", bufferSize)
 	{
 	}
-	Message(char* buffer, int bufferSize) : _bufferSize(bufferSize)
+	Message(const char* buffer, const int& bufferSize) : _bufferSize(bufferSize)
 	{
 		_buffer = std::make_unique<unsigned char[]>(bufferSize);
 		memcpy(_buffer.get(), buffer, bufferSize);

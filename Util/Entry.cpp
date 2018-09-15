@@ -1,6 +1,7 @@
-#include <Socket/IOCPServerSocket.h>
-#include <Socket/IOCPSocketClient.h>
-#include <Common/Trace.h>
+#include "Socket/IOCPServerSocket.h"
+#include "Socket/IOCPSocketClient.h"
+
+//#pragma comment(lib, "Util_d.lib")
 class TestClient : public Util::Socket::IOCPSocketClient<int>
 {
 	// IOCPSocketClient을(를) 통해 상속됨
@@ -12,7 +13,10 @@ class TestClient : public Util::Socket::IOCPSocketClient<int>
 	}
 	virtual void OnRecieved(Util::Socket::StateObject & stateObject) override
 	{
-
+		auto size = stateObject.ReceiveBuffer().Count();
+		auto read = stateObject.ReceiveBuffer().Read(size);
+		printf("handle  %ld Recieved : %ld\n", stateObject.Handle(), size);
+		IOCPSocketClient::OnCallback(123);
 	}
 };
 class TestServer : public Util::Socket::IOCPServerSocket<int>
@@ -43,43 +47,28 @@ struct Packet : Util::Socket::IPacket
 		*size = (ULONG)Data.size();
 	}
 };
-#include <assert.h>
-//#define NDEBUG
-#ifndef NDEBUG
-#   define ASSERT(condition, message) \
-    do { \
-        if (! (condition)) { \
-            std::cerr << "Assertion `" #condition "` failed in " << __FILE__ \
-                      << " line " << __LINE__ << ": " << message << std::endl; \
-            std::terminate(); \
-        } \
-    } while (false)
-#else
-#   define ASSERT(condition, message) do { } while (false)
-#endif
-
 int main()
 {
-	/*TestClient tc;
+	TestClient tc;
 	tc.Init();
 	tc.Connect("127.0.0.1", 10000);
-	
 	std::string test = "<test>";
 	Packet packet;
 	packet.Data.assign(test.begin(), test.end());
-	tc.Send(packet);*/
+	tc.Send(packet);
+
+	/*;
 	TestServer ts;
 	try
 	{
-		Util::Common::Trace::Assert(1 == 0, "오 시발 된다?");
 		ts.Init();
 		ts.Start("192.169.0.2", 10000);
 	}
-	catch (const std::exception& ex)
+	catch (std::exception ex)
 	{
-		
-	}
-	
+
+	}*/
+
 	while (true)
 	{
 		Sleep(4000);

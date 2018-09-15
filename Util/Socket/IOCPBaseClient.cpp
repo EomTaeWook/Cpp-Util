@@ -1,5 +1,6 @@
 #include "IOCPBaseClient.h"
 #include <WS2tcpip.h>
+#include "../Common/Trace.h"
 #pragma comment(lib, "Ws2_32.lib")
 NS_SOCKET_BEGIN
 void IOCPBaseClient::Init(UINT threadSize)
@@ -126,8 +127,17 @@ int IOCPBaseClient::Invoke()
 	{
 		if (!GetQueuedCompletionStatus(_completionPort, &bytesTrans, &stateObject, (LPOVERLAPPED  *)&overlapped, INFINITE))
 		{
-			if (WSAGetLastError() != ERROR_NETNAME_DELETED)
+			auto pHandler = reinterpret_cast<StateObject*>(stateObject);
+			int error = ::WSAGetLastError();
+			Common::Trace::WriteLine(std::to_string(error), "error");
+			switch (error)
+			{
+			case ERROR_NETNAME_DELETED:
+			case ERROR_SEM_TIMEOUT:
+				pHandler->Close();
 				break;
+			}
+			continue;
 		}
 		if ((LONG_PTR)stateObject == _CLOSE_THREAD && bytesTrans == 0)
 			break;
@@ -144,9 +154,9 @@ int IOCPBaseClient::Invoke()
 				pHandler->ReceiveBuffer().Append(_stateObject.WSABuff().buf, bytesTrans);
 				OnRecieved(*pHandler);
 			}
-			catch (const std::exception& ex)
+			catch (std::exception ex)
 			{
-				pHandler->ReceiveBuffer().Clear();
+				Common::Trace::WriteLine(ex.what(), "Invoke");
 			}
 			BeginReceive();
 		}

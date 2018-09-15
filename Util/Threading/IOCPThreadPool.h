@@ -1,14 +1,9 @@
 #pragma once
-#include <Windows.h>
-#include <process.h>
-#include <vector>
-#include <memory>
-#include "WaitCallback.h"
 #include "NS.h"
+#include <process.h>
+#include "WaitCallback.h"
 #include "../Common/Singleton.h"
-
 NS_THREADING_BEGIN
-
 class IOCPThreadPool : public Common::Singleton<IOCPThreadPool>
 {
 private:
@@ -22,6 +17,7 @@ public:
 	IOCPThreadPool();
 	~IOCPThreadPool();
 public:
+
 	bool Init(UINT threadSize = 0);
 	bool InsertQueueItem(const std::function<void(void*)>& callback, void* args);
 public:

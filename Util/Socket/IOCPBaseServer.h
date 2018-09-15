@@ -1,9 +1,6 @@
 #pragma once
 #include "NS.h"
-#include <WinSock2.h>
 #include "StateObject.h"
-#include <WS2tcpip.h>
-#include <vector>
 #include "../Threading/Thread.h"
 #include "SyncCount.h"
 #include <map>
@@ -45,7 +42,7 @@ protected:
 	virtual void OnDisconnected(unsigned long handle) = 0;
 	virtual void OnRecieved(Util::Socket::StateObject& stateObject) = 0;
 	//virtual
-	virtual void BroadCast(Util::Socket::IPacket& packet, StateObject state);
+	virtual void BroadCast(Util::Socket::StateObject& state, Util::Socket::IPacket& packet);
 private:
 	static unsigned int __stdcall Run(void*);
 };

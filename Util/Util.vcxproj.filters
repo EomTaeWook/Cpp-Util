@@ -1,193 +1,48 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Threading">
-      <UniqueIdentifier>{af75b7f4-cc35-4acd-adb4-057d44b94de6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Threading\Thread">
-      <UniqueIdentifier>{3c5ee255-92f4-4ec0-80b4-55c31410733a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Threading\ThreadPool">
-      <UniqueIdentifier>{ba9ed077-c053-4c85-80d6-99b863de90a9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Event">
-      <UniqueIdentifier>{dea91b49-3291-4c13-a635-87018e26dc41}</UniqueIdentifier>
+    <Filter Include="Collections">
+      <UniqueIdentifier>{864238bb-5066-4420-b0d7-8650bb9e2874}</UniqueIdentifier>
     </Filter>
     <Filter Include="Common">
-      <UniqueIdentifier>{ee418441-c468-483f-9d70-bdbe525a337b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Threading\Synchronization">
-      <UniqueIdentifier>{a31d2f2c-805e-4df8-b6fb-895eeca50ebb}</UniqueIdentifier>
+      <UniqueIdentifier>{58cc54c4-683e-4c84-b6bf-981eb1b83076}</UniqueIdentifier>
     </Filter>
     <Filter Include="Cryptography">
-      <UniqueIdentifier>{b75b2d46-6129-4df1-afe2-3c29ce623eab}</UniqueIdentifier>
+      <UniqueIdentifier>{85828f40-c6ef-4ce0-a0c7-4658e70eb711}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Event">
+      <UniqueIdentifier>{8926eea4-c1ad-4b92-a39e-bc1848c4694c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Socket">
-      <UniqueIdentifier>{bb5de941-859d-4d39-b6db-44fe81d737f8}</UniqueIdentifier>
+      <UniqueIdentifier>{8e6a8509-6eff-4d65-9132-1dd4632f9ff9}</UniqueIdentifier>
     </Filter>
     <Filter Include="System">
-      <UniqueIdentifier>{bfb0a63b-aa49-403d-9ba1-322a8b8184c0}</UniqueIdentifier>
+      <UniqueIdentifier>{9220e0b2-2461-4ae8-80d7-42bf349fff0a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="System\Message">
-      <UniqueIdentifier>{e1013e6d-4da6-4cd4-a7c5-9cf33e1e666e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="System\Message\MSMQ">
-      <UniqueIdentifier>{eb2e487c-0227-4d5a-a1cf-60a35116d670}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Collections">
-      <UniqueIdentifier>{5b796408-25bf-495f-9d1d-cdd4895965d4}</UniqueIdentifier>
+    <Filter Include="Threading">
+      <UniqueIdentifier>{3e705d68-6278-4c3e-8c7c-ff488d07e1fb}</UniqueIdentifier>
     </Filter>
     <Filter Include="Web">
-      <UniqueIdentifier>{64ce98c4-0eaf-4f13-9669-aa5660daac1c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Web\Http">
-      <UniqueIdentifier>{2b48f338-7afe-43b8-980a-d853e5c2a87b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Socket\Server">
-      <UniqueIdentifier>{aa6f3088-55b9-4751-bdab-485088c5d053}</UniqueIdentifier>
+      <UniqueIdentifier>{69e1abd8-8682-4281-9e0e-16197933fddb}</UniqueIdentifier>
     </Filter>
     <Filter Include="Socket\Client">
-      <UniqueIdentifier>{bbb3f6de-c760-4294-a69b-78ccce68ffd6}</UniqueIdentifier>
+      <UniqueIdentifier>{85b57ad1-927c-4755-b31b-680dc7c317c0}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Threading\WaitCallback.h">
-      <Filter>Threading\ThreadPool</Filter>
-    </ClInclude>
-    <ClInclude Include="Threading\IOCPThreadPool.h">
-      <Filter>Threading\ThreadPool</Filter>
-    </ClInclude>
-    <ClInclude Include="Threading\Thread.h">
-      <Filter>Threading\Thread</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\Delegate.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Event\Event.h">
-      <Filter>Event</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\Finally.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\StringFormat.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\NS.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Event\NS.h">
-      <Filter>Event</Filter>
-    </ClInclude>
-    <ClInclude Include="Threading\NS.h">
-      <Filter>Threading</Filter>
-    </ClInclude>
-    <ClInclude Include="Threading\CriticalSection.h">
-      <Filter>Threading\Synchronization</Filter>
-    </ClInclude>
-    <ClInclude Include="Cryptography\SHA1.h">
-      <Filter>Cryptography</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\NS.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\StateObject.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\MulticastDelegate.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Message\MSMQEnum.h">
-      <Filter>System\Message\MSMQ</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Message\Message.h">
-      <Filter>System\Message\MSMQ</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Message\NS.h">
-      <Filter>System\Message\MSMQ</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Message\MessageQueue.h">
-      <Filter>System\Message\MSMQ</Filter>
-    </ClInclude>
-    <ClInclude Include="Collections\NS.h">
-      <Filter>Collections</Filter>
-    </ClInclude>
-    <ClInclude Include="Collections\SyncQueue.h">
-      <Filter>Collections</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\SyncCount.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
-    <ClInclude Include="Web\Url.h">
-      <Filter>Web</Filter>
-    </ClInclude>
-    <ClInclude Include="Web\WebEnum.h">
-      <Filter>Web</Filter>
-    </ClInclude>
-    <ClInclude Include="Web\HttpClient.h">
-      <Filter>Web\Http</Filter>
-    </ClInclude>
-    <ClInclude Include="Web\NS.h">
-      <Filter>Web</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\IOCPBaseServer.h">
-      <Filter>Socket\Server</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\IOCPBaseClient.h">
-      <Filter>Socket\Client</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\SocketEnum.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\Overlapped.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\IOCPSocketClient.h">
-      <Filter>Socket\Client</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\IOCPServerSocket.h">
-      <Filter>Socket\Server</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\DefaultPacket.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket\IPacket.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\Singleton.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Collections\Iterator.h">
-      <Filter>Collections</Filter>
-    </ClInclude>
-    <ClInclude Include="Collections\Queue.h">
-      <Filter>Collections</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Threading\IOCPThreadPool.cpp">
-      <Filter>Threading\ThreadPool</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\StringFormat.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="Cryptography\SHA1.cpp">
-      <Filter>Cryptography</Filter>
-    </ClCompile>
-    <ClCompile Include="Cryptography\NS.h">
-      <Filter>Cryptography</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Message\MessageQueue.cpp">
-      <Filter>System\Message\MSMQ</Filter>
-    </ClCompile>
-    <ClCompile Include="Web\HttpClient.cpp">
-      <Filter>Web\Http</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket\IOCPBaseServer.cpp">
-      <Filter>Socket\Server</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket\IOCPBaseClient.cpp">
-      <Filter>Socket\Client</Filter>
-    </ClCompile>
+    <Filter Include="Socket\Server">
+      <UniqueIdentifier>{4b3dd81a-3e23-46a1-a513-ee37ba821b38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Threading\Thread">
+      <UniqueIdentifier>{61c2a080-f30c-40d3-869b-d9def8d267b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Threading\ThreadPool">
+      <UniqueIdentifier>{05642234-e1fc-4786-86d8-e1aa8d94afed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Message">
+      <UniqueIdentifier>{5c2e0d78-b514-4928-b4ee-4000b095008e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Message\MSMQ">
+      <UniqueIdentifier>{76e636fa-9ca4-4bee-961e-c2e87b070f41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Collections\cpp.hint">
@@ -199,20 +54,156 @@
     <None Include="Cryptography\cpp.hint">
       <Filter>Cryptography</Filter>
     </None>
-    <None Include="Threading\cpp.hint">
-      <Filter>Threading</Filter>
-    </None>
     <None Include="Event\cpp.hint">
       <Filter>Event</Filter>
     </None>
     <None Include="Socket\cpp.hint">
       <Filter>Socket</Filter>
     </None>
-    <None Include="System\Message\cpp.hint">
-      <Filter>System\Message\MSMQ</Filter>
-    </None>
     <None Include="Web\cpp.hint">
       <Filter>Web</Filter>
     </None>
+    <None Include="Threading\cpp.hint">
+      <Filter>Threading</Filter>
+    </None>
+    <None Include="System\Message\cpp.hint">
+      <Filter>System\Message\MSMQ</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Collections\Iterator.h">
+      <Filter>Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\NS.h">
+      <Filter>Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\Queue.h">
+      <Filter>Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\SyncQueue.h">
+      <Filter>Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Delegate.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Finally.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\MulticastDelegate.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\NS.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Singleton.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Cryptography\NS.h">
+      <Filter>Cryptography</Filter>
+    </ClInclude>
+    <ClInclude Include="Cryptography\SHA1.h">
+      <Filter>Cryptography</Filter>
+    </ClInclude>
+    <ClInclude Include="Event\Event.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Event\NS.h">
+      <Filter>Event</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\IOCPBaseClient.h">
+      <Filter>Socket\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\IOCPBaseServer.h">
+      <Filter>Socket\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\IOCPServerSocket.h">
+      <Filter>Socket\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\IPacket.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\NS.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\Overlapped.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\SocketEnum.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\StateObject.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\SyncCount.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Web\HttpClient.h">
+      <Filter>Web</Filter>
+    </ClInclude>
+    <ClInclude Include="Web\NS.h">
+      <Filter>Web</Filter>
+    </ClInclude>
+    <ClInclude Include="Web\Url.h">
+      <Filter>Web</Filter>
+    </ClInclude>
+    <ClInclude Include="Web\WebEnum.h">
+      <Filter>Web</Filter>
+    </ClInclude>
+    <ClInclude Include="Threading\CriticalSection.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="Threading\NS.h">
+      <Filter>Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="Threading\Thread.h">
+      <Filter>Threading\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Threading\IOCPThreadPool.h">
+      <Filter>Threading\ThreadPool</Filter>
+    </ClInclude>
+    <ClInclude Include="Threading\WaitCallback.h">
+      <Filter>Threading\ThreadPool</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket\IOCPSocketClient.h">
+      <Filter>Socket\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Trace.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Message\Message.h">
+      <Filter>System\Message\MSMQ</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Message\MessageQueue.h">
+      <Filter>System\Message\MSMQ</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Message\MSMQEnum.h">
+      <Filter>System\Message\MSMQ</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Message\NS.h">
+      <Filter>System\Message\MSMQ</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Cryptography\SHA1.cpp">
+      <Filter>Cryptography</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\IOCPBaseClient.cpp">
+      <Filter>Socket\Client</Filter>
+    </ClCompile>
+    <ClCompile Include="Web\HttpClient.cpp">
+      <Filter>Web</Filter>
+    </ClCompile>
+    <ClCompile Include="Threading\IOCPThreadPool.cpp">
+      <Filter>Threading\ThreadPool</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\ICOPBaseServer.cpp">
+      <Filter>Socket\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\Trace.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Message\MessageQueue.cpp">
+      <Filter>System\Message\MSMQ</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

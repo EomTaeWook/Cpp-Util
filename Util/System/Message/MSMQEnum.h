@@ -1,5 +1,4 @@
 #pragma once
-
 #include "NS.h"
 
 NS_MESSAGE_MSMQ_BEGIN

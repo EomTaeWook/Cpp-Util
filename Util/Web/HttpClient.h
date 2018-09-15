@@ -5,7 +5,6 @@
 #include "Url.h"
 #include <string>
 #include <functional>
-#pragma comment(lib ,"winhttp.lib")
 NS_WEB_HTTP_BEGIN
 class HttpClient
 {

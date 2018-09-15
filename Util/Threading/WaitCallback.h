@@ -1,5 +1,4 @@
 #pragma once
-#include <functional>
 #include "NS.h"
 #include "../Common/MulticastDelegate.h"
 

@@ -1,16 +1,14 @@
 #pragma once
-#pragma once
 #include "NS.h"
 #include <string>
 #include <algorithm>
-
 NS_WEB_BEGIN
 class Url
 {
 public:
 	Url();
-	Url(std::string url);
-	Url(std::wstring url);
+	Url(const std::string& url);
+	Url(const std::wstring& url);
 	virtual ~Url();
 private:
 	std::wstring _path;
@@ -18,8 +16,8 @@ private:
 	std::wstring _host;
 	int _port;
 public:
-	void Parse(std::string url);
-	void Parse(std::wstring url);
+	void Parse(const std::string& url);
+	void Parse(const std::wstring& url);
 	std::wstring GetPath();
 	std::wstring GetProtocol();
 	std::wstring GetHost();
@@ -28,24 +26,25 @@ public:
 inline Url::Url()
 {
 }
-inline Url::Url(std::string url)
+inline Url::Url(const std::string& url)
 {
 	Parse(std::wstring().assign(url.begin(), url.end()));
 }
-inline Url::Url(std::wstring url)
+inline Url::Url(const std::wstring& url)
 {
 	Parse(url);
 }
 inline Url::~Url()
 {
 }
-inline void Url::Parse(std::string url)
+inline void Url::Parse(const std::string& url)
 {
 	Parse(std::wstring().assign(url.begin(), url.end()));
 }
-inline void Url::Parse(std::wstring url)
+inline void Url::Parse(const std::wstring& url)
 {
-	if (url.size() == 0) return;
+	if (url.size() == 0)
+		return;
 	auto beginIdx = url.find(L"://");
 	if (beginIdx != std::wstring::npos)
 	{

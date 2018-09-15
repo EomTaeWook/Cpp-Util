@@ -2,7 +2,6 @@
 #include "NS.h"
 #include "../Threading/CriticalSection.h"
 #include "../Common/Finally.h"
-
 NS_SOCKET_BEGIN
 class SyncCount
 {
@@ -28,10 +27,7 @@ inline unsigned long SyncCount::Add()
 	try
 	{
 		_cs.EnterCriticalSection();
-		if (_count + 1 == 0)
-			_count = 1;
-		else
-			_count++;
+		_count++;
 	}
 	catch (...)
 	{

@@ -1,18 +1,13 @@
 #pragma once
 #include "NS.h"
-#include "SocketEnum.h"
-#include <WinSock2.h>
-#include <vector>
-#include "../Threading/Thread.h"
-#include "IPacket.h"
 #include "StateObject.h"
+#include "../Threading/Thread.h"
 
 NS_SOCKET_BEGIN
 class IOCPBaseClient
 {
 private:
 	static const LONG_PTR _CLOSE_THREAD = -1;
-	static const int _BUFF_SIZE = 2048;
 protected:
 	IOCPBaseClient();
 public:

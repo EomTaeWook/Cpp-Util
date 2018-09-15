@@ -1,12 +1,11 @@
 #include "MessageQueue.h"
-
+#pragma comment (lib, "Mqrt.lib")
 NS_MESSAGE_MSMQ_BEGIN
 
-void MessageQueue::Init(std::wstring pathName, MessageQueueMode mode)
+void MessageQueue::Init(const std::wstring& pathName, const MessageQueueMode& mode)
 {
 	if (pathName.size() == 0)
-		throw "MQ_ERROR_INVALID_PARAMETER";
-
+		throw std::exception("MQ_ERROR_INVALID_PARAMETER");
 	_mode = mode;
 	DWORD formatNameBufferLength = 256;
 	WCHAR formatNameBuffer[256];
@@ -122,7 +121,7 @@ HRESULT MessageQueue::Send(Message& message)
 
 	msgPropId[propId] = PROPID_M_LABEL;				// Property ID  
 	msgPropVar[propId].vt = VT_LPWSTR;				// Type indicator  
-	msgPropVar[propId].pwszVal = L"";       // Label buffer  
+	msgPropVar[propId].pwszVal = (WCHAR*)L"";       // Label buffer  
 	propId++;
 
 	// Initialize the MQMSGPROPS structure.  

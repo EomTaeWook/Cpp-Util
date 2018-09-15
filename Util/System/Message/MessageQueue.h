@@ -1,14 +1,9 @@
 #pragma once
-
+#include "NS.h"
 #include <Windows.h>
 #include <Mq.h>
-#include <string>
-
-#include "NS.h"
 #include "MSMQEnum.h"
 #include "Message.h"
-#pragma comment (lib, "Mqrt.lib")
-
 NS_MESSAGE_MSMQ_BEGIN
 class MessageQueue
 {
@@ -25,7 +20,7 @@ public:
 		MQCloseQueue(_hQueue);
 	}
 public:
-	void Init(std::wstring pathName, MessageQueueMode mode);
+	void Init(const std::wstring& pathName, const MessageQueueMode& mode);
 	HRESULT Receive(Message& message, int timeOutMillis);
 	HRESULT Send(Message& message);
 	bool IsRead();

@@ -2,6 +2,7 @@
 #include "NS.h"
 #include "IOCPBaseClient.h"
 #include <map>
+#include "../Common/Trace.h"
 NS_SOCKET_BEGIN
 template<typename ProtocolType, typename ...Types>
 class IOCPSocketClient : public IOCPBaseClient
@@ -16,7 +17,6 @@ public:
 	void BindCallback(ProtocolType protocol, const std::function<void(Types...)>& callback);
 	void OnCallback(ProtocolType protocol, Types...);
 };
-
 template<typename ProtocolType, typename ...Types>
 inline IOCPSocketClient<ProtocolType, Types...>::IOCPSocketClient()
 {
@@ -43,15 +43,18 @@ inline void IOCPSocketClient<ProtocolType, Types...>::OnCallback(ProtocolType pr
 	{
 		auto it = _funcMaps.find(protocol);
 		if (it != _funcMaps.end())
-		{
 			it->second(std::forward<Types>(params)...);
-		}
+		else
+			throw std::exception("KeyNotFoundException");
 	}
 	catch (const std::exception& ex)
 	{
+		Util::Common::Trace::WriteLine(ex.what());
 	}
 	catch (...)
 	{
+		Util::Common::Trace::WriteLine("OnCallbackException");
 	}
 }
+
 NS_SOCKET_END

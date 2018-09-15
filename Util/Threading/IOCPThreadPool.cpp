@@ -1,5 +1,5 @@
 #include "IOCPThreadPool.h"
-#include "../Common/Finally.h"
+#include "..\Common\Finally.h"
 #include <memory>
 
 NS_THREADING_BEGIN
@@ -82,8 +82,8 @@ int IOCPThreadPool::Invoke()
 	while (true)
 	{
 		GetQueuedCompletionStatus(_completionPort, &numberOfBytes, &callback, &pOverlapped, INFINITE);
-		if ((LONG_PTR)callback == _CLOSE_THREAD)
-			break;
+
+		if ((LONG_PTR)callback == _CLOSE_THREAD) break;
 		WaitCallback* pCallback = reinterpret_cast<WaitCallback*>(callback);
 		if (pCallback != NULL)
 		{

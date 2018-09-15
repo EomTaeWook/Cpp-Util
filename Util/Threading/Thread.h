@@ -1,10 +1,7 @@
 #pragma once
 #include "NS.h"
-#include <functional>
 #include <process.h>
 #include "../Common/MulticastDelegate.h"
-#include <Windows.h>
-
 NS_THREADING_BEGIN
 class Thread
 {
@@ -17,6 +14,7 @@ public:
 	Thread();
 	Thread(const std::function<void(void *)>& callback, void* pObj = NULL);
 	virtual ~Thread();
+public:
 	void Start();
 public:
 	void operator()(const std::function<void(void *)>& callback, void* pObj = NULL);
@@ -53,7 +51,7 @@ inline unsigned int __stdcall Thread::Run(void* pObj)
 }
 inline void Thread::Start()
 {
-	if (_handle != NULL) 
+	if (_handle != NULL)
 		return;
 	_handle = (HANDLE)_beginthreadex(0, 0, &Thread::Run, this, 0, NULL);
 	if (_handle == NULL)
