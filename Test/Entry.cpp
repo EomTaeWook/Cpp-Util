@@ -43,21 +43,6 @@ struct Packet : Util::Socket::IPacket
 		*size = (ULONG)Data.size();
 	}
 };
-#include <assert.h>
-//#define NDEBUG
-#ifndef NDEBUG
-#   define ASSERT(condition, message) \
-    do { \
-        if (! (condition)) { \
-            std::cerr << "Assertion `" #condition "` failed in " << __FILE__ \
-                      << " line " << __LINE__ << ": " << message << std::endl; \
-            std::terminate(); \
-        } \
-    } while (false)
-#else
-#   define ASSERT(condition, message) do { } while (false)
-#endif
-
 int main()
 {
 	/*TestClient tc;
@@ -71,7 +56,7 @@ int main()
 	TestServer ts;
 	try
 	{
-		Util::Common::Trace::Assert(1 == 0, "오 시발 된다?");
+		//Util::Common::Trace::Assert(1 == 0, "Assert");
 		ts.Init();
 		ts.Start("192.169.0.2", 10000);
 	}
