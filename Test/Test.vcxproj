@@ -42,7 +42,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -74,8 +74,8 @@
     <LibraryPath>C:\Users\Eomtw\Documents\Visual Studio 2017\Projects\Util\Debug\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Eomtw\Documents\Visual Studio 2017\Projects\Util\Debug\x64\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Eomtw\Documents\Visual Studio 2017\Projects\Util\Debug\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Util;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)$(Configuration)\$(Platform);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)Util;$(IncludePath)</IncludePath>
@@ -125,9 +125,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Entry.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Util\Util.vcxproj">

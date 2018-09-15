@@ -1,7 +1,7 @@
 #include "IOCPBaseServer.h"
 #include "..\Common\Finally.h"
-#include <iostream>
-
+#include <mstcpip.h>
+#pragma comment(lib, "Ws2_32.lib")
 NS_SOCKET_BEGIN
 void IOCPBaseServer::Stop()
 {
@@ -74,7 +74,7 @@ void IOCPBaseServer::Start(std::string ip, int port)
 				Stop();
 				throw std::exception("Listener Create Error : " + error);
 			}
-			//accept½Ã NonBlock
+			//accept NonBlock
 			//unsigned long mode = 1;
 			//ioctlsocket(_listener, FIONBIO, &mode);
 			int option = 1;
@@ -111,8 +111,18 @@ void IOCPBaseServer::StartListening(void* pObj)
 		SOCKET handler = accept(_listener, (SOCKADDR*)&clientAddr, &size);
 		if (handler == INVALID_SOCKET)
 			continue;
+
 		auto stateObject = new StateObject();
 		stateObject->Socket() = handler;
+
+		tcp_keepalive keepAlive;
+		keepAlive.onoff = 1;
+		keepAlive.keepalivetime = 5000;
+		keepAlive.keepaliveinterval = 1000;
+		DWORD option;
+
+		WSAIoctl(stateObject->Socket(), SIO_KEEPALIVE_VALS, &keepAlive, sizeof(keepAlive), 0, 0, &option, NULL, NULL);
+
 		std::memcpy(&stateObject->SocketAddr(), &clientAddr, size);
 		stateObject->Handle() = _handleCount.Add();
 		AddPeer(stateObject);
@@ -135,22 +145,16 @@ int IOCPBaseServer::Invoke()
 {
 	unsigned long bytesTrans = 0;
 	ULONG_PTR stateObject = 0;
-	Socket::Overlapped* overlapped;
+	Socket::Overlapped* overlapped = nullptr;
 	while (true)
 	{
 		if (!GetQueuedCompletionStatus(_completionPort, &bytesTrans, &stateObject, (LPOVERLAPPED *)&overlapped, INFINITE))
-		{
-			int error = WSAGetLastError();
-			if (error != ERROR_NETNAME_DELETED)
-			{
-				printf("Error : %d", error);
-				break;
-			}
+		{			int error = WSAGetLastError();			printf("%d", error);			auto pHandler = reinterpret_cast<StateObject*>(stateObject);			/*switch (error)			{			case ERROR_SEM_TIMEOUT:			case ERROR_NETNAME_DELETED:				ClosePeer(pHandler);				break;			}*/
 		}
 		if ((LONG_PTR)stateObject == _CLOSE_THREAD && bytesTrans == 0)
 			break;
 			
-		auto pHandler = reinterpret_cast<StateObject*>(stateObject);
+		/*auto pHandler = reinterpret_cast<StateObject*>(stateObject);
 		if (bytesTrans == 0)
 		{
 			ClosePeer(pHandler);
@@ -163,12 +167,11 @@ int IOCPBaseServer::Invoke()
 			{
 				OnRecieved(*pHandler);
 			}
-			catch (std::exception ex)
+			catch (const std::exception& ex)
 			{
-				printf("%s", ex.what());
 			}
 			BeginReceive(pHandler);
-		}
+		}*/
 	}
 	return 0;
 }
@@ -190,6 +193,7 @@ void IOCPBaseServer::AddPeer(StateObject* pStateObject)
 	}
 	catch (...)
 	{
+		
 	}
 }
 void IOCPBaseServer::ClosePeer(StateObject* pStateObject)
@@ -219,6 +223,7 @@ void IOCPBaseServer::ClosePeer(StateObject* pStateObject)
 	}
 	catch (...)
 	{
+		
 	}
 }
 void IOCPBaseServer::BroadCast(Util::Socket::IPacket& packet, StateObject state)

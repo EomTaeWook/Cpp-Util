@@ -1,7 +1,6 @@
 #pragma once
 #include<functional>
 #include "NS.h"
-
 NS_COMMON_BEGIN
 class Finally
 {

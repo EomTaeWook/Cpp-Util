@@ -14,45 +14,47 @@ private:
 	void* _obj;
 public:
 	Thread(const Thread&) = delete;
-	Thread() {
-		_handle = NULL;
-		this->_delegate = NULL;
-		this->_obj = NULL;
-	};
-	Thread(std::function<void(void *)> pFunc, void* p_obj = NULL)
-	{
-		_handle = NULL;
-		_delegate = pFunc;
-		this->_obj = p_obj;
-	}
-	virtual ~Thread()
-	{
-		if (_handle)
-			WaitForSingleObject(_handle, INFINITE);
-		_handle = NULL;
-	}
+	Thread();
+	Thread(const std::function<void(void *)>& callback, void* pObj = NULL);
+	virtual ~Thread();
 	void Start();
 public:
-	void operator()(std::function<void(void *)> pFunc, void* p_obj = NULL);
+	void operator()(const std::function<void(void *)>& callback, void* pObj = NULL);
 	Thread& operator=(const Thread&) = delete;
 private:
 	static unsigned int __stdcall Run(void*);
 	void Invoke();
 };
-inline void Thread::operator()(std::function<void(void *)> pFunc, void* p_obj)
+inline Thread::Thread() :_handle(nullptr), _delegate(nullptr), _obj(nullptr)
 {
-	_delegate = pFunc;
-	this->_obj = p_obj;
+}
+inline Thread::Thread(const std::function<void(void *)>& callback, void* pObj) : _handle(nullptr), _delegate(callback), _obj(pObj)
+{
 }
-inline unsigned int __stdcall Thread::Run(void* p_obj)
+inline  Thread::~Thread()
 {
-	Thread* p_th = static_cast<Thread*>(p_obj);
-	p_th->Invoke();
+	if (_handle)
+	{
+		WaitForSingleObject(_handle, INFINITE);
+		CloseHandle(_handle);
+		_handle = NULL;
+	}
+}
+inline void Thread::operator()(const std::function<void(void *)>& callback, void* pObj)
+{
+	_delegate = callback;
+	this->_obj = pObj;
+}
+inline unsigned int __stdcall Thread::Run(void* pObj)
+{
+	Thread* pThread = static_cast<Thread*>(pObj);
+	pThread->Invoke();
 	return 0;
 }
 inline void Thread::Start()
 {
-	if (_handle != NULL) return;
+	if (_handle != NULL) 
+		return;
 	_handle = (HANDLE)_beginthreadex(0, 0, &Thread::Run, this, 0, NULL);
 	if (_handle == NULL)
 		std::exception("ThreadCreateExcetion : " + GetLastError());

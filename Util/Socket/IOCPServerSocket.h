@@ -1,7 +1,6 @@
 #pragma once
 #include "NS.h"
 #include "IOCPBaseServer.h"
-
 NS_SOCKET_BEGIN
 template<typename ProtocolType, typename ...Types>
 class IOCPServerSocket : public IOCPBaseServer
@@ -13,7 +12,7 @@ public:
 protected:
 	std::map<ProtocolType, Util::Common::MulticastDelegate<void, Util::Socket::StateObject&, Types...>> _funcMaps;
 public:
-	void BindCallback(ProtocolType protocol, std::function<void(Util::Socket::StateObject&, Types...)> callback);
+	void BindCallback(ProtocolType protocol, const std::function<void(Util::Socket::StateObject&, Types...)>& callback);
 	void OnCallback(ProtocolType protocol, Util::Socket::StateObject& stateObject, Types...);
 };
 template<typename ProtocolType, typename ...Types>
@@ -25,7 +24,7 @@ IOCPServerSocket<ProtocolType, Types...>::~IOCPServerSocket()
 {
 }
 template<typename ProtocolType, typename ...Types>
-inline void IOCPServerSocket<ProtocolType, Types...>::BindCallback(ProtocolType protocol, std::function<void(Util::Socket::StateObject&, Types...)> callback)
+inline void IOCPServerSocket<ProtocolType, Types...>::BindCallback(ProtocolType protocol, const std::function<void(Util::Socket::StateObject&, Types...)>& callback)
 {
 	if (_funcMaps.find(protocol) == _funcMaps.end())
 		_funcMaps.insert(std::pair<ProtocolType, Util::Common::MulticastDelegate<void, Util::Socket::StateObject&, Types...>>(protocol, std::move(callback)));
@@ -43,9 +42,8 @@ inline void IOCPServerSocket<ProtocolType, Types...>::OnCallback(ProtocolType pr
 			it->second(std::forward<Util::Socket::StateObject&>(stateObject), std::forward<Types>(params)...);
 		}
 	}
-	catch (std::exception ex)
+	catch (const std::exception& ex)
 	{
-		ex.what();
 	}
 	catch (...)
 	{

@@ -1,7 +1,6 @@
 #pragma once
 #include "NS.h"
 #include "../Threading/CriticalSection.h"
-
 NS_COMMON_BEGIN
 template <typename T>
 class Singleton
@@ -14,7 +13,6 @@ private:
 	static std::shared_ptr<T> _instance;
 	static Threading::CriticalSection _cs;
 };
-
 template <typename T>
 inline Singleton<T>::Singleton()
 {
@@ -23,7 +21,6 @@ template <typename T>
 inline Singleton<T>::~Singleton()
 {
 }
-
 template <typename T>
 std::shared_ptr<T> Singleton<T>::Instance()
 {
@@ -35,6 +32,7 @@ std::shared_ptr<T> Singleton<T>::Instance()
 	_cs.LeaveCriticalSection();
 	return _instance;
 }
+
 template <typename T>
 Threading::CriticalSection Singleton<T>::_cs;
 

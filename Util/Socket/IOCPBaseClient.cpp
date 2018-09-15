@@ -1,5 +1,6 @@
 #include "IOCPBaseClient.h"
 #include <WS2tcpip.h>
+#pragma comment(lib, "Ws2_32.lib")
 NS_SOCKET_BEGIN
 void IOCPBaseClient::Init(UINT threadSize)
 {
@@ -143,9 +144,8 @@ int IOCPBaseClient::Invoke()
 				pHandler->ReceiveBuffer().Append(_stateObject.WSABuff().buf, bytesTrans);
 				OnRecieved(*pHandler);
 			}
-			catch (std::exception ex)
+			catch (const std::exception& ex)
 			{
-				ex.what();
 				pHandler->ReceiveBuffer().Clear();
 			}
 			BeginReceive();

@@ -22,7 +22,6 @@ public:
 	IOCPThreadPool();
 	~IOCPThreadPool();
 public:
-
 	bool Init(UINT threadSize = 0);
 	bool InsertQueueItem(const std::function<void(void*)>& callback, void* args);
 public:

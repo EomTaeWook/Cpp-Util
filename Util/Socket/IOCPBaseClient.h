@@ -2,13 +2,10 @@
 #include "NS.h"
 #include "SocketEnum.h"
 #include <WinSock2.h>
-#include <string>
 #include <vector>
-#include <memory>
 #include "../Threading/Thread.h"
 #include "IPacket.h"
 #include "StateObject.h"
-#pragma comment(lib, "Ws2_32.lib")
 
 NS_SOCKET_BEGIN
 class IOCPBaseClient

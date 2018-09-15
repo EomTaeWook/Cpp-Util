@@ -28,7 +28,10 @@ inline unsigned long SyncCount::Add()
 	try
 	{
 		_cs.EnterCriticalSection();
-		_count++;
+		if (_count + 1 == 0)
+			_count = 1;
+		else
+			_count++;
 	}
 	catch (...)
 	{

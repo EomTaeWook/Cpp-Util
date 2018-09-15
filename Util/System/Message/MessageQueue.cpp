@@ -43,7 +43,7 @@ void MessageQueue::Init(std::wstring pathName, MessageQueueMode mode)
 HRESULT MessageQueue::Receive(Message& message, int timeOutMillis)
 {
 	if (_hQueue == NULL)
-		throw "Invalid Handle";
+		throw std::exception("Invalid Handle");
 
 	// Define an MQMSGPROPS structure.
 	const int NUMBEROFPROPERTIES = 5;
@@ -102,7 +102,7 @@ HRESULT MessageQueue::Receive(Message& message, int timeOutMillis)
 HRESULT MessageQueue::Send(Message& message)
 {
 	if (_hQueue == NULL)
-		throw "Invalid Handle";
+		throw std::exception("Invalid Handle");
 
 	const int NUMBEROFPROPERTIES = 2;
 	DWORD propId = 0;

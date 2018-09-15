@@ -2,9 +2,9 @@
 #include "NS.h"
 #include <WinSock2.h>
 #include <memory>
-#include "DefaultPacket.h"
 #include "../Collections/SyncQueue.h"
 #include "Overlapped.h"
+#include "IPacket.h"
 
 NS_SOCKET_BEGIN
 class StateObject

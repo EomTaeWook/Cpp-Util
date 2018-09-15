@@ -3,15 +3,10 @@
 #include <WinSock2.h>
 #include "StateObject.h"
 #include <WS2tcpip.h>
-#include <string>
 #include <vector>
-#include <memory>
 #include "../Threading/Thread.h"
 #include "SyncCount.h"
-#include "IPacket.h"
 #include <map>
-#pragma comment(lib, "Ws2_32.lib")
-
 NS_SOCKET_BEGIN
 class IOCPBaseServer
 {
