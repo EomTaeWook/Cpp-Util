@@ -10,20 +10,38 @@ bool Trace::_Debug = true;
 
 void Trace::Write(const std::string& message)
 {
-	::OutputDebugString(message.c_str());
+	::OutputDebugStringA(message.c_str());
 }
 void Trace::WriteLine(const std::string& message)
 {
-	::OutputDebugString(std::string(message + "\n").c_str());
+	::OutputDebugStringA((std::string(message + "\n")).c_str());
 }
 void Trace::Write(const std::string& message, const std::string& category)
 {
-	::OutputDebugString(std::string(category + " : " + message).c_str());
+	::OutputDebugStringA((std::string(category + " : " + message)).c_str());
 }
 void Trace::WriteLine(const std::string& message, const std::string& category)
 {
-	::OutputDebugString(std::string(category + " : " + message + "\n").c_str());
+	::OutputDebugStringA((std::string(category + " : " + message + "\n")).c_str());
 }
+
+void Trace::Write(const std::wstring& message)
+{
+	::OutputDebugStringW(message.c_str());
+}
+void Trace::WriteLine(const std::wstring& message)
+{
+	::OutputDebugStringW((std::wstring(message + L"\n")).c_str());
+}
+void Trace::Write(const std::wstring& message, const std::wstring& category)
+{
+	::OutputDebugStringW((std::wstring(category + L" : " + message)).c_str());
+}
+void Trace::WriteLine(const std::wstring& message, const std::wstring& category)
+{
+	::OutputDebugStringW((std::wstring(category + L" : " + message + L"\n")).c_str());
+}
+
 void Trace::_Assert(const int& line, const std::string& file, const bool& condition)
 {
 	if (_Debug)

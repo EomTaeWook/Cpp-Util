@@ -77,16 +77,6 @@ void IOCPBaseServer::Start(std::string ip, int port)
 		throw std::exception("Server Start Fail");
 	}
 }
-void IOCPBaseServer::BeginReceive(Socket::StateObject* pStateObject)
-{
-	DWORD flags = 0;
-	if (WSARecv(pStateObject->Socket(), &pStateObject->WSABuff(), 1, 0, &flags, (LPWSAOVERLAPPED)(&pStateObject->ReceiveOverlapped()), NULL) == SOCKET_ERROR)
-	{
-		int error = WSAGetLastError();
-		if (error != WSA_IO_PENDING)
-			ClosePeer(pStateObject);
-	}
-}
 void IOCPBaseServer::StartListening(void* pObj)
 {
 	while (_isStart)
@@ -113,6 +103,16 @@ void IOCPBaseServer::StartListening(void* pObj)
 		OnAccepted(*stateObject);
 		CreateIoCompletionPort((HANDLE)stateObject->Socket(), _completionPort, (ULONG_PTR)stateObject, 0);
 		BeginReceive(stateObject);
+	}
+}
+void IOCPBaseServer::BeginReceive(Socket::StateObject* pStateObject)
+{
+	DWORD flags = 0;
+	if (WSARecv(pStateObject->Socket(), &pStateObject->WSABuff(), 1, 0, &flags, (LPWSAOVERLAPPED)(&pStateObject->ReceiveOverlapped()), NULL) == SOCKET_ERROR)
+	{
+		int error = WSAGetLastError();
+		if (error != WSA_IO_PENDING)
+			ClosePeer(pStateObject);
 	}
 }
 void IOCPBaseServer::Stop()

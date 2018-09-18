@@ -17,14 +17,13 @@ public:
 	IOCPThreadPool();
 	~IOCPThreadPool();
 public:
-
-	bool Init(UINT threadSize = 0);
+	void Init(UINT threadSize = 0);
 	bool InsertQueueItem(const std::function<void(void*)>& callback, void* args);
 public:
 	IOCPThreadPool & operator=(const IOCPThreadPool&) = delete;
 private:
 	bool Stop();
-	bool DeleteItem(WaitCallback* WaitCallback);
+	void DeleteItem(WaitCallback* WaitCallback);
 	int Invoke();
 private:
 	static unsigned int __stdcall Run(void*);

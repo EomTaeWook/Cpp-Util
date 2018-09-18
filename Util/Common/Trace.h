@@ -17,6 +17,11 @@ public:
 	static void WriteLine(const std::string& message);
 	static void Write(const std::string& message, const std::string& category);
 	static void WriteLine(const std::string& message, const std::string& category);
+
+	static void Write(const std::wstring& message);
+	static void WriteLine(const std::wstring& message);
+	static void Write(const std::wstring& message, const std::wstring& category);
+	static void WriteLine(const std::wstring& message, const std::wstring& category);
 private:
 	static void _Assert(const int& line, const std::string& file, const bool& condition);
 	static void _Assert(const int& line, const std::string& file, const bool& condition, const std::string& message);

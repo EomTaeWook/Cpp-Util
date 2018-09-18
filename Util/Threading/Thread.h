@@ -55,7 +55,11 @@ inline void Thread::Start()
 		return;
 	_handle = (HANDLE)_beginthreadex(0, 0, &Thread::Run, this, 0, NULL);
 	if (_handle == NULL)
-		std::exception("ThreadCreateExcetion : " + GetLastError());
+	{
+		std::string message = "Thread Create Exception : " + std::to_string(GetLastError());
+		throw std::exception(message.c_str());
+	}
+		
 }
 inline void Thread::Invoke()
 {

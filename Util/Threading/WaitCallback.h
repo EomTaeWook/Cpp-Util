@@ -11,11 +11,11 @@ private:
 private:
 	void Invoke();
 public:
-	WaitCallback(std::function<void(void*)> callback, void* state = NULL);
+	WaitCallback(const std::function<void(void*)>& callback, void* state = NULL);
 	virtual ~WaitCallback() {}
 public:
 };
-inline WaitCallback::WaitCallback(std::function<void(void*)> callback, void* state)
+inline WaitCallback::WaitCallback(const std::function<void(void*)>& callback, void* state)
 {
 	Common::MulticastDelegate<void, void*>::operator=(callback);
 	_state = state;

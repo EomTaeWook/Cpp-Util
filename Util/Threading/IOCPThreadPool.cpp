@@ -1,17 +1,18 @@
 #include "IOCPThreadPool.h"
 #include "..\Common\Finally.h"
 #include <memory>
-
+#include <string>
 NS_THREADING_BEGIN
 bool IOCPThreadPool::Init(UINT threadMaxSize)
 {
 	try
 	{
-		if (!Stop()) return false;
+		if (!Stop())
+			return;
 
 		_completionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 		if (_completionPort == INVALID_HANDLE_VALUE)
-			return false;
+			throw std::exception("INVALID_HANDLE_VALUE");
 
 		SYSTEM_INFO info;
 		GetSystemInfo(&info);
@@ -32,9 +33,9 @@ bool IOCPThreadPool::Init(UINT threadMaxSize)
 	}
 	catch (...)
 	{
-		return false;
+		std::string message = "IOCPThreadPool Init Exception : " + std::to_string(GetLastError());
+		throw std::exception(message.c_str());
 	}
-	return true;
 }
 bool IOCPThreadPool::Stop()
 {
@@ -56,8 +57,8 @@ bool IOCPThreadPool::Stop()
 }
 bool IOCPThreadPool::InsertQueueItem(const std::function<void(void*)>& callback, void* args)
 {
-	if (_completionPort == NULL) 
-		return false;
+	if (_completionPort == NULL)
+		throw std::exception("ThreadPool Not Initiated");
 
 	auto finally = Util::Common::Finally(std::bind(&CriticalSection::LeaveCriticalSection, &_cs));
 	try
@@ -83,7 +84,8 @@ int IOCPThreadPool::Invoke()
 	{
 		GetQueuedCompletionStatus(_completionPort, &numberOfBytes, &callback, &pOverlapped, INFINITE);
 
-		if ((LONG_PTR)callback == _CLOSE_THREAD) break;
+		if ((LONG_PTR)callback == _CLOSE_THREAD) 
+			break;
 		WaitCallback* pCallback = reinterpret_cast<WaitCallback*>(callback);
 		if (pCallback != NULL)
 		{
@@ -93,15 +95,13 @@ int IOCPThreadPool::Invoke()
 	}
 	return 0;
 }
-bool IOCPThreadPool::DeleteItem(WaitCallback* waitCallback)
+void IOCPThreadPool::DeleteItem(WaitCallback* waitCallback)
 {
 	if (waitCallback)
 	{
 		delete waitCallback;
 		waitCallback = NULL;
-		return true;
 	}
-	return false;
 }
 unsigned int __stdcall IOCPThreadPool::Run(void* obj)
 {
