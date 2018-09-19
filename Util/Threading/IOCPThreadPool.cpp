@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 NS_THREADING_BEGIN
-bool IOCPThreadPool::Init(UINT threadMaxSize)
+void IOCPThreadPool::Init(const UINT& threadMaxSize)
 {
 	try
 	{
@@ -30,6 +30,10 @@ bool IOCPThreadPool::Init(UINT threadMaxSize)
 		for (unsigned int i = 0; i < _thread_Max_Size; i++)
 			_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, Run, this, 0, NULL));
 
+	}
+	catch (const std::exception& ex)
+	{
+		throw ex;
 	}
 	catch (...)
 	{
