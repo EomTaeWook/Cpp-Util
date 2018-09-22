@@ -28,9 +28,8 @@ private:
 private:
 	static unsigned int __stdcall Run(void*);
 };
-inline IOCPThreadPool::IOCPThreadPool()
+inline IOCPThreadPool::IOCPThreadPool() : _completionPort(NULL)
 {
-	_completionPort = NULL;
 }
 inline IOCPThreadPool::~IOCPThreadPool()
 {

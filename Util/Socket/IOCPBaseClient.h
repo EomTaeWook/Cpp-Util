@@ -17,6 +17,7 @@ private:
 	std::vector<HANDLE> _hWorkerThread;
 	StateObject _stateObject;
 	sockaddr_in _iPEndPoint;
+	UINT _threadSize;
 public:
 	void Init(UINT threadSize = 0);
 	void Connect(std::string ip, int port, int timeOut = 5000);

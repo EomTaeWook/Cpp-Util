@@ -1,5 +1,6 @@
 #include "IOCPBaseClient.h"
 #include <WS2tcpip.h>
+#include <mstcpip.h>
 #include "../Common/Trace.h"
 #pragma comment(lib, "Ws2_32.lib")
 NS_SOCKET_BEGIN
@@ -7,7 +8,7 @@ void IOCPBaseClient::Init(UINT threadSize)
 {
 	_completionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 	if (_completionPort == INVALID_HANDLE_VALUE)
-		throw std::exception("CreateIoCompletionPort Fail : " + GetLastError());
+		throw std::exception(std::string("CreateIoCompletionPort Fail : " + std::to_string(GetLastError())).c_str());
 
 	SYSTEM_INFO info;
 	GetSystemInfo(&info);
@@ -22,6 +23,7 @@ void IOCPBaseClient::Init(UINT threadSize)
 		threadSize = info.dwNumberOfProcessors * 2;
 	for (size_t i = 0; i < threadSize; i++)
 		_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, Run, this, 0, NULL));
+	_threadSize = threadSize;
 }
 bool IOCPBaseClient::IsConnect()
 {
@@ -34,20 +36,20 @@ void IOCPBaseClient::DisConnect()
 void IOCPBaseClient::Connect(std::string ip, int port, int timeOut)
 {
 	if (_completionPort == NULL)
-		Init();
+		Init(_threadSize);
 
 	WSADATA WsaData;
 	if (WSAStartup(MAKEWORD(2, 2), &WsaData) != 0)
-		throw std::exception("WSAStartupError : " + GetLastError());
+		throw std::exception(std::string("WSAStartupError : " + std::to_string(GetLastError())).c_str());
 
 	auto socket = WSASocketW(AF_INET, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
 	if (socket == INVALID_SOCKET)
-		throw std::exception("SocketCraeteError : " + GetLastError());
+		throw std::exception(std::string("SocketCraeteError : " + std::to_string(GetLastError())).c_str());
 
 	memset(&_iPEndPoint, 0, sizeof(_iPEndPoint));
 
 	if (inet_pton(AF_INET, ip.c_str(), &_iPEndPoint.sin_addr) != 1)
-		throw std::exception("inet_pton : " + GetLastError());
+		throw std::exception(std::string("inet_pton : " + std::to_string(GetLastError())).c_str());
 
 	_iPEndPoint.sin_family = AF_INET;
 	_iPEndPoint.sin_port = htons(port);
@@ -67,11 +69,20 @@ void IOCPBaseClient::Connect(std::string ip, int port, int timeOut)
 			FD_ZERO(&fdError);
 			FD_SET(socket, &fdset);
 			FD_SET(socket, &fdError);
-			select(0, NULL, &fdset, &fdError, &tv);
+			::select(0, NULL, &fdset, &fdError, &tv);
 			if (FD_ISSET(socket, &fdset))
-			{
+			{		
 				_stateObject.Socket() = socket;
+
+				tcp_keepalive keepAlive;
+				keepAlive.onoff = 1;
+				keepAlive.keepalivetime = 5000;
+				keepAlive.keepaliveinterval = 1000;
+				DWORD bytes;
+				WSAIoctl(_stateObject.Socket(), SIO_KEEPALIVE_VALS, &keepAlive, sizeof(keepAlive), 0, 0, &bytes, NULL, NULL);
+
 				CreateIoCompletionPort((HANDLE)_stateObject.Socket(), _completionPort, (ULONG_PTR)&_stateObject, 0);
+
 				BeginReceive();
 				OnConnected(_stateObject);
 			}
@@ -79,14 +90,14 @@ void IOCPBaseClient::Connect(std::string ip, int port, int timeOut)
 			{
 				closesocket(socket);
 				WSACleanup();
-				throw std::exception("ConnectFail : " + error);
+				throw std::exception(std::string("ConnectFail : " + std::to_string(error)).c_str());
 			}
 		}
 		else
 		{
 			closesocket(socket);
 			WSACleanup();
-			throw std::exception("ConnectFail : " + error);
+			throw std::exception(std::string("ConnectFail : " + std::to_string(error)).c_str());
 		}
 	}
 }
@@ -135,6 +146,7 @@ int IOCPBaseClient::Invoke()
 			case ERROR_NETNAME_DELETED:
 			case ERROR_SEM_TIMEOUT:
 				pHandler->Close();
+				OnDisconnected();
 				break;
 			}
 			continue;
@@ -145,6 +157,7 @@ int IOCPBaseClient::Invoke()
 		if (bytesTrans == 0)
 		{
 			pHandler->Close();
+			OnDisconnected();
 			continue;
 		}
 		if (overlapped->mode == Socket::Mode::Receive)

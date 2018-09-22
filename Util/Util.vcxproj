@@ -198,7 +198,7 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
   <ItemGroup>
     <ClCompile Include="Common\Trace.cpp" />
     <ClCompile Include="Cryptography\SHA1.cpp" />
-    <ClCompile Include="Socket\ICOPBaseServer.cpp" />
+    <ClCompile Include="Socket\IOCPBaseServer.cpp" />
     <ClCompile Include="Socket\IOCPBaseClient.cpp" />
     <ClCompile Include="System\Message\MessageQueue.cpp" />
     <ClCompile Include="Threading\IOCPThreadPool.cpp" />

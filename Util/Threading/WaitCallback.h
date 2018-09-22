@@ -15,10 +15,9 @@ public:
 	virtual ~WaitCallback() {}
 public:
 };
-inline WaitCallback::WaitCallback(const std::function<void(void*)>& callback, void* state)
+inline WaitCallback::WaitCallback(const std::function<void(void*)>& callback, void* state) : _state(state)
 {
 	Common::MulticastDelegate<void, void*>::operator=(callback);
-	_state = state;
 }
 inline void WaitCallback::Invoke()
 {

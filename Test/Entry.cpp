@@ -6,13 +6,14 @@ class TestClient : public Util::Socket::IOCPSocketClient<int>
 	// IOCPSocketClient을(를) 통해 상속됨
 	virtual void OnDisconnected() override
 	{
+		printf("handle Disconnected");
 	}
 	virtual void OnConnected(Util::Socket::StateObject & stateObject) override
 	{
 	}
 	virtual void OnRecieved(Util::Socket::StateObject & stateObject) override
 	{
-
+		stateObject.ReceiveBuffer().Clear();
 	}
 };
 class TestServer : public Util::Socket::IOCPServerSocket<int>
@@ -47,7 +48,7 @@ int main()
 {
 	/*TestClient tc;
 	tc.Init();
-	tc.Connect("127.0.0.1", 10000);
+	tc.Connect("175.198.83.222", 50000);
 	
 	std::string test = "<test>";
 	Packet packet;
@@ -62,7 +63,7 @@ int main()
 	}
 	catch (const std::exception& ex)
 	{
-		
+		printf(ex.what());
 	}
 	
 	while (true)

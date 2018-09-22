@@ -196,14 +196,14 @@
     <ClCompile Include="Threading\IOCPThreadPool.cpp">
       <Filter>Threading\ThreadPool</Filter>
     </ClCompile>
-    <ClCompile Include="Socket\ICOPBaseServer.cpp">
-      <Filter>Socket\Server</Filter>
-    </ClCompile>
     <ClCompile Include="Common\Trace.cpp">
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="System\Message\MessageQueue.cpp">
       <Filter>System\Message\MSMQ</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\IOCPBaseServer.cpp">
+      <Filter>Socket\Server</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

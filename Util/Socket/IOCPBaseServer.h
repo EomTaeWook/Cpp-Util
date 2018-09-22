@@ -21,6 +21,7 @@ private:
 	std::vector<HANDLE> _hWorkerThread;
 	sockaddr_in _iPEndPoint;
 	SyncCount _handleCount;
+	UINT _threadSize;
 private:
 	SOCKET _listener;
 	Util::Threading::CriticalSection _remove;
@@ -46,10 +47,8 @@ protected:
 private:
 	static unsigned int __stdcall Run(void*);
 };
-inline IOCPBaseServer::IOCPBaseServer()
+inline IOCPBaseServer::IOCPBaseServer() : _threadSize(0), _completionPort(NULL), _isStart(false)
 {
-	_completionPort = NULL;
-	_isStart = false;
 }
 inline IOCPBaseServer::~IOCPBaseServer()
 {

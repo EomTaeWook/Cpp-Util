@@ -2,6 +2,7 @@
 #include "NS.h"
 #include <process.h>
 #include "../Common/MulticastDelegate.h"
+#include <string>
 NS_THREADING_BEGIN
 class Thread
 {

@@ -25,6 +25,7 @@ void IOCPBaseServer::Init(UINT threadSize)
 		threadSize = info.dwNumberOfProcessors * 2;
 	for (size_t i = 0; i < threadSize; i++)
 		_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, Run, this, 0, NULL));
+	_threadSize = threadSize;
 }
 
 void IOCPBaseServer::Start(std::string ip, int port)
@@ -34,46 +35,48 @@ void IOCPBaseServer::Start(std::string ip, int port)
 	try
 	{
 		if (_completionPort == NULL)
-			Init();
+			Init(_threadSize);
 		WSADATA _wsaData;
 		if (WSAStartup(MAKEWORD(2, 2), &_wsaData) != 0)
-			throw std::exception("WSAStartupError : " + GetLastError());
+			throw std::exception(std::string("WSAStartup Error : " + std::to_string(GetLastError())).c_str());
+
 		if (_thread.get() == NULL)
 		{
-			_isStart = true;
 			memset(&_iPEndPoint, 0, sizeof(_iPEndPoint));
-			if (inet_pton(PF_INET, ip.c_str(), &_iPEndPoint) != 1)
-				throw std::exception("SocketCraeteError : " + GetLastError());
-			_iPEndPoint.sin_family = PF_INET;
+			_iPEndPoint.sin_family = AF_INET;
 			_iPEndPoint.sin_port = htons(port);
+			if (inet_pton(AF_INET, ip.c_str(), &_iPEndPoint.sin_addr) != 1)
+				throw std::exception(std::string("Socket Create Error : " + std::to_string(GetLastError())).c_str());
+
 			_listener = WSASocketW(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
 			if (_listener == INVALID_SOCKET)
-			{
-				Stop();
-				throw std::exception("Listener Create Error : " + GetLastError());
-			}
+				throw std::exception(std::string("Listener Create Error : " + std::to_string(GetLastError())).c_str());
+
 			//accept NonBlock
 			//unsigned long mode = 1;
 			//ioctlsocket(_listener, FIONBIO, &mode);
-			int option = 1;
-			setsockopt(_listener, SOL_SOCKET, SO_REUSEADDR, (char*)&option, sizeof(option));
+			char option = 1;
+			setsockopt(_listener, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
+
 			if (::bind(_listener, (SOCKADDR*)&_iPEndPoint, sizeof(_iPEndPoint)) == SOCKET_ERROR)
-			{
-				Stop();
-				throw std::exception("BindException : " + GetLastError());
-			}
-			if (listen(_listener, 100) == SOCKET_ERROR)
-			{
-				Stop();
-				throw std::exception("ListenExcption : " + GetLastError());
-			}
+				throw std::exception(std::string("BindException : " + std::to_string(GetLastError())).c_str());
+
+			if (::listen(_listener, 200) == SOCKET_ERROR)
+				throw std::exception(std::string("ListenExcption : " + std::to_string(GetLastError())).c_str());
+
+			_isStart = true;
 			_thread = std::make_unique<Threading::Thread>(std::bind(&IOCPBaseServer::StartListening, this, nullptr));
 			_thread->Start();
 		}
 	}
+	catch (const std::exception& ex)
+	{
+		Stop();
+		throw ex;
+	}
 	catch (...)
 	{
-		_isStart = false;
+		Stop();
 		throw std::exception("Server Start Fail");
 	}
 }
@@ -84,18 +87,18 @@ void IOCPBaseServer::StartListening(void* pObj)
 		SOCKADDR_IN clientAddr;
 		int size = sizeof(clientAddr);
 		memset(&clientAddr, 0, size);
-		SOCKET handler = accept(_listener, (SOCKADDR*)&clientAddr, &size);
-		if (handler == INVALID_SOCKET)
+		SOCKET socket = accept(_listener, (SOCKADDR*)&clientAddr, &size);
+		if (socket == INVALID_SOCKET)
 			continue;
 		auto stateObject = new StateObject();
-		stateObject->Socket() = handler;
+		stateObject->Socket() = socket;
 
 		tcp_keepalive keepAlive;
 		keepAlive.onoff = 1;
 		keepAlive.keepalivetime = 5000;
 		keepAlive.keepaliveinterval = 1000;
-		DWORD option;
-		WSAIoctl(stateObject->Socket(), SIO_KEEPALIVE_VALS, &keepAlive, sizeof(keepAlive), 0, 0, &option, NULL, NULL);
+		DWORD bytes;
+		WSAIoctl(stateObject->Socket(), SIO_KEEPALIVE_VALS, &keepAlive, sizeof(keepAlive), 0, 0, &bytes, NULL, NULL);
 
 		std::memcpy(&stateObject->SocketAddr(), &clientAddr, size);
 		stateObject->Handle() = _handleCount.Add();
