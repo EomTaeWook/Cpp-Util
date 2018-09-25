@@ -182,13 +182,13 @@
     <ClInclude Include="System\Message\NS.h">
       <Filter>System\Message\MSMQ</Filter>
     </ClInclude>
+    <ClInclude Include="Socket\DefaultPacket.h">
+      <Filter>Socket</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cryptography\SHA1.cpp">
       <Filter>Cryptography</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket\IOCPBaseClient.cpp">
-      <Filter>Socket\Client</Filter>
     </ClCompile>
     <ClCompile Include="Web\HttpClient.cpp">
       <Filter>Web</Filter>
@@ -205,5 +205,9 @@
     <ClCompile Include="Socket\IOCPBaseServer.cpp">
       <Filter>Socket\Server</Filter>
     </ClCompile>
+    <ClCompile Include="Socket\IOCPBaseClient.cpp">
+      <Filter>Socket\Client</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket\DefaultPacket.cpp" />
   </ItemGroup>
 </Project>

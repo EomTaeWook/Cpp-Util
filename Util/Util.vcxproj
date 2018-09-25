@@ -171,6 +171,7 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <ClInclude Include="Cryptography\SHA1.h" />
     <ClInclude Include="Event\Event.h" />
     <ClInclude Include="Event\NS.h" />
+    <ClInclude Include="Socket\DefaultPacket.h" />
     <ClInclude Include="Socket\IOCPBaseClient.h" />
     <ClInclude Include="Socket\IOCPBaseServer.h" />
     <ClInclude Include="Socket\IOCPServerSocket.h" />
@@ -198,8 +199,9 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
   <ItemGroup>
     <ClCompile Include="Common\Trace.cpp" />
     <ClCompile Include="Cryptography\SHA1.cpp" />
-    <ClCompile Include="Socket\IOCPBaseServer.cpp" />
+    <ClCompile Include="Socket\DefaultPacket.cpp" />
     <ClCompile Include="Socket\IOCPBaseClient.cpp" />
+    <ClCompile Include="Socket\IOCPBaseServer.cpp" />
     <ClCompile Include="System\Message\MessageQueue.cpp" />
     <ClCompile Include="Threading\IOCPThreadPool.cpp" />
     <ClCompile Include="Web\HttpClient.cpp" />

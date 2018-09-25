@@ -8,7 +8,7 @@ protected:
 public:
 	virtual ~IPacket();
 public:
-	virtual void GetBytes(OUT char **buffer, OUT ULONG* size) = 0;
+	virtual void GetBytes(OUT char **buffer, OUT unsigned long* size) = 0;
 };
 inline IPacket::IPacket()
 {
