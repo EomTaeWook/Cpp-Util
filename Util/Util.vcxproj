@@ -171,7 +171,6 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <ClInclude Include="Cryptography\SHA1.h" />
     <ClInclude Include="Event\Event.h" />
     <ClInclude Include="Event\NS.h" />
-    <ClInclude Include="Socket\DefaultPacket.h" />
     <ClInclude Include="Socket\IOCPBaseClient.h" />
     <ClInclude Include="Socket\IOCPBaseServer.h" />
     <ClInclude Include="Socket\IOCPServerSocket.h" />

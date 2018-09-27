@@ -35,6 +35,7 @@ public:
 public:
 	void Close();
 	void Send(Util::Socket::IPacket& packet);
+	void Send(const char* message, unsigned long size);
 };
 
 inline StateObject::StateObject()
@@ -76,6 +77,17 @@ inline void StateObject::Send(Util::Socket::IPacket& packet)
 			if (WSAGetLastError() != WSA_IO_PENDING)
 				Close();
 		}
+	}
+}
+inline void StateObject::Send(const char* message, unsigned long size)
+{
+	WSABUF wsaBuf;
+	wsaBuf.buf = (char*)message;
+	wsaBuf.len = size;
+	if (::WSASend(_sock, &wsaBuf, 1, NULL, 0, (LPWSAOVERLAPPED)&_sendOverlapped, NULL) == SOCKET_ERROR)
+	{
+		if (WSAGetLastError() != WSA_IO_PENDING)
+			Close();
 	}
 }
 inline void StateObject::Close()

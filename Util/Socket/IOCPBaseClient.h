@@ -41,9 +41,8 @@ protected:
 public:
 	static unsigned int __stdcall Run(void*);
 };
-inline IOCPBaseClient::IOCPBaseClient()
+inline IOCPBaseClient::IOCPBaseClient() : _threadSize(0), _completionPort(NULL)
 {
-	_completionPort = NULL;
 }
 inline IOCPBaseClient::~IOCPBaseClient()
 {

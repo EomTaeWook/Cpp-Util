@@ -56,7 +56,7 @@ void IOCPBaseServer::Start(std::string ip, int port)
 			//unsigned long mode = 1;
 			//ioctlsocket(_listener, FIONBIO, &mode);
 			char option = 1;
-			setsockopt(_listener, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
+			::setsockopt(_listener, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
 
 			if (::bind(_listener, (SOCKADDR*)&_iPEndPoint, sizeof(_iPEndPoint)) == SOCKET_ERROR)
 				throw std::exception(std::string("BindException : " + std::to_string(GetLastError())).c_str());
@@ -153,7 +153,7 @@ int IOCPBaseServer::Invoke()
 		{
 			auto pHandler = reinterpret_cast<StateObject*>(stateObject);
 			long error = ::WSAGetLastError();
-			Common::Trace::WriteLine(std::to_string(error), "error");
+			Common::Trace::WriteLine(std::to_string(error), "Error");
 			switch (error)
 			{
 			case ERROR_NETNAME_DELETED:

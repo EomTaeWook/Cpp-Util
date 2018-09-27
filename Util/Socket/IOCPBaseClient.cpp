@@ -1,7 +1,6 @@
 #include "IOCPBaseClient.h"
 #include <WS2tcpip.h>
 #include "../Common/Trace.h"
-#include "DefaultPacket.h"
 #pragma comment(lib, "Ws2_32.lib")
 NS_SOCKET_BEGIN
 void IOCPBaseClient::Init(UINT threadSize)
@@ -173,6 +172,7 @@ int IOCPBaseClient::Invoke()
 		if (bytesTrans == 0)
 		{
 			pHandle->Close();
+			_keepAliveThread.reset();
 			OnDisconnected();
 			continue;
 		}
@@ -201,9 +201,6 @@ unsigned int __stdcall IOCPBaseClient::Run(void* obj)
 }
 void IOCPBaseClient::OnKeepAlive(Util::Socket::StateObject& stateObject)
 {
-	Util::Socket::DefaultPacket packet;
-	std::string message("{}");
-	packet.Insert(message.c_str(), message.size());
-	stateObject.Send(packet);
+	stateObject.Send("", 1);
 }
 NS_SOCKET_END

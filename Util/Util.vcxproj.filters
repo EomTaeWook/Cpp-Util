@@ -182,9 +182,6 @@
     <ClInclude Include="System\Message\NS.h">
       <Filter>System\Message\MSMQ</Filter>
     </ClInclude>
-    <ClInclude Include="Socket\DefaultPacket.h">
-      <Filter>Socket</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cryptography\SHA1.cpp">

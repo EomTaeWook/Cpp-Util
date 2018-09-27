@@ -6,7 +6,7 @@ class TestClient : public Util::Socket::IOCPSocketClient<int>
 	// IOCPSocketClient을(를) 통해 상속됨
 	virtual void OnDisconnected() override
 	{
-		printf("handle Disconnected");
+		printf("handle Disconnected\n");
 	}
 	virtual void OnConnected(Util::Socket::StateObject & stateObject) override
 	{
