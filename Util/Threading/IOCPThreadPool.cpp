@@ -7,7 +7,7 @@ void IOCPThreadPool::Init(const UINT& threadMaxSize)
 {
 	try
 	{
-		if (!Stop())
+		if (_completionPort != NULL)
 			return;
 
 		_completionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
@@ -16,20 +16,14 @@ void IOCPThreadPool::Init(const UINT& threadMaxSize)
 
 		SYSTEM_INFO info;
 		GetSystemInfo(&info);
+		_threadSize = threadMaxSize;
+		if (info.dwNumberOfProcessors * 2 < _threadSize)
+			_threadSize = info.dwNumberOfProcessors * 2;
+		else if (_threadSize == 0)
+			_threadSize = info.dwNumberOfProcessors * 2;
 
-		if (threadMaxSize > 0)
-		{
-			if (info.dwNumberOfProcessors * 2 < threadMaxSize)
-				_thread_Max_Size = info.dwNumberOfProcessors * 2;
-			else
-				_thread_Max_Size = threadMaxSize;
-		}
-		else
-			_thread_Max_Size = info.dwNumberOfProcessors * 2;
-
-		for (unsigned int i = 0; i < _thread_Max_Size; i++)
+		for (unsigned int i = 0; i < _threadSize; i++)
 			_hWorkerThread.push_back((HANDLE)_beginthreadex(0, 0, Run, this, 0, NULL));
-
 	}
 	catch (const std::exception& ex)
 	{
@@ -41,7 +35,7 @@ void IOCPThreadPool::Init(const UINT& threadMaxSize)
 		throw std::exception(message.c_str());
 	}
 }
-bool IOCPThreadPool::Stop()
+void IOCPThreadPool::Stop()
 {
 	if (_completionPort)
 	{
@@ -57,17 +51,15 @@ bool IOCPThreadPool::Stop()
 		CloseHandle(_completionPort);
 		_completionPort = NULL;
 	}
-	return true;
 }
 bool IOCPThreadPool::InsertQueueItem(const std::function<void(void*)>& callback, void* args)
 {
-	if (_completionPort == NULL)
-		throw std::exception("ThreadPool Not Initiated");
-
 	auto finally = Util::Common::Finally(std::bind(&CriticalSection::LeaveCriticalSection, &_cs));
 	try
 	{
 		_cs.EnterCriticalSection();
+		if (_completionPort == NULL)
+			Init(_threadSize);
 		WaitCallback* pWaitCallback = new WaitCallback(callback, args);
 		if (pWaitCallback == NULL)
 			return false;

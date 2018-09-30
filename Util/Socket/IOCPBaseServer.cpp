@@ -183,6 +183,10 @@ int IOCPBaseServer::Invoke()
 			{
 				Common::Trace::WriteLine(ex.what(), "Invoke");
 			}
+			catch (...)
+			{
+				Common::Trace::WriteLine("InvokeException");
+			}
 			BeginReceive(pHandler);
 		}
 	}

@@ -1,5 +1,6 @@
 #include "IOCPBaseClient.h"
 #include <WS2tcpip.h>
+#include <mstcpip.h>
 #include "../Common/Trace.h"
 #pragma comment(lib, "Ws2_32.lib")
 NS_SOCKET_BEGIN
@@ -65,8 +66,17 @@ void IOCPBaseClient::Connect(std::string ip, int port, int timeOut)
 			{
 				_stateObject.Socket() = socket;
 				CreateIoCompletionPort((HANDLE)_stateObject.Socket(), _completionPort, (ULONG_PTR)&_stateObject, 0);
-				_keepAliveThread = std::make_unique<Util::Threading::Thread>(std::bind(&IOCPBaseClient::KeepAlive, this, std::placeholders::_1), &_stateObject);
-				_keepAliveThread->Start();
+
+				tcp_keepalive keepAlive;
+				keepAlive.onoff = 1;
+				keepAlive.keepalivetime = 5000;
+				keepAlive.keepaliveinterval = 1000;
+				DWORD bytes;
+				WSAIoctl(_stateObject.Socket(), SIO_KEEPALIVE_VALS, &keepAlive, sizeof(keepAlive), 0, 0, &bytes, NULL, NULL);
+
+				/*_keepAliveThread = std::make_unique<Util::Threading::Thread>(std::bind(&IOCPBaseClient::KeepAlive, this, std::placeholders::_1), &_stateObject);
+				_keepAliveThread->Start();*/
+
 				OnConnected(_stateObject);
 				BeginReceive();
 			}
@@ -160,7 +170,7 @@ int IOCPBaseClient::Invoke()
 			case ERROR_NETNAME_DELETED:
 			case ERROR_SEM_TIMEOUT:
 				pHandle->Close();
-				_keepAliveThread.reset();
+				//_keepAliveThread.reset();
 				OnDisconnected();
 				break;
 			}
@@ -172,7 +182,7 @@ int IOCPBaseClient::Invoke()
 		if (bytesTrans == 0)
 		{
 			pHandle->Close();
-			_keepAliveThread.reset();
+			//_keepAliveThread.reset();
 			OnDisconnected();
 			continue;
 		}
@@ -186,6 +196,10 @@ int IOCPBaseClient::Invoke()
 			catch (const std::exception& ex)
 			{
 				Common::Trace::WriteLine(ex.what(), "Invoke");
+			}
+			catch (...)
+			{
+				Common::Trace::WriteLine("InvokeException");
 			}
 			BeginReceive();
 		}

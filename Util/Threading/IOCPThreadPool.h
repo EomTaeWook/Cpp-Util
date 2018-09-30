@@ -11,7 +11,7 @@ private:
 
 	HANDLE _completionPort;
 	std::vector<HANDLE> _hWorkerThread;
-	UINT _thread_Max_Size;
+	UINT _threadSize;
 	CriticalSection _cs;
 public:
 	IOCPThreadPool();
@@ -22,13 +22,13 @@ public:
 public:
 	IOCPThreadPool & operator=(const IOCPThreadPool&) = delete;
 private:
-	bool Stop();
+	void Stop();
 	void DeleteItem(WaitCallback* WaitCallback);
 	int Invoke();
 private:
 	static unsigned int __stdcall Run(void*);
 };
-inline IOCPThreadPool::IOCPThreadPool() : _completionPort(NULL)
+inline IOCPThreadPool::IOCPThreadPool() : _completionPort(NULL), _threadSize(0)
 {
 }
 inline IOCPThreadPool::~IOCPThreadPool()

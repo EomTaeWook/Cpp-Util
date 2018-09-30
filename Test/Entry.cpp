@@ -1,6 +1,10 @@
 #include <Socket/IOCPServerSocket.h>
 #include <Socket/IOCPSocketClient.h>
 #include <Common/Trace.h>
+#include <Logger/FileLogger.h>
+#include <Collections/PriorityQueue.h>
+#include <queue>
+#include <Threading/IOCPThreadPool.h>
 class TestClient : public Util::Socket::IOCPSocketClient<int>
 {
 	// IOCPSocketClient을(를) 통해 상속됨
@@ -44,37 +48,96 @@ struct Packet : Util::Socket::IPacket
 		*size = (ULONG)Data.size();
 	}
 };
+void WriteMessage()
+{
+	Util::Logger::FileLogger::Instance()->Write(L"한글 테스트 " + std::to_wstring(std::chrono::system_clock::now().time_since_epoch().count()));
+}
 int main()
 {
-	/*
+	Util::Logger::FileLogger::Instance()->Init(Util::Logger::LoggerPeriod::Hour);
 	
+	Util::Collections::PriorityQueue<Util::Logger::LogMessage, Util::Logger::LogMessage::Compare> _queue;
+	_queue.Push(Util::Logger::LogMessage(L"1"));
+	_queue.Push(Util::Logger::LogMessage(L"2"));
+	_queue.Push(Util::Logger::LogMessage(L"3"));
+
+	auto item = _queue.Pop();
+	item = _queue.Pop();
+	item = _queue.Pop();
+
+	Util::Logger::FileLogger::Instance()->Write(L"한글 테스트");
+	Util::Logger::FileLogger::Instance()->Write(L"한글 테스트");
+	while (true)
+	{
+		for(int i=0; i<5000; i++)
+			Util::Threading::IOCPThreadPool::Instance()->InsertQueueItem(std::bind(WriteMessage), nullptr);
+	}
+	
+
+	std::priority_queue<int> stlQueue;
+	stlQueue.push(10);
+	stlQueue.push(9);
+	stlQueue.push(11);
+	stlQueue.push(9);
+	stlQueue.push(11);
+	stlQueue.push(9);
+	stlQueue.push(9);
+	stlQueue.push(11);
+	//while (stlQueue.size() > 0)
+	//{
+	//	auto item = stlQueue.top();
+	//	for (auto i = 0; i < stlQueue.size(); i++)
+	//	{
+	//		//printf("%d ", stlQueue[i]);
+	//	}
+	//	printf("Read : %d\n", item);
+
+
+	//}
+
+	
+
+	while (_queue.Count() > 0)
+	{
+		auto item = _queue.Pop();
+		for (auto i = 0; i < _queue.Count(); i++)
+		{
+			printf("%d ", _queue[i]);
+		}
+		printf("Read : %d\n", item);
+		
+
+	}
+
+
+	/*
 	std::string test = "<test>";
 	Packet packet;
 	packet.Data.assign(test.begin(), test.end());
 	tc.Send(packet);*/
-	TestServer ts;
-	try
-	{
-		//Util::Common::Trace::Assert(1 == 0, "Assert");
-		ts.Init();
-		ts.Start("192.169.0.2", 10000);
+	//TestServer ts;
+	//try
+	//{
+	//	//Util::Common::Trace::Assert(1 == 0, "Assert");
+	//	ts.Init();
+	//	ts.Start("192.169.0.2", 10000);
 
 
-	}
-	catch (const std::exception& ex)
-	{
-		printf(ex.what());
-	}
-	
-	TestClient tc;
-	tc.Init();
-	tc.Connect("192.169.0.2", 10000);
-	std::string test = "In the sky where the seasons passIt is full of autumn.I have no worriesI feel like staring in the stars in the fall.One star in the heartNow,Because of this morning,That's why tomorrow night is left,This is why my youth has not finished yet.With one's memoryLove and one on one starOne loneliness in one starOne starOne star is poetryMother, Mother,Mother, I try to sing a beautiful word on a star. The names of the children who shared their desks during elementary school, the names of the ladies, the gods, the jokes, the exotic girls, the names of the already mothers, the names of the poor neighbors, the doves, dogs, rabbits, mules, I will call the names of these poets: 'Francis sleep [1]', 'Liner Maria Rilke [2]'.These are too far away.The stars are as far as you can be.mother,And you are in North Korea.I miss what I amOn top of this many starry hillsI write my nameI covered it with dirt.The other worms crying at nightIt is because of the mourning of the shameful name.But when winter passes and my star comes sgAs the blue grass blooms on the graveMy name is on the buried hill.It will be grassy like boast.";
-	Packet packet;
-	packet.Data.assign(test.begin(), test.end());
+	//}
+	//catch (const std::exception& ex)
+	//{
+	//	printf(ex.what());
+	//}
+	//
+	//TestClient tc;
+	//tc.Init();
+	//tc.Connect("192.169.0.2", 10000);
+	//std::string test = "In the sky where the seasons passIt is full of autumn.I have no worriesI feel like staring in the stars in the fall.One star in the heartNow,Because of this morning,That's why tomorrow night is left,This is why my youth has not finished yet.With one's memoryLove and one on one starOne loneliness in one starOne starOne star is poetryMother, Mother,Mother, I try to sing a beautiful word on a star. The names of the children who shared their desks during elementary school, the names of the ladies, the gods, the jokes, the exotic girls, the names of the already mothers, the names of the poor neighbors, the doves, dogs, rabbits, mules, I will call the names of these poets: 'Francis sleep [1]', 'Liner Maria Rilke [2]'.These are too far away.The stars are as far as you can be.mother,And you are in North Korea.I miss what I amOn top of this many starry hillsI write my nameI covered it with dirt.The other worms crying at nightIt is because of the mourning of the shameful name.But when winter passes and my star comes sgAs the blue grass blooms on the graveMy name is on the buried hill.It will be grassy like boast.";
+	//Packet packet;
+	//packet.Data.assign(test.begin(), test.end());
 	while (true)
 	{
-		tc.Send(packet);
+		//tc.Send(packet);
 		Sleep(4000);
 	}
 	return 0;

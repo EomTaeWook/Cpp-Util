@@ -43,6 +43,9 @@
     <Filter Include="System\Message\MSMQ">
       <UniqueIdentifier>{76e636fa-9ca4-4bee-961e-c2e87b070f41}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Logger">
+      <UniqueIdentifier>{816ec358-9f72-4569-967b-65d5b866802e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Collections\cpp.hint">
@@ -68,6 +71,9 @@
     </None>
     <None Include="System\Message\cpp.hint">
       <Filter>System\Message\MSMQ</Filter>
+    </None>
+    <None Include="Logger\cpp.hint">
+      <Filter>Logger</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -182,6 +188,25 @@
     <ClInclude Include="System\Message\NS.h">
       <Filter>System\Message\MSMQ</Filter>
     </ClInclude>
+    <ClInclude Include="Logger\NS.h">
+      <Filter>Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger\FileLogger.h">
+      <Filter>Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger\EnumLogger.h">
+      <Filter>Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger\LogMessage.h">
+      <Filter>Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\PriorityQueue.h">
+      <Filter>Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\EnumCollection.h">
+      <Filter>Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="Collections\DoublePriorityQueue.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cryptography\SHA1.cpp">
@@ -205,6 +230,8 @@
     <ClCompile Include="Socket\IOCPBaseClient.cpp">
       <Filter>Socket\Client</Filter>
     </ClCompile>
-    <ClCompile Include="Socket\DefaultPacket.cpp" />
+    <ClCompile Include="Logger\FileLogger.cpp">
+      <Filter>Logger</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

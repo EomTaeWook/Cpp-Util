@@ -151,14 +151,18 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <None Include="Common\cpp.hint" />
     <None Include="Cryptography\cpp.hint" />
     <None Include="Event\cpp.hint" />
+    <None Include="Logger\cpp.hint" />
     <None Include="Socket\cpp.hint" />
     <None Include="System\Message\cpp.hint" />
     <None Include="Threading\cpp.hint" />
     <None Include="Web\cpp.hint" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Collections\DoublePriorityQueue.h" />
+    <ClInclude Include="Collections\EnumCollection.h" />
     <ClInclude Include="Collections\Iterator.h" />
     <ClInclude Include="Collections\NS.h" />
+    <ClInclude Include="Collections\PriorityQueue.h" />
     <ClInclude Include="Collections\Queue.h" />
     <ClInclude Include="Collections\SyncQueue.h" />
     <ClInclude Include="Common\Delegate.h" />
@@ -171,6 +175,10 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
     <ClInclude Include="Cryptography\SHA1.h" />
     <ClInclude Include="Event\Event.h" />
     <ClInclude Include="Event\NS.h" />
+    <ClInclude Include="Logger\EnumLogger.h" />
+    <ClInclude Include="Logger\FileLogger.h" />
+    <ClInclude Include="Logger\LogMessage.h" />
+    <ClInclude Include="Logger\NS.h" />
     <ClInclude Include="Socket\IOCPBaseClient.h" />
     <ClInclude Include="Socket\IOCPBaseServer.h" />
     <ClInclude Include="Socket\IOCPServerSocket.h" />
@@ -198,7 +206,7 @@ IF EXIST "$(SolutionDir)Include" (xcopy /S/Y "$(SolutionDir)Include\*.*" "$(Solu
   <ItemGroup>
     <ClCompile Include="Common\Trace.cpp" />
     <ClCompile Include="Cryptography\SHA1.cpp" />
-    <ClCompile Include="Socket\DefaultPacket.cpp" />
+    <ClCompile Include="Logger\FileLogger.cpp" />
     <ClCompile Include="Socket\IOCPBaseClient.cpp" />
     <ClCompile Include="Socket\IOCPBaseServer.cpp" />
     <ClCompile Include="System\Message\MessageQueue.cpp" />
