@@ -28,6 +28,7 @@ void FileLogger::Init(LoggerPeriod period, const std::string& path)
 		::CreateDirectory(_path.c_str(), NULL);
 
 	_fs.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t, 0x10ffff, static_cast<std::codecvt_mode>(std::generate_header | std::consume_header)>));
+	_fs.sync_with_stdio(false);
 	CreateLogFile();
 }
 void FileLogger::Write(const std::wstring& message)

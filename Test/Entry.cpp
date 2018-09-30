@@ -54,35 +54,61 @@ void WriteMessage()
 }
 int main()
 {
-	Util::Logger::FileLogger::Instance()->Init(Util::Logger::LoggerPeriod::Hour);
+	//Util::Logger::FileLogger::Instance()->Init(Util::Logger::LoggerPeriod::Hour);
+	//
+	//Util::Collections::PriorityQueue<Util::Logger::LogMessage, Util::Logger::LogMessage::Compare> _queue;
+	//_queue.Push(Util::Logger::LogMessage(L"1"));
+	//_queue.Push(Util::Logger::LogMessage(L"2"));
+	//_queue.Push(Util::Logger::LogMessage(L"3"));
+
+	//auto item = _queue.Pop();
+	//item = _queue.Pop();
+	//item = _queue.Pop();
+
+	//Util::Logger::FileLogger::Instance()->Write(L"한글 테스트");
+	//Util::Logger::FileLogger::Instance()->Write(L"한글 테스트");
+	//while (true)
+	//{
+	//	for(int i=0; i<5000; i++)
+	//		Util::Threading::IOCPThreadPool::Instance()->InsertQueueItem(std::bind(WriteMessage), nullptr);
+	//}
+	//
+
 	
-	Util::Collections::PriorityQueue<Util::Logger::LogMessage, Util::Logger::LogMessage::Compare> _queue;
-	_queue.Push(Util::Logger::LogMessage(L"1"));
-	_queue.Push(Util::Logger::LogMessage(L"2"));
-	_queue.Push(Util::Logger::LogMessage(L"3"));
 
-	auto item = _queue.Pop();
-	item = _queue.Pop();
-	item = _queue.Pop();
-
-	Util::Logger::FileLogger::Instance()->Write(L"한글 테스트");
-	Util::Logger::FileLogger::Instance()->Write(L"한글 테스트");
-	while (true)
-	{
-		for(int i=0; i<5000; i++)
-			Util::Threading::IOCPThreadPool::Instance()->InsertQueueItem(std::bind(WriteMessage), nullptr);
-	}
-	
-
+	auto stlStart = std::chrono::system_clock::now();
 	std::priority_queue<int> stlQueue;
-	stlQueue.push(10);
-	stlQueue.push(9);
-	stlQueue.push(11);
-	stlQueue.push(9);
-	stlQueue.push(11);
-	stlQueue.push(9);
-	stlQueue.push(9);
-	stlQueue.push(11);
+	for (int i = 0; i < 110000; i++)
+		stlQueue.push(i);
+
+	for (int i = 0; i < 110000; i++)
+	{
+		printf("%d", stlQueue.top());
+		stlQueue.pop();
+	}
+		
+	auto stlEnd = std::chrono::system_clock::now();
+	
+	auto utilStart = std::chrono::system_clock::now();
+	Util::Collections::PriorityQueue<int> _utilQueue;
+	for (int i = 0; i < 110000; i++)
+		_utilQueue.Push(i);
+
+	for (int i = 0; i < 110000; i++)
+	{
+		printf("%d", _utilQueue.Pop());
+	}
+
+	auto utilEnd = std::chrono::system_clock::now();
+	
+	std::chrono::duration<double> stlspan = stlEnd - stlStart;
+	std::chrono::duration<double> utilspan = utilEnd - utilStart;
+
+	printf("\n");
+	printf("util : %lf STL : %lf", utilspan, stlspan);
+
+	getchar();
+	
 	//while (stlQueue.size() > 0)
 	//{
 	//	auto item = stlQueue.top();
@@ -95,19 +121,19 @@ int main()
 
 	//}
 
-	
+	//
 
-	while (_queue.Count() > 0)
-	{
-		auto item = _queue.Pop();
-		for (auto i = 0; i < _queue.Count(); i++)
-		{
-			printf("%d ", _queue[i]);
-		}
-		printf("Read : %d\n", item);
-		
+	//while (_queue.Count() > 0)
+	//{
+	//	auto item = _queue.Pop();
+	//	for (auto i = 0; i < _queue.Count(); i++)
+	//	{
+	//		printf("%d ", _queue[i]);
+	//	}
+	//	printf("Read : %d\n", item);
+	//	
 
-	}
+	//}
 
 
 	/*

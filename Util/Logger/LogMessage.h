@@ -40,9 +40,11 @@ inline LogMessage::LogMessage(const std::wstring& message)
 	::localtime_s(&timeInfo, &time);
 	wchar_t timeBuff[20];
 	std::wcsftime(timeBuff, 20, L"%Y-%m-%d %H:%M:%S", &timeInfo);
+	std::wstring ms = std::to_wstring(milliseconds.count());
+
 	_message.append(L"[")
 		.append(timeBuff)
-		.append(L"." + std::to_wstring(milliseconds.count()))
+		.append(L"." + std::wstring().insert(0, 3 - ms.size(), '0').append(ms))
 		.append(L"]")
 		.append(L" " + message);
 }
