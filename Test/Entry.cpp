@@ -54,7 +54,7 @@ void WriteMessage()
 }
 int main()
 {
-	//Util::Logger::FileLogger::Instance()->Init(Util::Logger::LoggerPeriod::Hour);
+	Util::Logger::FileLogger::Instance()->Init(Util::Logger::LoggerPeriod::Hour);
 	//
 	//Util::Collections::PriorityQueue<Util::Logger::LogMessage, Util::Logger::LogMessage::Compare> _queue;
 	//_queue.Push(Util::Logger::LogMessage(L"1"));

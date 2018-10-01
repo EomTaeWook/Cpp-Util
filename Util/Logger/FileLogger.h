@@ -23,7 +23,7 @@ private:
 	std::wfstream _fs;
 	tm _time;
 public:
-	void Init(LoggerPeriod period = LoggerPeriod::Infinitely, const std::string& path = "");
+	void Init(LoggerPeriod period = LoggerPeriod::Infinitely, const std::string& moduleName="", const std::string& path = "");
 	void Write(const std::wstring& message);
 private:
 	void WriteMessage(const LogMessage& message);
