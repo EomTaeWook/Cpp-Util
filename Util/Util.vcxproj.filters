@@ -206,7 +206,9 @@
     <ClInclude Include="Collections\EnumCollection.h">
       <Filter>Collections</Filter>
     </ClInclude>
-    <ClInclude Include="Collections\DoublePriorityQueue.h" />
+    <ClInclude Include="Collections\DoublePriorityQueue.h">
+      <Filter>Collections</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cryptography\SHA1.cpp">
