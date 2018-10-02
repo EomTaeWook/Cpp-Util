@@ -8,6 +8,8 @@ FileLogger::FileLogger()
 }
 FileLogger::~FileLogger()
 {
+	Invoke(nullptr);
+	Invoke(nullptr);
 	_fs.close();
 }
 void FileLogger::Init(LoggerPeriod period, const std::string& moduleName, const std::string& path)
@@ -46,14 +48,26 @@ void FileLogger::Write(const std::wstring& message)
 	_appand.EnterCriticalSection();
 	_queue.AppendQueue().Push(LogMessage(message));
 	if (_queue.ReadQueue().Count() == 0)
-	{
-		_queue.Swap();
 		Threading::IOCPThreadPool::Instance()->InsertQueueItem(std::bind(&FileLogger::Invoke, this, std::placeholders::_1), nullptr);
-	}
 }
 void FileLogger::WriteMessage (const LogMessage& message)
 {	
-	auto format = ((LogMessage)message).GetLogMessage();
+	auto now = std::chrono::system_clock::now();
+	auto since = now.time_since_epoch();
+	auto second = std::chrono::duration_cast<std::chrono::seconds>(since);
+	since -= second;
+	auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(since);
+	auto time = std::chrono::system_clock::to_time_t(now);
+	tm timeInfo;
+	::localtime_s(&timeInfo, &time);
+	wchar_t timeBuff[20];
+	std::wcsftime(timeBuff, 20, L"%Y-%m-%d %H:%M:%S", &timeInfo);
+	std::wstring ms = std::to_wstring(milliseconds.count());
+	auto format = std::wstring(L"[")
+		.append(timeBuff)
+		.append(L"." + std::wstring().insert(0, 3 - ms.size(), '0') + ms.c_str())
+		.append(L"]")
+		.append(L" " + ((LogMessage)message).GetLogMessage());
 #if _DEBUG
 	Common::Trace::WriteLine(format.c_str());
 #endif
@@ -66,7 +80,7 @@ void FileLogger::Invoke(void* state)
 	if (_write.TryEnterCriticalSection())
 	{
 		auto finally = Common::Finally(std::bind(&Threading::CriticalSection::LeaveCriticalSection, &_write));
-
+		_queue.Swap();
 		while (_queue.ReadQueue().Count() > 0)
 		{
 			switch (_period)
