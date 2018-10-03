@@ -3,13 +3,15 @@
 #include "../Threading/IOCPThreadPool.h"
 #include "../Common/Trace.h"
 NS_LOGGER_BEGIN
-FileLogger::FileLogger()
+FileLogger::FileLogger() : _PeriodCompare(nullptr)
+						, _thread(std::bind(&FileLogger::Invoke, this), nullptr)
 {
 }
 FileLogger::~FileLogger()
 {
-	Invoke(nullptr);
-	Invoke(nullptr);
+	_isStart = false;
+	_trigger.notify_all();
+	_thread.Join();
 	_fs.close();
 }
 void FileLogger::Init(LoggerPeriod period, const std::string& moduleName, const std::string& path)
@@ -34,21 +36,31 @@ void FileLogger::Init(LoggerPeriod period, const std::string& moduleName, const 
 	DWORD attribs = ::GetFileAttributesA(_path.c_str());
 	if (attribs == INVALID_FILE_ATTRIBUTES) 
 		::CreateDirectory(_path.c_str(), NULL);
-
+	switch (_period)
+	{
+	case Util::Logger::LoggerPeriod::Hour:
+		_PeriodCompare = std::bind(&FileLogger::HourCompare, this);
+		break;
+	case Util::Logger::LoggerPeriod::Day:
+		_PeriodCompare = std::bind(&FileLogger::DayCompare, this);
+		break;
+	}
 	_fs.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t, 0x10ffff, static_cast<std::codecvt_mode>(std::generate_header | std::consume_header)>));
 	_fs.sync_with_stdio(false);
 	CreateLogFile();
+	_isStart = true;
+	_thread.Start();
 }
-void FileLogger::Write(const std::wstring& message)
+void FileLogger::Write(const std::wstring& message, const std::chrono::system_clock::time_point& timeStamp)
 {
 	if (!_fs.is_open())
 		throw std::exception("Logger Not Initialization");
 
 	auto finally = Common::Finally(std::bind(&Threading::CriticalSection::LeaveCriticalSection, &_appand));
 	_appand.EnterCriticalSection();
-	_queue.AppendQueue().Push(LogMessage(message));
-	if (_queue.ReadQueue().Count() == 0)
-		Threading::IOCPThreadPool::Instance()->InsertQueueItem(std::bind(&FileLogger::Invoke, this, std::placeholders::_1), nullptr);
+	_queue.Push(LogMessage(message, timeStamp));
+	if (!_doWork)
+		_trigger.notify_all();
 }
 void FileLogger::WriteMessage (const LogMessage& message)
 {	
@@ -74,25 +86,23 @@ void FileLogger::WriteMessage (const LogMessage& message)
 	_fs.write(format.c_str(), format.size());
 	_fs.put(L'\r').put(L'\n').flush();
 }
-void FileLogger::Invoke(void* state)
+void FileLogger::Invoke()
 {
-	
-	if (_write.TryEnterCriticalSection())
+	std::unique_lock<std::mutex> lock(_write);
+	while (_isStart)
 	{
-		auto finally = Common::Finally(std::bind(&Threading::CriticalSection::LeaveCriticalSection, &_write));
-		_queue.Swap();
-		while (_queue.ReadQueue().Count() > 0)
+		_doWork = false;
+		_trigger.wait_for(lock, std::chrono::seconds(5));
+		_doWork = true;
+		while (_queue.AppendCount() > 0)
 		{
-			switch (_period)
+			_queue.Swap();
+			while (_queue.ReadCount() > 0)
 			{
-			case Util::Logger::LoggerPeriod::Hour:
-				HourCompare();
-				break;
-			case Util::Logger::LoggerPeriod::Day:
-				DayCompare();
-				break;
+				if (_PeriodCompare != nullptr)
+					_PeriodCompare();
+				WriteMessage(_queue.Pop());
 			}
-			WriteMessage(_queue.ReadQueue().Pop());
 		}
 	}
 }

@@ -17,6 +17,7 @@ public:
 	virtual ~Thread();
 public:
 	void Start();
+	void Join();
 public:
 	void operator()(const std::function<void(void *)>& callback, void* pObj = NULL);
 	Thread& operator=(const Thread&) = delete;
@@ -26,11 +27,15 @@ private:
 };
 inline Thread::Thread() :_handle(nullptr), _delegate(nullptr), _obj(nullptr)
 {
-}
+}
 inline Thread::Thread(const std::function<void(void *)>& callback, void* pObj) : _handle(nullptr), _delegate(callback), _obj(pObj)
 {
 }
-inline  Thread::~Thread()
+inline Thread::~Thread()
+{
+	Join();
+}
+inline void Thread::Join()
 {
 	if (_handle)
 	{

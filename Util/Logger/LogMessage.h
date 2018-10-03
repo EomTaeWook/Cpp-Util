@@ -8,6 +8,7 @@ class LogMessage
 public:
 	LogMessage();
 	LogMessage(const std::wstring& message);
+	LogMessage(const std::wstring& message, const std::chrono::system_clock::time_point& timeStamp);
 	~LogMessage();
 private:
 	long long _time;
@@ -29,7 +30,11 @@ inline LogMessage::LogMessage()
 }
 inline LogMessage::LogMessage(const std::wstring& message)
 {
-	_time = std::chrono::system_clock::now().time_since_epoch().count();
+	LogMessage::LogMessage(message, std::chrono::system_clock::now());
+}
+inline LogMessage::LogMessage(const std::wstring& message, const std::chrono::system_clock::time_point& timeStamp)
+{
+	_time = timeStamp.time_since_epoch().count();
 	_message = message;
 }
 inline LogMessage::~LogMessage()
