@@ -92,7 +92,7 @@ void FileLogger::Invoke()
 	while (_isStart)
 	{
 		_doWork = false;
-		_trigger.wait_for(lock, std::chrono::seconds(5));
+		_trigger.wait(lock);
 		_doWork = true;
 		while (_queue.AppendCount() > 0)
 		{
