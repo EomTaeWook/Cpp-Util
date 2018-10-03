@@ -16,6 +16,8 @@ FileLogger::~FileLogger()
 }
 void FileLogger::Init(LoggerPeriod period, const std::string& moduleName, const std::string& path)
 {
+	if (_isStart)
+		return;
 	_period = period;
 	_path = path;
 	_moduleName = moduleName;
