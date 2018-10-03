@@ -24,7 +24,7 @@ private:
 	Threading::CriticalSection _appand;
 	Collections::DoublePriorityQueue<LogMessage, LogMessage::Compare> _queue;
 	std::wfstream _fs;
-	std::function<void()> _PeriodCompare;
+	std::function<void()> _periodCompare;
 	Threading::Thread _thread;
 	bool _isStart, _doWork;
 	std::mutex _write;

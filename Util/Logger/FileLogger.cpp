@@ -3,7 +3,7 @@
 #include "../Threading/IOCPThreadPool.h"
 #include "../Common/Trace.h"
 NS_LOGGER_BEGIN
-FileLogger::FileLogger() : _PeriodCompare(nullptr)
+FileLogger::FileLogger() : _periodCompare(nullptr)
 						, _thread(std::bind(&FileLogger::Invoke, this), nullptr)
 {
 }
@@ -41,10 +41,10 @@ void FileLogger::Init(LoggerPeriod period, const std::string& moduleName, const 
 	switch (_period)
 	{
 	case Util::Logger::LoggerPeriod::Hour:
-		_PeriodCompare = std::bind(&FileLogger::HourCompare, this);
+		_periodCompare = std::bind(&FileLogger::HourCompare, this);
 		break;
 	case Util::Logger::LoggerPeriod::Day:
-		_PeriodCompare = std::bind(&FileLogger::DayCompare, this);
+		_periodCompare = std::bind(&FileLogger::DayCompare, this);
 		break;
 	}
 	_fs.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t, 0x10ffff, static_cast<std::codecvt_mode>(std::generate_header | std::consume_header)>));
@@ -101,8 +101,8 @@ void FileLogger::Invoke()
 			_queue.Swap();
 			while (_queue.ReadCount() > 0)
 			{
-				if (_PeriodCompare != nullptr)
-					_PeriodCompare();
+				if (_periodCompare != nullptr)
+					_periodCompare();
 				WriteMessage(_queue.Pop());
 			}
 		}
