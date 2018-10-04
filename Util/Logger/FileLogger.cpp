@@ -13,7 +13,8 @@ FileLogger::~FileLogger()
 	_isStart = false;
 	_trigger.notify_all();
 	_thread.Join();
-	_fs.close();
+	if(_fs.is_open())
+		_fs.close();
 }
 void FileLogger::Init(LoggerPeriod period, const std::string& moduleName, const std::string& path)
 {
