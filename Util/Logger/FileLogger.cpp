@@ -3,8 +3,9 @@
 #include "../Threading/IOCPThreadPool.h"
 #include "../Common/Trace.h"
 NS_LOGGER_BEGIN
-FileLogger::FileLogger() : _periodCompare(nullptr)
-						, _thread(std::bind(&FileLogger::Invoke, this), nullptr)
+FileLogger::FileLogger() : _periodCompare(nullptr), 
+						_thread(std::bind(&FileLogger::Invoke, this), nullptr),
+						_isStart(false)
 {
 }
 FileLogger::~FileLogger()
@@ -98,7 +99,10 @@ void FileLogger::Invoke()
 		_doWork = true;
 		while (_queue.AppendCount() > 0)
 		{
+			_appand.EnterCriticalSection();
 			_queue.Swap();
+			_appand.LeaveCriticalSection();
+
 			while (_queue.ReadCount() > 0)
 			{
 				if (_periodCompare != nullptr)

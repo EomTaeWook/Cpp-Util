@@ -13,7 +13,6 @@ public:
 private:
 	PriorityQueue<T, Compare> _queue[2];
 	char _idx;
-	Threading::CriticalSection _sync;
 private:
 	PriorityQueue<T, Compare>& ReadQueue();
 	PriorityQueue<T, Compare>& AppendQueue();
@@ -38,8 +37,6 @@ inline DoublePriorityQueue<T, Compare>::~DoublePriorityQueue()
 template<typename T, typename Compare>
 inline PriorityQueue<T, Compare>& DoublePriorityQueue<T, Compare>::Push(const T& item)
 {
-	auto finally = Common::Finally(std::bind(&Threading::CriticalSection::LeaveCriticalSection, &_sync));
-	_sync.EnterCriticalSection();
 	AppendQueue().Push(item);
 	return AppendQueue();
 }
@@ -47,10 +44,8 @@ inline PriorityQueue<T, Compare>& DoublePriorityQueue<T, Compare>::Push(const T&
 template<typename T, typename Compare>
 inline PriorityQueue<T, Compare>& DoublePriorityQueue<T, Compare>::Push(T * items, size_t size)
 {
-	auto finally = Common::Finally(std::bind(&Threading::CriticalSection::LeaveCriticalSection, &_sync));
-	_sync.EnterCriticalSection();
 	for (size_t i = 0; i < size; i++)
-		AppendQueue().Push(item);
+		AppendQueue().Push(items[i]);
 	return AppendQueue();
 }
 
@@ -91,8 +86,6 @@ inline PriorityQueue<T, Compare>& DoublePriorityQueue<T, Compare>::AppendQueue()
 template<typename T, typename Compare>
 inline void DoublePriorityQueue<T, Compare>::Swap()
 {
-	_sync.EnterCriticalSection();
-	auto finally = Common::Finally(std::bind(&Threading::CriticalSection::LeaveCriticalSection, &_sync));
 	if (ReadQueue().Count() == 0)
 		_idx ^= 1;
 }
