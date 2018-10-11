@@ -29,14 +29,13 @@ void FileLogger::Init(LoggerPeriod period, const std::string& moduleName, const 
 	if (_path.size() == 0)
 	{
 		_path.append(moduleFileName);
-		_path = _path.substr(0, _path.find_last_of("\\"));
+		_path = _path.substr(0, _path.find_last_of("\\")).append("\\Log");
 	}
 	if (_moduleName.size() == 0)
 	{
 		_moduleName.append(moduleFileName);
 		_moduleName = _moduleName.substr(_moduleName.find_last_of("\\") + 1, _moduleName.find_last_of(".") - _moduleName.find_last_of("\\") - 1);
 	}
-	_path.append("\\Log");
 	DWORD attribs = ::GetFileAttributesA(_path.c_str());
 	if (attribs == INVALID_FILE_ATTRIBUTES) 
 		::CreateDirectory(_path.c_str(), NULL);
